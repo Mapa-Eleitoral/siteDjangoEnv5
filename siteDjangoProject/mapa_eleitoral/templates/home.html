@@ -27,9 +27,28 @@
     <!-- DNS Prefetch para recursos externos -->
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
     
     <!-- Favicon otimizado -->
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- Google Analytics Otimizado -->
+    {% if not debug %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ39M33HCG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XQ39M33HCG', {
+            // Otimizações para performance
+            'page_title': document.title,
+            'send_page_view': true,
+            'anonymize_ip': true,
+            'allow_google_signals': false,
+            'allow_ad_personalization_signals': false
+        });
+    </script>
+    {% endif %}
     
     <!-- Resource hints para melhor performance -->
     <link rel="prefetch" href="/get_partidos_ajax/">
@@ -997,6 +1016,17 @@
                 }
 
                 Utils.setLoading(true);
+                
+                // Analytics: Filtro aplicado
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'filter_applied', {
+                        'event_category': 'Interaction',
+                        'event_label': 'Form Submission',
+                        'ano': this.elements.ano.value,
+                        'partido': this.elements.partido.value,
+                        'candidato': this.elements.candidato.value
+                    });
+                }
 
                 // Enviar formulário (reload da página com novos parâmetros)
                 this.elements.form.submit();
@@ -1103,20 +1133,24 @@
             // Log de performance inicial
             Utils.logPerformance('DOM Ready', startTime);
 
-            // Analytics de performance (se habilitado)
-            if (AppConfig.DEBUG) {
-                setTimeout(() => {
-                    const loadTime = performance.now() - startTime;
+            // Analytics de performance otimizado
+            setTimeout(() => {
+                const loadTime = performance.now() - startTime;
+                
+                if (AppConfig.DEBUG) {
                     console.log(`[ANALYTICS] Page load completed in ${loadTime.toFixed(2)}ms`);
-                    
-                    // Enviar métricas se configurado
-                    if (window.gtag) {
-                        window.gtag('event', 'page_load_time', {
-                            'custom_parameter': loadTime
-                        });
-                    }
-                }, 100);
-            }
+                }
+                
+                // Enviar métricas para Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'page_performance', {
+                        'event_category': 'Performance',
+                        'event_label': 'Page Load Time',
+                        'value': Math.round(loadTime),
+                        'custom_map': {'metric1': 'load_time'}
+                    });
+                }
+            }, 100);
         });
 
         // === FUNÇÃO PARA CARREGAR MAPAS DINÂMICOS ===
@@ -1140,6 +1174,15 @@
                 if (data.success) {
                     mapWrapper.innerHTML = data.html;
                     console.log('Mapa dinâmico carregado com sucesso');
+                    
+                    // Analytics: Mapa carregado
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'map_loaded', {
+                            'event_category': 'Engagement',
+                            'event_label': `${mapData.candidato} - ${mapData.partido}`,
+                            'ano': mapData.ano
+                        });
+                    }
                 } else {
                     mapWrapper.innerHTML = `
                         <div style="text-align: center; padding: 2rem; color: #ef4444;">
