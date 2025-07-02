@@ -30,6 +30,13 @@ class DadoEleitoral(models.Model):
         managed = False  
         verbose_name = "Dado Eleitoral"
         verbose_name_plural = "Dados Eleitorais"
+        # Indexes for performance optimization
+        indexes = [
+            models.Index(fields=['ano_eleicao', 'sg_partido'], name='idx_ano_partido'),
+            models.Index(fields=['ano_eleicao', 'nm_bairro'], name='idx_ano_bairro'),
+            models.Index(fields=['nm_urna_candidato'], name='idx_candidato'),
+            models.Index(fields=['ano_eleicao', 'sg_partido', 'nm_urna_candidato'], name='idx_completo'),
+        ]
     
     def __str__(self):
         return f"{self.nm_urna_candidato} ({self.sg_partido}) - {self.nm_bairro}: {self.qt_votos} votos"
