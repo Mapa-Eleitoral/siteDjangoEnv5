@@ -686,11 +686,11 @@
     </div>
     {% endif %}
 
-    <!-- JavaScript otimizado com loading assíncrono -->
+    <!-- JavaScript otimizado com loading assíncrono inserido DJANGO-->
     <script defer>
-        // === CONFIGURAÇÃO OTIMIZADA ===
+        // === CONFIGURAÇÃO OTIMIZADA DJANGO===
         const AppConfig = {
-            DEBUG: {% if debug %}true{% else %}false{% endif %},
+            DEBUG: {% if debug %}true{% else %}false{% endif %},// Configuração de debug em Django
             CACHE_DURATION: 300000, // 5 minutos
             DEBOUNCE_DELAY: 250, // Reduzido para melhor responsividade
             RETRY_ATTEMPTS: 2, // Reduzido
