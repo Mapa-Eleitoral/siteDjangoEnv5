@@ -16,15 +16,25 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mapaeleitoral.com.br">
     
-    <!-- Preload de recursos críticos -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;600;700&display=swap"></noscript>
+    <!-- Preload crítico de fonts com otimizações -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap&subset=latin" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap&subset=latin"></noscript>
+    
+    <!-- DNS Prefetch para recursos externos -->
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
     
     <!-- Favicon otimizado -->
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     
+    <!-- Resource hints para melhor performance -->
+    <link rel="prefetch" href="/get_partidos_ajax/">
+    <link rel="prefetch" href="/healthcheck/">
+    
     <!-- Meta tags de segurança otimizadas -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;"">
     
     <style>
         /* CSS Critical Path Optimized */
@@ -51,12 +61,13 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--background);
             color: var(--text-primary);
             line-height: 1.6;
             font-size: 14px;
             font-display: swap;
+            contain: layout style paint;
         }
 
         .container {
@@ -571,14 +582,32 @@
                 <!-- Mapa será carregado dinamicamente aqui -->
             </div>
             <script>
-                // Carregar mapa dinamicamente quando a página carrega
-                document.addEventListener('DOMContentLoaded', function() {
-                    loadDynamicMap({
-                        candidato: '{{ map_data.candidato }}',
-                        partido: '{{ map_data.partido }}',
-                        ano: '{{ map_data.ano }}'
-                    });
-                });
+                // Carregar mapa dinamicamente com otimização de performance
+                function loadMapWhenReady() {
+                    // Aguardar que elementos críticos estejam carregados
+                    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                        loadDynamicMap({
+                            candidato: '{{ map_data.candidato }}',
+                            partido: '{{ map_data.partido }}',
+                            ano: '{{ map_data.ano }}'
+                        });
+                    } else {
+                        document.addEventListener('DOMContentLoaded', () => {
+                            loadDynamicMap({
+                                candidato: '{{ map_data.candidato }}',
+                                partido: '{{ map_data.partido }}',
+                                ano: '{{ map_data.ano }}'
+                            });
+                        });
+                    }
+                }
+                
+                // Usar requestIdleCallback para não bloquear renderização
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(loadMapWhenReady, { timeout: 3000 });
+                } else {
+                    setTimeout(loadMapWhenReady, 100);
+                }
             </script>
             {% else %}
             <div class="map-placeholder">
@@ -635,8 +664,8 @@
     </div>
     {% endif %}
 
-    <!-- JavaScript otimizado -->
-    <script>
+    <!-- JavaScript otimizado com loading assíncrono -->
+    <script defer>
         // === CONFIGURAÇÃO E CACHE ===
         const AppConfig = {
             DEBUG: {% if debug %}true{% else %}false{% endif %},
@@ -1010,12 +1039,26 @@
             }
         }
 
-        // === INICIALIZAÇÃO ===
-        document.addEventListener('DOMContentLoaded', function() {
+        // === INICIALIZAÇÃO OTIMIZADA ===
+        // Usar requestIdleCallback para inicialização não crítica
+        function initializeApp() {
             const startTime = performance.now();
 
             // Inicializar aplicação
             window.mapaApp = new MapaEleitoralApp();
+            
+            Utils.logPerformance('App Initialization', startTime);
+        }
+        
+        // Inicialização com prioridade baseada em recursos
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(initializeApp, { timeout: 2000 });
+        } else {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        }
+        
+        // Crítico: apenas os elementos essenciais
+        document.addEventListener('DOMContentLoaded', function() {
 
             // Setup de lazy loading para iframe
             const mapIframe = document.querySelector('.map-wrapper iframe');

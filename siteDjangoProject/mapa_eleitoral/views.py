@@ -432,8 +432,9 @@ def create_fallback_map_html(candidato_info):
 # === VIEW PRINCIPAL OTIMIZADA ===
 
 @vary_on_headers('Accept-Language')
+@cache_page(300)  # Cache da página por 5 minutos para melhor TTFB
 def home_view(request):
-    """View principal com máxima otimização"""
+    """View principal com máxima otimização para Core Web Vitals"""
     
     start_time = time.time()
     
@@ -661,14 +662,25 @@ class OptimizedPerformanceMiddleware:
                 f"{duration:.2f}s - User: {getattr(request.user, 'username', 'anonymous')}"
             )
         
-        # Headers de performance
+        # Headers de performance otimizados
         response['X-Response-Time'] = f"{duration:.3f}s"
         
-        # Cache headers para recursos estáticos
+        # Headers de compressão e performance
+        if not request.path.startswith('/admin/'):
+            response['Vary'] = 'Accept-Encoding'
+            
+        # Cache headers otimizados
         if request.path.startswith('/static/'):
-            response['Cache-Control'] = 'public, max-age=86400'  # 24h
-        elif request.path.endswith('.html') and 'maps' in request.path:
-            response['Cache-Control'] = 'public, max-age=43200'  # 12h
+            response['Cache-Control'] = 'public, max-age=31536000, immutable'  # 1 ano
+            response['Expires'] = 'Thu, 31 Dec 2025 23:59:59 GMT'
+        elif request.path in ['/', '/healthcheck/']:
+            response['Cache-Control'] = 'public, max-age=300'  # 5 minutos
+        elif request.path.startswith('/get_'):
+            response['Cache-Control'] = 'public, max-age=1800'  # 30 minutos
+            
+        # Headers de otimização para mapas dinâmicos
+        if request.path == '/generate-map/':
+            response['Cache-Control'] = 'private, max-age=3600'  # 1h cache privado
         
         return response
 
