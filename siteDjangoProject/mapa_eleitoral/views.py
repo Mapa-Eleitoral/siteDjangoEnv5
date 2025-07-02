@@ -664,22 +664,19 @@ class OptimizedPerformanceMiddleware:
         # Headers de performance otimizados
         response['X-Response-Time'] = f"{duration:.3f}s"
         
-        # Headers de compressão e performance
+        # Headers de performance seguros
         if not request.path.startswith('/admin/'):
             response['Vary'] = 'Accept-Encoding'
             
-        # Cache headers otimizados
+        # Cache headers conservadores e seguros
         if request.path.startswith('/static/'):
-            response['Cache-Control'] = 'public, max-age=31536000, immutable'  # 1 ano
-            response['Expires'] = 'Thu, 31 Dec 2025 23:59:59 GMT'
-        elif request.path in ['/', '/healthcheck/']:
+            response['Cache-Control'] = 'public, max-age=86400'  # 24h seguro
+        elif request.path == '/':
             response['Cache-Control'] = 'public, max-age=300'  # 5 minutos
-        elif request.path.startswith('/get_'):
-            response['Cache-Control'] = 'public, max-age=1800'  # 30 minutos
-            
-        # Headers de otimização para mapas dinâmicos
-        if request.path == '/generate-map/':
-            response['Cache-Control'] = 'private, max-age=3600'  # 1h cache privado
+        elif request.path.startswith('/get_') and request.path.endswith('_ajax/'):
+            response['Cache-Control'] = 'public, max-age=600'  # 10 minutos
+        elif request.path == '/generate-map/':
+            response['Cache-Control'] = 'private, max-age=1800'  # 30min privado
         
         return response
 

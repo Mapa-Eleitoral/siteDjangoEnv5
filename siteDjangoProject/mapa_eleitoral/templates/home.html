@@ -16,11 +16,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mapaeleitoral.com.br">
     
-    <!-- Preload crítico de fonts com otimizações -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <!-- Otimização crítica de fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap&subset=latin" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap&subset=latin"></noscript>
+    <!-- Carregamento inline do CSS crítico -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    </style>
     
     <!-- DNS Prefetch para recursos externos -->
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
@@ -37,7 +39,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;"">
     
     <style>
-        /* CSS Critical Path Optimized */
+        /* CSS Above-the-fold Critical - Inline para melhor FCP */
         :root {
             --primary: #123F32;
             --primary-dark: #0e3229;
@@ -76,7 +78,7 @@
             padding: 0 1rem;
         }
 
-        /* Header otimizado */
+        /* Header otimizado para LCP */
         .header {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
@@ -84,8 +86,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(8px);
-            will-change: transform;
+            contain: layout style paint;
+            transform: translateZ(0); /* Force GPU acceleration */
         }
 
         .header-content {
@@ -301,9 +303,10 @@
             letter-spacing: 0.05em;
         }
 
-        /* Map container otimizado */
+        /* Map container otimizado para CLS */
         .map-container {
             padding: 0;
+            height: 500px; /* Altura fixa para evitar CLS */
             min-height: 500px;
             position: relative;
             contain: layout style paint;
@@ -666,13 +669,13 @@
 
     <!-- JavaScript otimizado com loading assíncrono -->
     <script defer>
-        // === CONFIGURAÇÃO E CACHE ===
+        // === CONFIGURAÇÃO OTIMIZADA ===
         const AppConfig = {
             DEBUG: {% if debug %}true{% else %}false{% endif %},
-            CACHE_DURATION: 5 * 60 * 1000, // 5 minutos
-            DEBOUNCE_DELAY: 300,
-            RETRY_ATTEMPTS: 3,
-            TIMEOUT: 15000
+            CACHE_DURATION: 300000, // 5 minutos
+            DEBOUNCE_DELAY: 250, // Reduzido para melhor responsividade
+            RETRY_ATTEMPTS: 2, // Reduzido
+            TIMEOUT: 10000 // Reduzido
         };
 
         // Cache inteligente para requisições AJAX
