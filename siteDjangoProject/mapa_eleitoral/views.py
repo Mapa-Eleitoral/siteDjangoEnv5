@@ -258,9 +258,9 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
 # CORREÇÃO PARA SISTEMA DE GERAÇÃO DE MAPAS
 # Adicione este código ao seu views.py ou substitua a função generate_static_map_html
 
-def generate_static_map_html(votos_dict, total_votos, candidato_info):
+def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
     """
-    Versão corrigida da geração de mapas que resolve o erro 404
+    Gera mapa dinamicamente e retorna HTML inline (sem salvar arquivo)
     """
     try:
         # 1. Verificar se temos dados válidos
@@ -268,41 +268,9 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             logging.warning("Dados de votação vazios ou inválidos")
             return None
         
-        # 2. Gerar hash único para o mapa
-        data_signature = f"{candidato_info['nome']}_{candidato_info['ano']}_{total_votos}"
-        file_hash = hashlib.md5(data_signature.encode()).hexdigest()[:16]
-        filename = f"mapa_{file_hash}.html"
+        logging.info(f"Gerando mapa dinâmico para {candidato_info['nome']}")
         
-        # 3. Definir caminhos - CORREÇÃO PRINCIPAL
-        # Em desenvolvimento, usar sempre diretório static local
-        if settings.DEBUG:
-            maps_dir = os.path.join(settings.BASE_DIR, 'static', 'maps')
-        else:
-            # Em produção, usar STATIC_ROOT
-            maps_dir = os.path.join(settings.STATIC_ROOT, 'maps')
-        
-        # Criar diretório se não existir
-        os.makedirs(maps_dir, exist_ok=True)
-        
-        file_path = os.path.join(maps_dir, filename)
-        
-        # 4. Verificar se arquivo já existe
-        if os.path.exists(file_path):
-            # Verificar se arquivo não está corrompido
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                if len(content) > 1000:  # Arquivo válido
-                    url = f"{settings.STATIC_URL}maps/{filename}"
-                    logging.info(f"Mapa existente reutilizado: {filename}")
-                    return url
-            except Exception as e:
-                logging.warning(f"Arquivo de mapa corrompido, regenerando: {e}")
-        
-        # 5. Gerar novo mapa
-        logging.info(f"Gerando novo mapa para {candidato_info['nome']}")
-        
-        # Configuração do mapa otimizada
+        # 2. Configuração do mapa otimizada
         mapa = fl.Map(
             location=[-22.928777, -43.423878],  # Centro do Rio de Janeiro
             zoom_start=10,
@@ -315,15 +283,15 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             attribution_control=False
         )
         
-        # 6. Carregar GeoJSON
+        # 3. Carregar GeoJSON
         geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', 'Limite_Bairro.geojson')
         
         if not os.path.exists(geojson_path):
             logging.error(f"Arquivo GeoJSON não encontrado: {geojson_path}")
-            return create_fallback_map(candidato_info, maps_dir, filename)
+            return create_fallback_map_html(candidato_info)
         
         try:
-            # 7. Adicionar Choropleth
+            # 4. Adicionar Choropleth
             choropleth_data = [[bairro, votos] for bairro, votos in votos_dict.items() if votos > 0]
             
             choropleth = fl.Choropleth(
@@ -345,7 +313,7 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             )
             choropleth.add_to(mapa)
             
-            # 8. Adicionar tooltips
+            # 5. Adicionar tooltips
             with open(geojson_path, 'r', encoding='utf-8') as f:
                 import json
                 geojson_data = json.load(f)
@@ -383,14 +351,14 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             )
             tooltip_layer.add_to(mapa)
             
-            # 9. Adicionar controles
+            # 6. Adicionar controles
             fl.LayerControl().add_to(mapa)
             
         except Exception as e:
             logging.error(f"Erro ao processar GeoJSON: {e}")
-            return create_fallback_map(candidato_info, maps_dir, filename)
+            return create_fallback_map_html(candidato_info)
         
-        # 10. Salvar arquivo HTML
+        # 7. Gerar HTML dinâmico (SEM salvar arquivo)
         try:
             # Gerar HTML do mapa
             html_content = mapa._repr_html_()
@@ -408,7 +376,7 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             <script>
                 // Otimizações de performance
                 window.addEventListener('load', function() {
-                    console.log('Mapa carregado com sucesso');
+                    console.log('Mapa dinâmico carregado com sucesso');
                 });
             </script>
             """
@@ -417,30 +385,20 @@ def generate_static_map_html(votos_dict, total_votos, candidato_info):
             if '</head>' in html_content:
                 html_content = html_content.replace('</head>', html_improvements + '</head>')
             
-            # Salvar arquivo
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write(html_content)
-            
-            # Verificar se arquivo foi criado corretamente
-            if os.path.exists(file_path) and os.path.getsize(file_path) > 1000:
-                url = f"{settings.STATIC_URL}maps/{filename}"
-                logging.info(f"Mapa gerado com sucesso: {filename} ({os.path.getsize(file_path)} bytes)")
-                return url
-            else:
-                logging.error(f"Arquivo de mapa não foi criado corretamente: {file_path}")
-                return create_fallback_map(candidato_info, maps_dir, filename)
+            logging.info(f"Mapa dinâmico gerado com sucesso para {candidato_info['nome']}")
+            return html_content  # Retornar HTML direto, não URL
                 
         except Exception as e:
-            logging.error(f"Erro ao salvar mapa: {e}")
-            return create_fallback_map(candidato_info, maps_dir, filename)
+            logging.error(f"Erro ao gerar HTML do mapa: {e}")
+            return create_fallback_map_html(candidato_info)
     
     except Exception as e:
-        logging.error(f"Erro geral na geração do mapa: {e}")
-        return None
+        logging.error(f"Erro geral na geração do mapa dinâmico: {e}")
+        return create_fallback_map_html(candidato_info)
 
-def create_fallback_map(candidato_info, maps_dir, filename):
+def create_fallback_map_html(candidato_info):
     """
-    Cria um mapa simples de fallback em caso de erro
+    Cria um mapa simples de fallback em caso de erro (HTML dinâmico)
     """
     try:
         # Mapa básico sem GeoJSON
@@ -459,19 +417,14 @@ def create_fallback_map(candidato_info, maps_dir, filename):
             tooltip="Rio de Janeiro"
         ).add_to(fallback_map)
         
-        # Salvar mapa de fallback
-        file_path = os.path.join(maps_dir, filename)
-        fallback_map.save(file_path)
-        
-        if os.path.exists(file_path):
-            url = f"{settings.STATIC_URL}maps/{filename}"
-            logging.info(f"Mapa de fallback criado: {filename}")
-            return url
+        # Retornar HTML direto
+        html_content = fallback_map._repr_html_()
+        logging.info(f"Mapa de fallback criado para {candidato_info['nome']}")
+        return html_content
             
     except Exception as e:
         logging.error(f"Erro ao criar mapa de fallback: {e}")
-    
-    return None
+        return None
 
 
 
@@ -500,8 +453,11 @@ def home_view(request):
     mapa_url = None
     candidato_info = None
     
-    # Gerar mapa se todos os parâmetros estão presentes
-    if all([candidato_selecionado, partido_selecionado, ano_selecionado]):
+    # Verificar se deve gerar mapa
+    show_map = all([candidato_selecionado, partido_selecionado, ano_selecionado])
+    map_data = None
+    
+    if show_map:
         dados_completos = get_complete_candidate_data_optimized(
             candidato_selecionado, 
             partido_selecionado, 
@@ -509,12 +465,13 @@ def home_view(request):
         )
         
         if dados_completos and dados_completos['total_votos'] > 0:
-            mapa_url = generate_static_map_html(
-                dados_completos['votos_dict'],
-                dados_completos['total_votos'],
-                dados_completos['candidato_info']
-            )
             candidato_info = dados_completos['candidato_info']
+            # Preparar dados para o mapa dinâmico
+            map_data = {
+                'candidato': candidato_selecionado,
+                'partido': partido_selecionado,
+                'ano': ano_selecionado
+            }
     
     # Log de performance
     duration = time.time() - start_time
@@ -529,7 +486,7 @@ def home_view(request):
         'selected_partido': partido_selecionado,
         'selected_candidato': candidato_selecionado,
         'candidato_info': candidato_info,
-        'map_url': mapa_url,
+        'map_data': map_data,  # Dados para gerar mapa dinamicamente
         'load_time': f"{duration:.2f}s"  # Para debug
     }
     
@@ -847,4 +804,51 @@ def debug_candidato_view(request):
     debug_info['candidatos_similares'] = candidatos_similares
     
     return JsonResponse(debug_info, json_dumps_params={'ensure_ascii': False})
+
+def generate_map_view(request):
+    """View para gerar mapas dinamicamente via AJAX"""
+    candidato = request.GET.get('candidato')
+    partido = request.GET.get('partido')
+    ano = request.GET.get('ano')
+    
+    if not all([candidato, partido, ano]):
+        return JsonResponse({
+            'error': 'Parâmetros obrigatórios: candidato, partido, ano'
+        }, status=400)
+    
+    try:
+        # Buscar dados do candidato
+        dados_completos = get_complete_candidate_data_optimized(candidato, partido, ano)
+        
+        if not dados_completos or dados_completos['total_votos'] == 0:
+            return JsonResponse({
+                'error': 'Candidato não encontrado ou sem dados de votação',
+                'candidato': candidato,
+                'partido': partido,
+                'ano': ano
+            }, status=404)
+        
+        # Gerar mapa dinâmico
+        html_content = generate_dynamic_map_html(
+            dados_completos['votos_dict'],
+            dados_completos['total_votos'],
+            dados_completos['candidato_info']
+        )
+        
+        if not html_content:
+            return JsonResponse({
+                'error': 'Erro ao gerar mapa'
+            }, status=500)
+        
+        return JsonResponse({
+            'success': True,
+            'html': html_content,
+            'candidato_info': dados_completos['candidato_info']
+        })
+        
+    except Exception as e:
+        logging.error(f"Erro ao gerar mapa: {e}")
+        return JsonResponse({
+            'error': 'Erro interno do servidor'
+        }, status=500)
             

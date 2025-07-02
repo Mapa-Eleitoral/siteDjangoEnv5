@@ -566,16 +566,20 @@
 
         <!-- Map -->
         <div class="card map-container" id="mapContainer">
-            {% if map_url %}
-            <div class="map-wrapper">
-                <iframe 
-                    src="{{ map_url }}" 
-                    class="folium-map" 
-                    title="Mapa eleitoral interativo mostrando distribuição de votos por bairro"
-                    loading="lazy"
-                    allowfullscreen>
-                </iframe>
+            {% if map_data %}
+            <div class="map-wrapper" id="mapWrapper">
+                <!-- Mapa será carregado dinamicamente aqui -->
             </div>
+            <script>
+                // Carregar mapa dinamicamente quando a página carrega
+                document.addEventListener('DOMContentLoaded', function() {
+                    loadDynamicMap({
+                        candidato: '{{ map_data.candidato }}',
+                        partido: '{{ map_data.partido }}',
+                        ano: '{{ map_data.ano }}'
+                    });
+                });
+            </script>
             {% else %}
             <div class="map-placeholder">
                 <div class="map-placeholder-icon" aria-hidden="true">🗺️</div>
@@ -1068,6 +1072,48 @@
                 }, 100);
             }
         });
+
+        // === FUNÇÃO PARA CARREGAR MAPAS DINÂMICOS ===
+        window.loadDynamicMap = async function(mapData) {
+            const mapWrapper = document.getElementById('mapWrapper');
+            if (!mapWrapper || !mapData) return;
+            
+            try {
+                Utils.setLoading(true);
+                mapWrapper.innerHTML = '<div style="text-align: center; padding: 2rem;">Gerando mapa...</div>';
+                
+                const params = new URLSearchParams({
+                    candidato: mapData.candidato,
+                    partido: mapData.partido,
+                    ano: mapData.ano
+                });
+                
+                const response = await fetch(`/generate-map/?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mapWrapper.innerHTML = data.html;
+                    console.log('Mapa dinâmico carregado com sucesso');
+                } else {
+                    mapWrapper.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: #ef4444;">
+                            <h3>Erro ao carregar mapa</h3>
+                            <p>${data.error || 'Erro desconhecido'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar mapa:', error);
+                mapWrapper.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #ef4444;">
+                        <h3>Erro de conexão</h3>
+                        <p>Não foi possível carregar o mapa</p>
+                    </div>
+                `;
+            } finally {
+                Utils.setLoading(false);
+            }
+        };
 
         // === FUNÇÕES GLOBAIS PARA COMPATIBILIDADE ===
         window.updatePartidos = function() {
