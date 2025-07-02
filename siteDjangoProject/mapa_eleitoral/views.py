@@ -505,17 +505,31 @@ def get_anos_ajax(request):
 
 @cache_page(CACHE_TIMES['partidos'])
 def get_partidos_ajax(request):
-    """API otimizada para buscar partidos"""
+    """API otimizada para buscar partidos com fallback"""
     ano = request.GET.get('ano')
-    if not ano:
-        return JsonResponse({'error': 'Ano é obrigatório'}, status=400)
     
-    partidos = get_cached_partidos(ano)
-    return JsonResponse({
-        'partidos': partidos,
-        'count': len(partidos),
-        'status': 'success'
-    })
+    # Fallback: usar ano mais recente se não especificado
+    if not ano:
+        anos_disponiveis = get_cached_anos()
+        ano = anos_disponiveis[0] if anos_disponiveis else '2024'
+        logging.warning(f"Ano não especificado em get_partidos_ajax, usando fallback: {ano}")
+    
+    try:
+        partidos = get_cached_partidos(ano)
+        return JsonResponse({
+            'partidos': partidos,
+            'count': len(partidos),
+            'status': 'success',
+            'ano_usado': ano
+        })
+    except Exception as e:
+        logging.error(f"Erro em get_partidos_ajax: {e}")
+        return JsonResponse({
+            'error': 'Erro interno',
+            'partidos': [],
+            'count': 0,
+            'status': 'error'
+        }, status=500)
 
 @cache_page(CACHE_TIMES['candidatos'])
 def get_candidatos_ajax(request):

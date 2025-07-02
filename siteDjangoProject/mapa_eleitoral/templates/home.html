@@ -939,9 +939,9 @@
 
             async preloadCriticalData() {
                 try {
-                    // Preload dados mais utilizados
+                    // Preload dados mais utilizados apenas se ano válido
                     const anoAtual = this.elements.ano.value;
-                    if (anoAtual) {
+                    if (anoAtual && anoAtual !== '' && !isNaN(anoAtual)) {
                         await this.stateManager.getData(
                             `/get_partidos_ajax/?ano=${encodeURIComponent(anoAtual)}`,
                             `partidos_${anoAtual}`
@@ -956,7 +956,11 @@
                 const startTime = performance.now();
                 const ano = this.elements.ano.value;
 
-                if (!ano) return;
+                // Validação rigorosa
+                if (!ano || ano === '' || isNaN(ano) || ano.length !== 4) {
+                    console.warn('Ano inválido para updatePartidos:', ano);
+                    return;
+                }
 
                 try {
                     this.setSelectLoading(this.elements.partido, true);

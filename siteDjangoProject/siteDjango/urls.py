@@ -31,3 +31,28 @@ urlpatterns = [
 if not settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# URLs de segurança para evitar logs de erro
+from django.http import HttpResponse, HttpResponseNotFound
+
+def security_txt(request):
+    return HttpResponseNotFound("Security endpoint disabled")
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /telescope/",
+        "Disallow: /info.php",
+        "Allow: /",
+        "",
+        f"Sitemap: https://{request.get_host()}/sitemap.xml"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+# Adicionar URLs de segurança
+urlpatterns += [
+    path('robots.txt', robots_txt),
+    path('telescope/requests', security_txt),
+    path('info.php', security_txt),
+]
