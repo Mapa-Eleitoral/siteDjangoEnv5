@@ -111,11 +111,26 @@ def get_cached_candidatos(partido, ano):
     if not (partido and ano):
         return []
     
+    def query_candidatos():
+        candidatos = (DadoEleitoral.objects
+                     .filter(ano_eleicao=ano, sg_partido=partido)
+                     .values_list('nm_urna_candidato', flat=True)
+                     .distinct()
+                     .order_by('nm_urna_candidato'))
+        
+        # Garantir que candidatos existem antes de retornar
+        candidatos_list = list(candidatos)
+        
+        # Log para debug
+        if not candidatos_list:
+            logging.warning(f"Nenhum candidato encontrado para {partido} em {ano}")
+        else:
+            logging.info(f"Encontrados {len(candidatos_list)} candidatos para {partido} em {ano}")
+        
+        return candidatos_list
+    
     return cached_query(
-        lambda: DadoEleitoral.objects.filter(ano_eleicao=ano, sg_partido=partido)
-                                   .values_list('nm_urna_candidato', flat=True)
-                                   .distinct()
-                                   .order_by('nm_urna_candidato'),
+        query_candidatos,
         safe_key('candidatos_v2', partido, ano),
         CACHE_TIMES['candidatos']
     )
@@ -131,12 +146,64 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
     if data is not None:
         return data
     
-    # Query única e super otimizada usando agregação
-    votos_agregados = (DadoEleitoral.objects
-                      .filter(ano_eleicao=ano, sg_partido=partido, nm_urna_candidato=candidato)
-                      .values('nm_bairro')
-                      .annotate(total_votos=models.Sum('qt_votos'))
-                      .values_list('nm_bairro', 'total_votos'))
+    # Decodificar URL encoding se necessário
+    import urllib.parse
+    candidato_decoded = urllib.parse.unquote(candidato)
+    
+    # Tentar diferentes variações do nome para máxima compatibilidade
+    candidato_variants = [
+        candidato,
+        candidato_decoded,
+        candidato.upper(),
+        candidato_decoded.upper(),
+        candidato.strip(),
+        candidato_decoded.strip()
+    ]
+    
+    votos_agregados = None
+    candidato_encontrado = None
+    
+    # Tentar cada variação até encontrar dados
+    for variant in candidato_variants:
+        votos_agregados = (DadoEleitoral.objects
+                          .filter(ano_eleicao=ano, sg_partido=partido, nm_urna_candidato=variant)
+                          .values('nm_bairro')
+                          .annotate(total_votos=models.Sum('qt_votos'))
+                          .values_list('nm_bairro', 'total_votos'))
+        
+        if votos_agregados.exists():
+            candidato_encontrado = variant
+            logging.info(f"Candidato encontrado com variação: '{variant}' (original: '{candidato}')")
+            break
+    
+    # Se ainda não encontrou, tentar busca case-insensitive
+    if not votos_agregados or not votos_agregados.exists():
+        votos_agregados = (DadoEleitoral.objects
+                          .filter(ano_eleicao=ano, sg_partido=partido, nm_urna_candidato__iexact=candidato_decoded)
+                          .values('nm_bairro')
+                          .annotate(total_votos=models.Sum('qt_votos'))
+                          .values_list('nm_bairro', 'total_votos'))
+        
+        if votos_agregados.exists():
+            candidato_encontrado = candidato_decoded
+            logging.info(f"Candidato encontrado com busca case-insensitive: '{candidato_decoded}'")
+    
+    # Log para debug
+    if not votos_agregados or not votos_agregados.exists():
+        logging.warning(f"Candidato não encontrado: '{candidato}' / '{candidato_decoded}' - Ano: {ano} - Partido: {partido}")
+        
+        # Buscar candidatos similares para debug
+        candidatos_similares = (DadoEleitoral.objects
+                               .filter(ano_eleicao=ano, sg_partido=partido)
+                               .filter(nm_urna_candidato__icontains=candidato_decoded.split()[0] if candidato_decoded else candidato.split()[0])
+                               .values_list('nm_urna_candidato', flat=True)
+                               .distinct()[:5])
+        
+        if candidatos_similares:
+            logging.info(f"Candidatos similares encontrados: {list(candidatos_similares)}")
+        
+        cache.set(cache_key, None, CACHE_TIMES['complete_data'])
+        return None
     
     if not votos_agregados:
         cache.set(cache_key, None, CACHE_TIMES['complete_data'])
@@ -701,9 +768,12 @@ def healthcheck_view(request):
             os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', 'Limite_Bairro.geojson')
         )
         
+        # Teste de dados básicos
+        total_registros = DadoEleitoral.objects.count()
+        
         status = {
             'status': 'healthy',
-            'database': f'ok ({count_anos} anos)',
+            'database': f'ok ({count_anos} anos, {total_registros:,} registros)',
             'cache': 'ok' if cache_ok else 'error',
             'geojson': 'ok' if geojson_ok else 'missing',
             'timestamp': time.time()
@@ -717,4 +787,64 @@ def healthcheck_view(request):
             'error': str(e),
             'timestamp': time.time()
         }, status=500)
+
+def debug_candidato_view(request):
+    """Debug específico para problemas de candidatos"""
+    if not settings.DEBUG and not request.user.is_superuser:
+        return JsonResponse({'error': 'Acesso negado'}, status=403)
+    
+    candidato = request.GET.get('candidato', '')
+    partido = request.GET.get('partido', '')
+    ano = request.GET.get('ano', '')
+    
+    if not all([candidato, partido, ano]):
+        return JsonResponse({
+            'error': 'Parâmetros obrigatórios: candidato, partido, ano'
+        }, status=400)
+    
+    import urllib.parse
+    candidato_decoded = urllib.parse.unquote(candidato)
+    
+    debug_info = {
+        'parametros_recebidos': {
+            'candidato_original': candidato,
+            'candidato_decoded': candidato_decoded,
+            'partido': partido,
+            'ano': ano
+        },
+        'testes': {}
+    }
+    
+    # Teste 1: Busca exata
+    exact_match = DadoEleitoral.objects.filter(
+        ano_eleicao=ano, 
+        sg_partido=partido, 
+        nm_urna_candidato=candidato_decoded
+    ).exists()
+    debug_info['testes']['busca_exata'] = exact_match
+    
+    # Teste 2: Busca case-insensitive
+    case_insensitive = DadoEleitoral.objects.filter(
+        ano_eleicao=ano, 
+        sg_partido=partido, 
+        nm_urna_candidato__iexact=candidato_decoded
+    ).exists()
+    debug_info['testes']['case_insensitive'] = case_insensitive
+    
+    # Teste 3: Candidatos do partido/ano
+    candidatos_disponiveis = list(DadoEleitoral.objects.filter(
+        ano_eleicao=ano, 
+        sg_partido=partido
+    ).values_list('nm_urna_candidato', flat=True).distinct()[:10])
+    debug_info['candidatos_disponiveis'] = candidatos_disponiveis
+    
+    # Teste 4: Busca parcial
+    candidatos_similares = list(DadoEleitoral.objects.filter(
+        ano_eleicao=ano, 
+        sg_partido=partido,
+        nm_urna_candidato__icontains=candidato_decoded.split()[0] if candidato_decoded else candidato.split()[0]
+    ).values_list('nm_urna_candidato', flat=True).distinct()[:5])
+    debug_info['candidatos_similares'] = candidatos_similares
+    
+    return JsonResponse(debug_info, json_dumps_params={'ensure_ascii': False})
             

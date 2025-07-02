@@ -12,5 +12,6 @@ urlpatterns = [
     path('clear-cache/', views.clear_cache_view, name='clear_cache'),
     path('cache-stats/', views.cache_stats_view, name='cache_stats'),
     path('healthcheck/', views.healthcheck_view, name='healthcheck'),
+    path('debug-candidato/', views.debug_candidato_view, name='debug_candidato'),
 ]
 
