@@ -5,7 +5,9 @@
       "Bash(git config:*)",
       "Bash(git commit:*)",
       "Bash(python3:*)",
-      "Bash(./python.exe -m django --version)"
+      "Bash(./python.exe -m django --version)",
+      "Bash(touch:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
