@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Eleitoral - Democracia em Dados</title>
+    
+    <!-- Meta tags otimizadas para SEO -->
+    <meta name="description" content="Visualize dados eleitorais do Rio de Janeiro por bairro. Sistema interativo com mapas e estatísticas de votação.">
+    <meta name="keywords" content="eleições, rio de janeiro, dados eleitorais, mapa, votação, bairros">
+    <meta name="author" content="Filipe Dias">
+    
+    <!-- Meta tags para redes sociais -->
+    <meta property="og:title" content="Mapa Eleitoral - Democracia em Dados">
+    <meta property="og:description" content="Sistema interativo de visualização de dados eleitorais do Rio de Janeiro">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mapaeleitoral.com.br">
+    
+    <!-- Preload de recursos críticos -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;600;700&display=swap"></noscript>
+    
+    <!-- Favicon otimizado -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- Meta tags de segurança otimizadas -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;">
+    
+    <style>
+        /* CSS Critical Path Optimized */
+        :root {
+            --primary: #123F32;
+            --primary-dark: #0e3229;
+            --primary-light: #1a4f3f;
+            --secondary: #64748b;
+            --success: #10b981;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+            font-display: swap;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header otimizado */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            will-change: transform;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 100;
+            color: var(--primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 100;
+            color: var(--secondary);
+            margin-top: 0.25rem;
+            margin-left: 4rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Main content otimizado */
+        .main-content {
+            display: grid;
+            gap: 0.5rem;
+            padding: 1rem 0;
+        }
+
+        /* Card base otimizado */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            contain: layout style paint;
+        }
+
+        /* Alert moderno e otimizado */
+        .alert {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            color: var(--primary);
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .alert-content {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .alert-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Controls panel otimizado */
+        .controls-panel {
+            margin-top: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 0.25rem);
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(18, 63, 50, 0.1);
+        }
+
+        .form-select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: calc(var(--radius) - 0.25rem);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            min-height: 44px; /* Melhor para touch */
+        }
+
+        .btn-primary {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--success);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Candidate info otimizado */
+        .candidate-info {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .candidate-details h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .candidate-role {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .vote-stats {
+            text-align: right;
+        }
+
+        .vote-count {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .vote-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Map container otimizado */
+        .map-container {
+            padding: 0;
+            min-height: 500px;
+            position: relative;
+            contain: layout style paint;
+        }
+
+        .map-wrapper {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+
+        .map-wrapper iframe {
+            width: 100%;
+            min-height: 500px;
+            border: none;
+            display: block;
+            border-radius: var(--radius);
+            loading: lazy; /* Lazy loading nativo */
+        }
+
+        .map-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 500px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .map-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border);
+        }
+
+        /* Loading otimizado */
+        .loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            gap: 1rem;
+        }
+
+        .loading.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer otimizado */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .footer-info strong {
+            color: var(--text-primary);
+        }
+
+        .footer-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* Performance indicator (debug) */
+        .performance-indicator {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Responsive otimizado */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .logo-section {
+                justify-content: center;
+            }
+
+            .logo-text {
+                align-items: center;
+                text-align: center;
+            }
+
+            .main-title {
+                font-size: 1.8rem;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .candidate-info {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .vote-stats {
+                text-align: center;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .footer-meta {
+                text-align: center;
+            }
+
+            .map-wrapper iframe {
+                min-height: 400px; /* Menor em mobile */
+            }
+        }
+
+        /* Otimizações para impressão */
+        @media print {
+            .header, .footer, .controls-panel, .alert {
+                display: none;
+            }
+            
+            .map-container {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Reduzir motion para usuários sensíveis */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-text">
+                        <h1 class="main-title">mapæleitoral</h1>
+                        <p class="subtitle">Democracia em Dados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <!-- Controls -->
+        <div class="card controls-panel">
+            <form method="GET" id="filterForm" novalidate>
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label for="ano" class="form-label">Ano da Eleição</label>
+                        <select class="form-select" id="ano" name="ano" required aria-label="Selecione o ano da eleição">
+                            {% for ano in anos %}
+                                <option value="{{ ano }}" {% if ano|stringformat:"s" == selected_ano %}selected{% endif %}>
+                                    {{ ano }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="partido" class="form-label">Partido</label>
+                        <select class="form-select" id="partido" name="partido" required aria-label="Selecione o partido">
+                            {% for partido in partidos %}
+                                <option value="{{ partido }}" {% if partido == selected_partido %}selected{% endif %}>
+                                    {{ partido }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="candidato" class="form-label">Candidato</label>
+                        <select class="form-select" id="candidato" name="candidato" required aria-label="Selecione o candidato">
+                            {% for candidato in candidatos %}
+                                <option value="{{ candidato }}" {% if candidato == selected_candidato %}selected{% endif %}>
+                                    {{ candidato }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="updateBtn" aria-label="Atualizar mapa com os dados selecionados">
+                        <span class="btn-text">Atualizar</span>
+                        <span class="btn-loading" style="display: none;">Carregando...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Loading indicator -->
+        <div class="loading" id="loadingIndicator" role="status" aria-live="polite">
+            <div class="spinner" aria-hidden="true"></div>
+            <p>Carregando dados do mapa...</p>
+        </div>
+
+        <!-- Candidate Info -->
+        {% if candidato_info %}
+        <div class="card candidate-info" role="banner">
+            <div class="candidate-details">
+                <h2>{{ candidato_info.nome }}</h2>
+                <p class="candidate-role">{{ candidato_info.cargo }} - {{ candidato_info.ano }}</p>
+            </div>
+            <div class="vote-stats">
+                <div class="vote-count" aria-label="{{ candidato_info.votos_total }} votos totais">
+                    {{ candidato_info.votos_total|floatformat:0 }}
+                </div>
+                <div class="vote-label">Votos</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Map -->
+        <div class="card map-container" id="mapContainer">
+            {% if map_url %}
+            <div class="map-wrapper">
+                <iframe 
+                    src="{{ map_url }}" 
+                    class="folium-map" 
+                    title="Mapa eleitoral interativo mostrando distribuição de votos por bairro"
+                    loading="lazy"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            {% else %}
+            <div class="map-placeholder">
+                <div class="map-placeholder-icon" aria-hidden="true">🗺️</div>
+                <h3>Selecione um candidato</h3>
+                <p>Escolha um ano, partido e candidato para visualizar os dados no mapa</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Alerts -->
+        <div class="alert" role="alert">
+            <span class="alert-icon" aria-hidden="true">ℹ️</span>
+            <div class="alert-content">
+                <div class="alert-title">Informação importante</div>
+                Alguns bairros podem não apresentar dados devido à ausência de locais de votação ou falhas na coleta de votos.
+            </div>
+        </div>
+
+        <div class="alert" role="alert">
+            <span class="alert-icon" aria-hidden="true">💝</span>
+            <div class="alert-content">
+                <div class="alert-title">APOIO AO PROJETO</div>
+                Este site é uma iniciativa independente sem apoio financeiro institucional. 
+                <br>Se você deseja apoiar o projeto, considere fazer uma doação:
+                <br><strong>Pix:</strong> mapaeleitoral@outlook.com
+                <br><strong>Banco:</strong> Nubank (260) | Agência: 0001 | Conta: 2199399-2
+                <br><strong>Favorecido:</strong> Filipe de Meireles Dias
+                <br>Sua contribuição ajuda a manter o projeto em funcionamento. Obrigado! 🙏
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Fonte:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
+                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
+                    <p><strong>Versão:</strong> 2.0 - {% if load_time %}Carregado em {{ load_time }}{% else %}Site em desenvolvimento{% endif %}</p>
+                </div>
+                <div class="footer-meta">
+                    Última atualização: Janeiro/2025
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Performance indicator (apenas em debug) -->
+    {% if debug %}
+    <div class="performance-indicator" id="perfIndicator">
+        Carregando...
+    </div>
+    {% endif %}
+
+    <!-- JavaScript otimizado -->
+    <script>
+        // === CONFIGURAÇÃO E CACHE ===
+        const AppConfig = {
+            DEBUG: {% if debug %}true{% else %}false{% endif %},
+            CACHE_DURATION: 5 * 60 * 1000, // 5 minutos
+            DEBOUNCE_DELAY: 300,
+            RETRY_ATTEMPTS: 3,
+            TIMEOUT: 15000
+        };
+
+        // Cache inteligente para requisições AJAX
+        class SmartCache {
+            constructor() {
+                this.cache = new Map();
+                this.timestamps = new Map();
+                this.setupCleanup();
+            }
+
+            set(key, data) {
+                this.cache.set(key, data);
+                this.timestamps.set(key, Date.now());
+            }
+
+            get(key) {
+                const timestamp = this.timestamps.get(key);
+                if (!timestamp || (Date.now() - timestamp) > AppConfig.CACHE_DURATION) {
+                    this.delete(key);
+                    return null;
+                }
+                return this.cache.get(key);
+            }
+
+            delete(key) {
+                this.cache.delete(key);
+                this.timestamps.delete(key);
+            }
+
+            clear() {
+                this.cache.clear();
+                this.timestamps.clear();
+            }
+
+            setupCleanup() {
+                // Limpeza automática a cada 5 minutos
+                setInterval(() => {
+                    const now = Date.now();
+                    for (const [key, timestamp] of this.timestamps.entries()) {
+                        if (now - timestamp > AppConfig.CACHE_DURATION) {
+                            this.delete(key);
+                        }
+                    }
+                }, AppConfig.CACHE_DURATION);
+            }
+
+            getStats() {
+                return {
+                    size: this.cache.size,
+                    keys: Array.from(this.cache.keys())
+                };
+            }
+        }
+
+        // === UTILITÁRIOS ===
+        const Utils = {
+            // Debounce para evitar chamadas excessivas
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
+
+            // Fetch com retry e timeout
+            async fetchWithRetry(url, options = {}) {
+                const maxRetries = AppConfig.RETRY_ATTEMPTS;
+                let lastError;
+
+                for (let i = 0; i <= maxRetries; i++) {
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), AppConfig.TIMEOUT);
+
+                        const response = await fetch(url, {
+                            ...options,
+                            signal: controller.signal
+                        });
+
+                        clearTimeout(timeoutId);
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        }
+
+                        return await response.json();
+                    } catch (error) {
+                        lastError = error;
+                        if (i < maxRetries) {
+                            await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                        }
+                    }
+                }
+
+                throw lastError;
+            },
+
+            // Log de performance
+            logPerformance(operation, startTime) {
+                const duration = performance.now() - startTime;
+                if (AppConfig.DEBUG) {
+                    console.log(`[PERF] ${operation}: ${duration.toFixed(2)}ms`);
+                    
+                    const perfIndicator = document.getElementById('perfIndicator');
+                    if (perfIndicator) {
+                        perfIndicator.textContent = `${operation}: ${duration.toFixed(0)}ms`;
+                        perfIndicator.style.display = 'block';
+                        setTimeout(() => {
+                            perfIndicator.style.display = 'none';
+                        }, 3000);
+                    }
+                }
+                return duration;
+            },
+
+            // Validação de formulário
+            validateForm() {
+                const ano = document.getElementById('ano').value;
+                const partido = document.getElementById('partido').value;
+                const candidato = document.getElementById('candidato').value;
+
+                return ano && partido && candidato;
+            },
+
+            // Feedback visual de loading
+            setLoading(isLoading) {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                const updateBtn = document.getElementById('updateBtn');
+                const btnText = updateBtn.querySelector('.btn-text');
+                const btnLoading = updateBtn.querySelector('.btn-loading');
+
+                if (isLoading) {
+                    loadingIndicator.classList.add('show');
+                    updateBtn.disabled = true;
+                    btnText.style.display = 'none';
+                    btnLoading.style.display = 'inline';
+                } else {
+                    loadingIndicator.classList.remove('show');
+                    updateBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                }
+            }
+        };
+
+        // === GERENCIADOR DE ESTADO ===
+        class StateManager {
+            constructor() {
+                this.cache = new SmartCache();
+                this.currentRequest = null;
+            }
+
+            async getData(url, cacheKey) {
+                // Verificar cache primeiro
+                const cached = this.cache.get(cacheKey);
+                if (cached) {
+                    if (AppConfig.DEBUG) console.log(`[CACHE HIT] ${cacheKey}`);
+                    return cached;
+                }
+
+                // Cancelar request anterior se existir
+                if (this.currentRequest) {
+                    this.currentRequest.abort();
+                }
+
+                // Nova requisição
+                const controller = new AbortController();
+                this.currentRequest = controller;
+
+                try {
+                    const data = await Utils.fetchWithRetry(url);
+                    this.cache.set(cacheKey, data);
+                    return data;
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error(`Erro ao carregar ${cacheKey}:`, error);
+                        throw error;
+                    }
+                } finally {
+                    this.currentRequest = null;
+                }
+            }
+        }
+
+        // === CONTROLADOR PRINCIPAL ===
+        class MapaEleitoralApp {
+            constructor() {
+                this.stateManager = new StateManager();
+                this.initializeElements();
+                this.setupEventListeners();
+                this.preloadCriticalData();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    ano: document.getElementById('ano'),
+                    partido: document.getElementById('partido'),
+                    candidato: document.getElementById('candidato'),
+                    form: document.getElementById('filterForm'),
+                    mapContainer: document.getElementById('mapContainer')
+                };
+            }
+
+            setupEventListeners() {
+                // Eventos com debounce
+                this.elements.ano.addEventListener('change', 
+                    Utils.debounce(() => this.updatePartidos(), AppConfig.DEBOUNCE_DELAY)
+                );
+
+                this.elements.partido.addEventListener('change', 
+                    Utils.debounce(() => this.updateCandidatos(), AppConfig.DEBOUNCE_DELAY)
+                );
+
+                // Submit do formulário
+                this.elements.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (Utils.validateForm()) {
+                        this.updateMap();
+                    }
+                });
+
+                // Eventos de teclado para acessibilidade
+                [this.elements.ano, this.elements.partido, this.elements.candidato].forEach(element => {
+                    element.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            this.elements.form.dispatchEvent(new Event('submit'));
+                        }
+                    });
+                });
+
+                // Cleanup on page unload
+                window.addEventListener('beforeunload', () => {
+                    this.stateManager.cache.clear();
+                });
+            }
+
+            async preloadCriticalData() {
+                try {
+                    // Preload dados mais utilizados
+                    const anoAtual = this.elements.ano.value;
+                    if (anoAtual) {
+                        await this.stateManager.getData(
+                            `/get_partidos_ajax/?ano=${encodeURIComponent(anoAtual)}`,
+                            `partidos_${anoAtual}`
+                        );
+                    }
+                } catch (error) {
+                    console.warn('Erro no preload:', error);
+                }
+            }
+
+            async updatePartidos() {
+                const startTime = performance.now();
+                const ano = this.elements.ano.value;
+
+                if (!ano) return;
+
+                try {
+                    this.setSelectLoading(this.elements.partido, true);
+                    this.setSelectLoading(this.elements.candidato, true);
+
+                    const data = await this.stateManager.getData(
+                        `/get_partidos_ajax/?ano=${encodeURIComponent(ano)}`,
+                        `partidos_${ano}`
+                    );
+
+                    this.populateSelect(this.elements.partido, data.partidos);
+                    await this.updateCandidatos();
+
+                    Utils.logPerformance('Update Partidos', startTime);
+
+                } catch (error) {
+                    console.error('Erro ao atualizar partidos:', error);
+                    this.showError(this.elements.partido, 'Erro ao carregar partidos');
+                } finally {
+                    this.setSelectLoading(this.elements.partido, false);
+                }
+            }
+
+            async updateCandidatos() {
+                const startTime = performance.now();
+                const partido = this.elements.partido.value;
+                const ano = this.elements.ano.value;
+
+                if (!partido || !ano) return;
+
+                try {
+                    this.setSelectLoading(this.elements.candidato, true);
+
+                    const data = await this.stateManager.getData(
+                        `/get_candidatos_ajax/?partido=${encodeURIComponent(partido)}&ano=${encodeURIComponent(ano)}`,
+                        `candidatos_${partido}_${ano}`
+                    );
+
+                    this.populateSelect(this.elements.candidato, data.candidatos);
+
+                    Utils.logPerformance('Update Candidatos', startTime);
+
+                } catch (error) {
+                    console.error('Erro ao atualizar candidatos:', error);
+                    this.showError(this.elements.candidato, 'Erro ao carregar candidatos');
+                } finally {
+                    this.setSelectLoading(this.elements.candidato, false);
+                }
+            }
+
+            updateMap() {
+                const startTime = performance.now();
+
+                if (!Utils.validateForm()) {
+                    alert('Por favor, selecione todos os filtros');
+                    return;
+                }
+
+                Utils.setLoading(true);
+
+                // Enviar formulário (reload da página com novos parâmetros)
+                this.elements.form.submit();
+
+                Utils.logPerformance('Update Map', startTime);
+            }
+
+            populateSelect(selectElement, options) {
+                const currentValue = selectElement.value;
+                selectElement.innerHTML = '';
+
+                options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    selectElement.appendChild(optionElement);
+                });
+
+                // Restaurar valor anterior se ainda existe
+                if (options.includes(currentValue)) {
+                    selectElement.value = currentValue;
+                }
+            }
+
+            setSelectLoading(selectElement, isLoading) {
+                selectElement.disabled = isLoading;
+                
+                if (isLoading) {
+                    selectElement.innerHTML = '<option>Carregando...</option>';
+                    selectElement.style.opacity = '0.6';
+                } else {
+                    selectElement.style.opacity = '1';
+                }
+            }
+
+            showError(selectElement, message) {
+                selectElement.innerHTML = `<option>${message}</option>`;
+                selectElement.style.borderColor = '#ef4444';
+                
+                setTimeout(() => {
+                    selectElement.style.borderColor = '';
+                }, 3000);
+            }
+        }
+
+        // === INICIALIZAÇÃO ===
+        document.addEventListener('DOMContentLoaded', function() {
+            const startTime = performance.now();
+
+            // Inicializar aplicação
+            window.mapaApp = new MapaEleitoralApp();
+
+            // Setup de lazy loading para iframe
+            const mapIframe = document.querySelector('.map-wrapper iframe');
+            if (mapIframe) {
+                mapIframe.loading = 'lazy';
+                
+                // Observador para quando o mapa entrar na viewport
+                if ('IntersectionObserver' in window) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                // Mapa visível, pode fazer otimizações adicionais
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    });
+                    observer.observe(mapIframe);
+                }
+            }
+
+            // Cleanup de elementos desnecessários (notebooks, etc.)
+            const cleanupInterval = setInterval(() => {
+                const notebookElements = document.querySelectorAll(
+                    '.output_area, .jp-OutputArea, .cell-output, [class*="trust"], [class*="notebook"]'
+                );
+                
+                notebookElements.forEach(el => {
+                    if (el.textContent.includes('Trust') || el.textContent.includes('Notebook')) {
+                        el.remove();
+                    }
+                });
+
+                // Parar limpeza após 10 segundos
+                if (performance.now() - startTime > 10000) {
+                    clearInterval(cleanupInterval);
+                }
+            }, 1000);
+
+            // Log de performance inicial
+            Utils.logPerformance('DOM Ready', startTime);
+
+            // Analytics de performance (se habilitado)
+            if (AppConfig.DEBUG) {
+                setTimeout(() => {
+                    const loadTime = performance.now() - startTime;
+                    console.log(`[ANALYTICS] Page load completed in ${loadTime.toFixed(2)}ms`);
+                    
+                    // Enviar métricas se configurado
+                    if (window.gtag) {
+                        window.gtag('event', 'page_load_time', {
+                            'custom_parameter': loadTime
+                        });
+                    }
+                }, 100);
+            }
+        });
+
+        // === FUNÇÕES GLOBAIS PARA COMPATIBILIDADE ===
+        window.updatePartidos = function() {
+            if (window.mapaApp) {
+                window.mapaApp.updatePartidos();
+            }
+        };
+
+        window.updateCandidatos = function() {
+            if (window.mapaApp) {
+                window.mapaApp.updateCandidatos();
+            }
+        };
+
+        // === TRATAMENTO DE ERROS GLOBAIS ===
+        window.addEventListener('error', function(e) {
+            console.error('Erro global capturado:', e.error);
+            
+            // Tentar recuperar estado da aplicação
+            Utils.setLoading(false);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Promise rejeitada:', e.reason);
+            e.preventDefault(); // Evitar log no console
+        });
+
+        // === SERVICE WORKER (SE DISPONÍVEL) ===
+        if ('serviceWorker' in navigator && !AppConfig.DEBUG) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registrado:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('SW falhou:', error);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Schema.org para SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Mapa Eleitoral",
+        "description": "Sistema interativo de visualização de dados eleitorais do Rio de Janeiro",
+        "url": "https://mapaeleitoral.com.br",
+        "applicationCategory": "GovernmentApplication",
+        "operatingSystem": "Web",
+        "author": {
+            "@type": "Person",
+            "name": "Filipe Dias",
+            "url": "https://github.com/diasfilipe"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "BRL"
+        }
+    }
+    </script>
+</body>
+</html>
