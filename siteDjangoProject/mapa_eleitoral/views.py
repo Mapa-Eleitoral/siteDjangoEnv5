@@ -432,7 +432,6 @@ def create_fallback_map_html(candidato_info):
 # === VIEW PRINCIPAL OTIMIZADA ===
 
 @vary_on_headers('Accept-Language')
-@cache_page(300)  # Cache da página por 5 minutos para melhor TTFB
 def home_view(request):
     """View principal com máxima otimização para Core Web Vitals"""
     
