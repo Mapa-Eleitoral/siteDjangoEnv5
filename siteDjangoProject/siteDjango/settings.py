@@ -13,6 +13,7 @@ ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1', 
     '.railway.app',
+    'sitedjangoenv4-production.up.railway.app',
     'mapaeleitoral.com.br',
     'www.mapaeleitoral.com.br'
 ]
