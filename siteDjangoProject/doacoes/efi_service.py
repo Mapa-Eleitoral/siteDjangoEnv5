@@ -195,6 +195,11 @@ class EFIBankService:
                 logger.info('Ambiente de desenvolvimento local detectado - usando simulação PIX')
                 return self._simular_cobranca_pix(doacao)
             
+            # TEMPORÁRIO: Forçar simulação em produção até resolver API
+            if settings.DEBUG:
+                logger.info('DEBUG ativo - usando simulação PIX temporariamente')
+                return self._simular_cobranca_pix(doacao)
+            
             # Para ambiente de desenvolvimento, simular cobrança se não tiver certificado válido
             if (self.config.sandbox and 
                 (not hasattr(self.config, 'certificate_path') or 
