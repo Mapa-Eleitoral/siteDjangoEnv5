@@ -7,7 +7,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')  # Remove default for security
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=lambda x: x.lower() in ('true', '1', 'yes', 'on'))
 
 ALLOWED_HOSTS = [
     'localhost', 

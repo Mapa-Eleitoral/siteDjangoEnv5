@@ -190,12 +190,7 @@ class EFIBankService:
         try:
             from django.conf import settings
             
-            # Para desenvolvimento local, sempre simular
-            if settings.DEBUG and 'sqlite' in str(settings.DATABASES['default']['ENGINE']):
-                logger.info('Ambiente de desenvolvimento local detectado - usando simulação PIX')
-                return self._simular_cobranca_pix(doacao)
-            
-            # TEMPORÁRIO: Forçar simulação em produção até resolver API
+            # TEMPORÁRIO: Forçar simulação em DEBUG até resolver API
             if settings.DEBUG:
                 logger.info('DEBUG ativo - usando simulação PIX temporariamente')
                 return self._simular_cobranca_pix(doacao)
