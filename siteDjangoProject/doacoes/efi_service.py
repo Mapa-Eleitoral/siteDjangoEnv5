@@ -177,20 +177,31 @@ class EFIBankService:
             
         except Exception as e:
             logger.error(f'Erro na requisição EFI: {str(e)}')
+            logger.error(f'URL tentada: {url}')
+            logger.error(f'Headers: {headers}')
+            logger.error(f'Data: {data}')
             return {
                 'sucesso': False,
-                'erro': str(e)
+                'erro': f'Erro de requisição: {str(e)}'
             }
     
     def criar_cobranca_pix(self, doacao):
         """Cria cobrança PIX"""
         try:
+            from django.conf import settings
+            
+            # Para desenvolvimento local, sempre simular
+            if settings.DEBUG and 'sqlite' in str(settings.DATABASES['default']['ENGINE']):
+                logger.info('Ambiente de desenvolvimento local detectado - usando simulação PIX')
+                return self._simular_cobranca_pix(doacao)
+            
             # Para ambiente de desenvolvimento, simular cobrança se não tiver certificado válido
             if (self.config.sandbox and 
                 (not hasattr(self.config, 'certificate_path') or 
                  not self.config.certificate_path or 
                  self.config.certificate_path in ['/path/to/sandbox_certificate.p12', './certificados/sandbox_certificate.p12'] or
                  not self._certificate_exists())):
+                logger.info('Sandbox sem certificado válido - usando simulação PIX')
                 return self._simular_cobranca_pix(doacao)
             
             # Dados da cobrança
