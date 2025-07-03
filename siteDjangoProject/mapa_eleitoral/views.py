@@ -274,11 +274,11 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
         # 2. Configuração do mapa otimizada
         mapa = fl.Map(
             location=[-22.928777, -43.423878],  # Centro do Rio de Janeiro
-            zoom_start=10,
+            zoom_start=11,
             tiles='CartoDB positron',
             prefer_canvas=True,
             width='100%',
-            height='100%',
+            height='80%',
             max_zoom=15,
             min_zoom=9,
             attribution_control=False
@@ -301,7 +301,7 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
                 data=choropleth_data,
                 columns=['Bairro', 'Votos'],
                 key_on='feature.properties.NOME',
-                fill_color='YlOrRd',
+                fill_color='Greens',
                 nan_fill_color='#f0f0f0',
                 nan_fill_opacity=0.3,
                 fill_opacity=0.7,

@@ -9,13 +9,17 @@
     <meta name="description" content="Visualize dados eleitorais do Rio de Janeiro por bairro. Sistema interativo com mapas e estatísticas de votação.">
     <meta name="keywords" content="eleições, rio de janeiro, dados eleitorais, mapa, votação, bairros">
     <meta name="author" content="Filipe Dias">
-    
-    <!-- Meta tags para redes sociais -->
+
+    <!-- Open Graph para redes sociais (inclui WhatsApp) -->
     <meta property="og:title" content="Mapa Eleitoral - Democracia em Dados">
-    <meta property="og:description" content="Sistema interativo de visualização de dados eleitorais do Rio de Janeiro">
+    <meta property="og:description" content="Veja mapas interativos com dados de votação por bairro no Rio de Janeiro.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mapaeleitoral.com.br">
-    
+    <meta property="og:image" content="https://mapaeleitoral.com.br/static/EduardoPaesViz.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
     <!-- Otimização crítica de fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -114,32 +118,6 @@
             justify-content: space-between;
             align-items: center;
             gap: 2rem;
-        }
-
-        .donation-btn {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .donation-btn:hover {
-            background: linear-gradient(45deg, #c0392b, #a93226);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
-        }
-
-        .donation-btn:active {
-            transform: translateY(0);
         }
 
         .logo-section {
@@ -491,11 +469,6 @@
                 font-size: 1.8rem;
             }
 
-            .donation-btn {
-                padding: 10px 20px;
-                font-size: 0.85rem;
-            }
-
             .controls-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
@@ -685,11 +658,26 @@
             <div class="alert-content">
                 <div class="alert-title">APOIO AO PROJETO</div>
                 Este site é uma iniciativa independente sem apoio financeiro institucional. 
-                Se você aprecia o projeto e deseja contribuir, considere fazer uma doação. Sua ajuda é fundamental para manter o mapa atualizado e em funcionamento.
+                <br>Se você aprecia o projeto e deseja contribuir, considere fazer uma doação. Sua ajuda é fundamental para mantê-lo atualizado e em funcionamento.
+                <br>
                 <br><strong>Pix:</strong> mapaeleitoral@outlook.com
                 <br><strong>Banco:</strong> Efí Bank (364) | Agência: 0001 | Conta: 792139-1
                 <br><strong>Favorecido:</strong> Filipe de Meireles Dias
-                <br>Sua contribuição ajuda a manter o projeto em funcionamento. Obrigado! 🙏
+                <br>
+                <br>Sua contribuição ajuda a manter o projeto em funcionamento. Obrigado!
+            </div>
+            <span class="alert-icon" aria-hidden="true">🗺️</span>
+            <div class="alert-content">
+                <div class="alert-title">PRÓXIMOS PASSOS</div>
+                Todos os meses, o mapa é atualizado com os dados mais recentes das eleições.
+                Planejamos expandir o mapa para incluir dados de outros municípios, tornando-o uma ferramenta abrangente para a visualização de dados eleitorais em todo o país.
+                <br>
+                <br><strong>Road Map:</strong>
+                <br>São Paulo Capital até Outubro de 25
+                <br>Belo Horizonte, Curitiba até Janeiro 26
+                <br>Salvador, Fortaleza, Vitória, Recife até Abril 26
+                <br>Porto Alegre, Londrina, Ponta Grossa, São Bernardo do Campo até Julho 26
+                <br>Essas cidades foram escolhidas com base em critérios como população, relevância política e sobretudo disponibilidade de dados geoespaciais.
             </div>
         </div>
     </main>
@@ -1286,7 +1274,7 @@
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Mapa Eleitoral",
-        "description": "Sistema interativo de visualização de dados eleitorais do Rio de Janeiro",
+        "description": "Lançamento do Sistema Interativo de visualização de Dados Eleitorais",
         "url": "https://mapaeleitoral.com.br",
         "applicationCategory": "GovernmentApplication",
         "operatingSystem": "Web",
