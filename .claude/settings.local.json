@@ -11,7 +11,8 @@
       "Bash(source:*)",
       "Bash(mkdir:*)",
       "Bash(railway status:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }
