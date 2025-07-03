@@ -257,7 +257,6 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
 # === GERAÇÃO DE MAPA SUPER OTIMIZADA ===
 
 # CORREÇÃO PARA SISTEMA DE GERAÇÃO DE MAPAS
-# Adicione este código ao seu views.py ou substitua a função generate_static_map_html
 
 def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
     """
@@ -307,10 +306,11 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
                 fill_opacity=0.7,
                 line_opacity=0.3,
                 line_weight=1,
-                bins=6,
+                bins=10,
                 legend_name=f'Votos - {candidato_info["nome"]}',
                 smooth_factor=1.0,
-                highlight=True
+                highlight=True,
+                
             )
             choropleth.add_to(mapa)
             
