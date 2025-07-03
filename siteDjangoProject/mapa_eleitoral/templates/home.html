@@ -116,6 +116,32 @@
             gap: 2rem;
         }
 
+        .donation-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .donation-btn:hover {
+            background: linear-gradient(45deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .donation-btn:active {
+            transform: translateY(0);
+        }
+
         .logo-section {
             display: flex;
             align-items: center;
@@ -465,6 +491,11 @@
                 font-size: 1.8rem;
             }
 
+            .donation-btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+
             .controls-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
@@ -527,6 +558,10 @@
                         <p class="subtitle">Democracia em Dados</p>
                     </div>
                 </div>
+                <a href="/doacoes/" class="donation-btn">
+                    <span>💝</span>
+                    <span>Apoie o Projeto</span>
+                </a>
             </div>
         </div>
     </header>
@@ -654,7 +689,8 @@
             <div class="alert-content">
                 <div class="alert-title">APOIO AO PROJETO</div>
                 Este site é uma iniciativa independente sem apoio financeiro institucional. 
-                <br>Se você deseja apoiar o projeto, considere fazer uma doação:
+                <br>Use o botão <strong>"Apoie o Projeto"</strong> no topo da página para fazer uma doação segura via PIX.
+                <br><br>Ou faça uma transferência direta:
                 <br><strong>Pix:</strong> mapaeleitoral@outlook.com
                 <br><strong>Banco:</strong> Nubank (260) | Agência: 0001 | Conta: 2199399-2
                 <br><strong>Favorecido:</strong> Filipe de Meireles Dias
