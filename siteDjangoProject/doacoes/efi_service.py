@@ -61,11 +61,54 @@ class EFIBankService:
         """Verifica se o certificado existe"""
         try:
             import os
+            
+            # Verificar se tem certificado em Base64 (para Railway)
+            if self.config.sandbox:
+                cert_b64 = config('EFI_CERTIFICATE_SANDBOX_B64', default='')
+                if cert_b64:
+                    return True
+            else:
+                cert_b64 = config('EFI_CERTIFICATE_PRODUCTION_B64', default='')
+                if cert_b64:
+                    return True
+            
+            # Verificar arquivo físico
             if hasattr(self.config, 'certificate_path') and self.config.certificate_path:
                 return os.path.exists(self.config.certificate_path)
             return False
         except Exception:
             return False
+    
+    def _get_certificate_path(self):
+        """Obtém o caminho do certificado, criando arquivo temporário se necessário"""
+        try:
+            import tempfile
+            import base64
+            import os
+            
+            # Tentar usar certificado Base64 primeiro (Railway)
+            if self.config.sandbox:
+                cert_b64 = config('EFI_CERTIFICATE_SANDBOX_B64', default='')
+            else:
+                cert_b64 = config('EFI_CERTIFICATE_PRODUCTION_B64', default='')
+            
+            if cert_b64:
+                # Decodificar Base64 e criar arquivo temporário
+                cert_data = base64.b64decode(cert_b64)
+                temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.p12')
+                temp_file.write(cert_data)
+                temp_file.close()
+                return temp_file.name
+            
+            # Fallback para arquivo físico
+            if hasattr(self.config, 'certificate_path') and self.config.certificate_path:
+                if os.path.exists(self.config.certificate_path):
+                    return self.config.certificate_path
+            
+            return None
+        except Exception as e:
+            logger.error(f'Erro ao obter certificado: {str(e)}')
+            return None
     
     def _get_access_token(self):
         """Obtém token de acesso"""
