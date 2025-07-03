@@ -205,7 +205,7 @@ class EFIBankService:
                 'valor': {
                     'original': str(doacao.valor)
                 },
-                'chave': config('PIX_KEY', default='mapaeleitoral@outlook.com'),  # Chave PIX
+                'chave': config('EFI_PIX_KEY', default='mapaeleitoral@outlook.com'),  # Chave PIX
                 'solicitacaoPagador': f'Doação para Mapa Eleitoral - {doacao.mensagem}' if doacao.mensagem else 'Doação para Mapa Eleitoral'
             }
             
@@ -256,7 +256,7 @@ class EFIBankService:
         
         # Gerar dados simulados
         fake_txid = str(uuid.uuid4()).replace('-', '')[:32]
-        pix_key = config('PIX_KEY', default='mapaeleitoral@outlook.com')
+        pix_key = config('EFI_PIX_KEY', default='mapaeleitoral@outlook.com')
         fake_qr_code = f"00020126330014br.gov.bcb.pix{len(pix_key):02d}{pix_key}5204000053039865404{doacao.valor:.2f}5802BR6009SAO PAULO62070503***6304"
         
         # Atualizar doação
