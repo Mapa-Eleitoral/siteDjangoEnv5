@@ -801,6 +801,7 @@ def generate_map_view(request):
         }, status=400)
     
     try:
+        
         # Buscar dados do candidato
         dados_completos = get_complete_candidate_data_optimized(candidato, partido, ano)
         

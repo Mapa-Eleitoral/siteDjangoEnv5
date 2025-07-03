@@ -1,7 +1,7 @@
-# urls.py - Adicione estas rotas ao seu arquivo urls.py
-
 from django.urls import path
 from . import views
+
+app_name = 'mapa_eleitoral'
 
 urlpatterns = [
     path('', views.home_view, name='home'),

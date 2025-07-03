@@ -8,7 +8,13 @@
       "Bash(./python.exe -m django --version)",
       "Bash(touch:*)",
       "Bash(ls:*)",
-      "Bash(rm:*)"
+      "Bash(source:*)",
+      "Bash(mkdir:*)",
+      "Bash(railway status:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(python manage.py:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
