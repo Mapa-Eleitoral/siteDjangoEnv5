@@ -320,6 +320,10 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+else:
+    # Configurações para debug - mostrar erros detalhados
+    INTERNAL_IPS = ['127.0.0.1', '::1']
+    ALLOWED_HOSTS.extend(['*'])  # Permitir qualquer host em debug
 
 # === FUNÇÃO DE SETUP DE DIRETÓRIOS ===
 def setup_directories():

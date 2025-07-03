@@ -11,4 +11,5 @@ urlpatterns = [
     path('obrigado/<uuid:doacao_id>/', views.obrigado_view, name='obrigado'),
     path('webhook/efi/', views.webhook_efi, name='webhook_efi'),
     path('consultar/<uuid:doacao_id>/', views.consultar_pagamento, name='consultar'),
+    path('debug/', views.debug_view, name='debug'),
 ]

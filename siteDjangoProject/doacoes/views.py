@@ -220,3 +220,63 @@ def consultar_pagamento(request, doacao_id):
             'sucesso': False,
             'erro': 'Erro interno'
         })
+
+
+def debug_view(request):
+    """View para debug - só funciona com DEBUG=True"""
+    from django.conf import settings
+    import os
+    from decouple import config
+    
+    if not settings.DEBUG:
+        return HttpResponse('Debug desabilitado', status=403)
+    
+    debug_info = {
+        'Django Settings': {
+            'DEBUG': settings.DEBUG,
+            'ALLOWED_HOSTS': settings.ALLOWED_HOSTS,
+            'CSRF_TRUSTED_ORIGINS': getattr(settings, 'CSRF_TRUSTED_ORIGINS', 'Não configurado'),
+            'INSTALLED_APPS': 'doacoes' in settings.INSTALLED_APPS,
+        },
+        'Environment Variables': {
+            'EFI_SANDBOX': config('EFI_SANDBOX', default='Não configurado'),
+            'EFI_PIX_KEY': config('EFI_PIX_KEY', default='Não configurado'),
+            'EFI_CLIENT_ID_PRODUCTION': config('EFI_CLIENT_ID_PRODUCTION', default='Não configurado')[:20] + '...' if config('EFI_CLIENT_ID_PRODUCTION', default='') else 'Não configurado',
+            'DEBUG': config('DEBUG', default='Não configurado'),
+        },
+        'Database': {},
+        'EFI Service': {}
+    }
+    
+    # Testar conexão com banco
+    try:
+        from .models import Doacao
+        count = Doacao.objects.count()
+        debug_info['Database']['Conexão'] = f'OK - {count} doações'
+    except Exception as e:
+        debug_info['Database']['Erro'] = str(e)
+    
+    # Testar EFI Service
+    try:
+        from .efi_service import EFIBankService
+        efi = EFIBankService()
+        debug_info['EFI Service']['Configuração'] = 'OK'
+        debug_info['EFI Service']['Sandbox'] = efi.config.sandbox
+        debug_info['EFI Service']['Client ID'] = efi.config.client_id[:20] + '...' if efi.config.client_id else 'Não configurado'
+    except Exception as e:
+        debug_info['EFI Service']['Erro'] = str(e)
+    
+    # Renderizar como HTML simples
+    html = '<html><head><title>Debug Info</title></head><body>'
+    html += '<h1>Debug Information</h1>'
+    html += '<style>body{font-family:monospace;} table{border-collapse:collapse;} td,th{border:1px solid #ddd;padding:8px;}</style>'
+    
+    for section, data in debug_info.items():
+        html += f'<h2>{section}</h2><table>'
+        for key, value in data.items():
+            html += f'<tr><td><strong>{key}</strong></td><td>{value}</td></tr>'
+        html += '</table><br>'
+    
+    html += '</body></html>'
+    
+    return HttpResponse(html)
