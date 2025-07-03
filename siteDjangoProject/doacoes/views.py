@@ -89,19 +89,33 @@ def processar_doacao(request):
                 
                 return redirect('doacoes:pagamento', doacao_id=doacao.id)
             else:
-                # Erro ao processar pagamento
+                # Erro ao processar pagamento - debug detalhado
+                erro_detalhado = resultado.get('erro', 'Erro desconhecido')
+                resposta_completa = resultado.get('resposta_efi', {})
+                
+                logger.error(f'Erro EFI Bank: {erro_detalhado}')
+                logger.error(f'Resposta completa EFI: {resposta_completa}')
+                
                 doacao.status = 'rejeitada'
                 doacao.save()
                 
                 LogTransacao.objects.create(
                     doacao=doacao,
                     evento='erro_cobranca',
-                    dados={'erro': resultado['erro']},
+                    dados={
+                        'erro': erro_detalhado,
+                        'resposta_completa': resposta_completa,
+                        'resultado_completo': resultado
+                    },
                     sucesso=False,
-                    erro=resultado['erro']
+                    erro=erro_detalhado
                 )
                 
-                messages.error(request, f'Erro ao processar pagamento: {resultado["erro"]}')
+                # Mostrar erro mais detalhado em desenvolvimento
+                if settings.DEBUG:
+                    messages.error(request, f'Erro detalhado: {erro_detalhado} | Resposta: {resposta_completa}')
+                else:
+                    messages.error(request, f'Erro ao processar pagamento: {erro_detalhado}')
                 return redirect('doacoes:doacao')
                 
         except Exception as e:

@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'siteDjango.wsgi.application'
 
 # === CONFIGURAÇÃO DE BANCO DE DADOS OTIMIZADA ===
 if config('DATABASE_URL', default=None):
-    # Para produção (Railway, Heroku, etc.)
+    # Para produção (Railway, Heroku, etc.) ou desenvolvimento com DATABASE_URL
     DATABASES = {
         'default': dj_database_url.config(
             default=config('DATABASE_URL'),
@@ -99,13 +99,18 @@ if config('DATABASE_URL', default=None):
             ssl_require=config('DB_SSL', default=False, cast=bool)
         )
     }
-    # Otimizações específicas para produção
-    DATABASES['default']['OPTIONS'] = {
-        'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_lock_wait_timeout=50",
-        'charset': 'utf8mb4',
-        'autocommit': True,
-        'isolation_level': 'read committed',
-    }
+    
+    # Aplicar configurações específicas apenas para MySQL
+    database_url = config('DATABASE_URL')
+    if 'mysql' in database_url:
+        # Otimizações específicas para MySQL
+        DATABASES['default']['OPTIONS'] = {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', innodb_lock_wait_timeout=50",
+            'charset': 'utf8mb4',
+            'autocommit': True,
+            'isolation_level': 'read committed',
+        }
+    # Para SQLite, não precisa de OPTIONS especiais
 else:
     # Para desenvolvimento local
     DATABASES = {

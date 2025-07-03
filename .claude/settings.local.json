@@ -12,7 +12,9 @@
       "Bash(mkdir:*)",
       "Bash(railway status:*)",
       "Bash(git push:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(python manage.py:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
   }
