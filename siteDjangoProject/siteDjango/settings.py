@@ -18,6 +18,14 @@ ALLOWED_HOSTS = [
     'www.mapaeleitoral.com.br'
 ]
 
+# CSRF Trusted Origins para Railway
+CSRF_TRUSTED_ORIGINS = [
+    'https://mapaeleitoral.com.br',
+    'https://www.mapaeleitoral.com.br',
+    'https://*.railway.app',
+    'https://sitedjangoenv4-production.up.railway.app'
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
