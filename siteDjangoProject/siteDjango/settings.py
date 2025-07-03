@@ -23,8 +23,16 @@ CSRF_TRUSTED_ORIGINS = [
     'https://mapaeleitoral.com.br',
     'https://www.mapaeleitoral.com.br',
     'https://*.railway.app',
-    'https://sitedjangoenv4-production.up.railway.app'
+    'https://sitedjangoenv4-production.up.railway.app',
+    'http://mapaeleitoral.com.br',  # Fallback para HTTP
+    'http://www.mapaeleitoral.com.br'
 ]
+
+# Configurações CSRF adicionais para Railway
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = True
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
