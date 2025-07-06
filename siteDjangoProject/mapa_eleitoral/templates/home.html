@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Mapa Eleitoral - Democracia em Dados</title>
     
     <!-- Meta tags otimizadas para SEO -->
@@ -43,6 +44,7 @@
     <!-- Otimização crítica de fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <!-- Carregamento inline do CSS crítico -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
@@ -701,10 +703,10 @@
                 Planejamos expandir o mapa para incluir dados de outros municípios, tornando-o uma ferramenta abrangente para a visualização de dados eleitorais em todo o país.
                 <br>
                 <br><strong>Road Map:</strong>
+                <br><del>Rio de Janeiro Capital até <strong>Julho de 25</strong></del>
                 <br>São Paulo Capital até <strong>Outubro de 25</strong>
                 <br>Belo Horizonte, Curitiba até <strong>Janeiro 26</strong>
-                <br>Salvador, Fortaleza, Vitória, Recife até <strong>Abril 26</strong>
-                <br>Porto Alegre, Londrina, Ponta Grossa, São Bernardo do Campo até <strong>Julho 26</strong>
+                <br>Salvador, Fortaleza, Porto Alegre, Recife até <strong>Outubro 26</strong>
                 <br>Essas cidades foram escolhidas com base em critérios como população, relevância política e sobretudo disponibilidade de dados geoespaciais.
             </div>
         </div>
@@ -718,10 +720,27 @@
                     <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
                     <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
                     <p><strong>Versão:</strong> 2.0 - {% if load_time %}Carregado em {{ load_time }}{% else %}Site em desenvolvimento{% endif %}</p>
-                    <p><strong>Ferramentas:</strong> Python, Django, JavaScript</p>
+                    <p><strong>Tecnologias:</strong> Python, Folium, Django, SQL, Git, GitHub, Ubuntu CLI, Claude Code AI.</p>
                 </div>
                 <div class="footer-meta">
-                    Última atualização: Julho/2025
+                    <div style="font-size: 24px; margin-bottom: 15px;">
+                        <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/mapaeleitoral.contato" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i> 
+                        </a>
+                        <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <br>Última atualização: <strong>Julho/2025</strong>
                 </div>
             </div>
         </div>
