@@ -15,7 +15,9 @@
       "WebFetch(domain:github.com)",
       "Bash(python manage.py:*)",
       "Bash(cp:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git --version)"
     ],
     "deny": []
   }

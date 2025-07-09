@@ -162,3 +162,9 @@ Lib/
 Scripts/
 share/
 pyvenv.cfg
+
+# Certificados removidos
+certificados/
+
+# Dados GeoJSON grandes (manter apenas os essenciais)
+*.geojson.backup

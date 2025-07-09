@@ -1,28 +1,40 @@
-# Mapa Eleitoral - Democracia em Dados
+# Mapa Eleitoral v5 - Democracia em Dados
 
-Sistema interativo de visualização de dados eleitorais do Rio de Janeiro.
+Sistema de visualização interativa de dados eleitorais do Rio de Janeiro, desenvolvido com Django e tecnologias modernas.
 
-## 📋 Sobre o Projeto
+## 🎯 Sobre o Projeto
 
-Sistema web desenvolvido em Django para visualização interativa de dados eleitorais por bairros do Rio de Janeiro. Permite consultar votação de candidatos por partido, ano e região através de mapas dinâmicos.
+O **Mapa Eleitoral** é uma plataforma web que democratiza o acesso aos dados eleitorais brasileiros através de visualizações interativas e mapas dinâmicos. O projeto promove a transparência democrática, tornando informações complexas acessíveis para cidadãos, pesquisadores, jornalistas e interessados em política.
+
+## ✨ Funcionalidades
+
+- 🗺️ **Mapas Interativos**: Visualização de resultados eleitorais por bairro
+- 📊 **Análise por Região**: Filtros por ano, partido, candidato e localização
+- 🔍 **Busca Avançada**: Sistema de filtros dinâmicos
+- 📱 **Design Responsivo**: Interface otimizada para todos os dispositivos
+- ⚡ **Performance Otimizada**: Cache inteligente e otimizações de banco
+- 🔒 **Dados Confiáveis**: Informações diretas do TSE e fontes oficiais
 
 ## 🚀 Tecnologias
 
-- **Backend**: Django 4.2+
-- **Frontend**: HTML5, CSS3, JavaScript ES6+
-- **Banco**: MySQL 8.0+
+- **Backend**: Django 4.2+, Python 3.8+
+- **Banco de Dados**: MySQL 8.0+
+- **Cache**: Redis
 - **Mapas**: Folium + GeoJSON
-- **Deploy**: Railway
-- **Cache**: Redis (com fallback LocMem)
+- **Frontend**: HTML5, CSS3, JavaScript ES6+
+- **Deployment**: Railway, Gunicorn
 
-## 📊 Funcionalidades
+## 🎨 Novidades v5
 
-- ✅ Visualização de mapas eleitorais por bairro
-- ✅ Filtros por ano, partido e candidato
-- ✅ Geração dinâmica de mapas via AJAX
-- ✅ Cache otimizado para performance
-- ✅ Interface responsiva
-- ✅ Google Analytics integrado
+### Páginas Adicionadas
+- **Projeto**: Informações detalhadas sobre o sistema
+- **Apoio**: Formas de contribuir com o projeto
+
+### Melhorias de UI/UX
+- Design minimalista e moderno
+- Cards e ícones redimensionados
+- Navegação intuitiva
+- Performance otimizada
 
 ## 🛠️ Instalação Local
 
