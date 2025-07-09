@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Apoio - Mapa Eleitoral | Democracia em Dados</title>
+    
+    <!-- Meta tags otimizadas para SEO -->
+    <meta name="description" content="Apoie o projeto Mapa Eleitoral. Contribua como desenvolvedor, investidor social ou divulgador para fortalecer a democracia através de dados abertos.">
+    <meta name="keywords" content="apoio, contribuição, desenvolvedor, investidor social, democracia, dados eleitorais, open source">
+    <meta name="author" content="Filipe Dias">
+
+    <!-- Open Graph para redes sociais -->
+    <meta property="og:title" content="Apoio - Mapa Eleitoral | Democracia em Dados">
+    <meta property="og:description" content="Junte-se a nós para fortalecer a democracia através de dados eleitorais abertos e transparentes.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mapaeleitoral.com.br/apoio">
+    <meta property="og:image" content="https://mapaeleitoral.com.br/static/EduardoPaesViz.png">
+    <meta property="og:site_name" content="Mapa Eleitoral">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #123F32;
+            --primary-dark: #0e3229;
+            --primary-light: #1a4f3f;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 100;
+            color: var(--primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 100;
+            color: var(--secondary);
+            margin-top: 0.25rem;
+            margin-left: 4rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            color: white;
+            margin-bottom: 3rem;
+            border-radius: var(--radius);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .section-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .support-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .support-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .support-card.highlight {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.1));
+        }
+
+        .support-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .support-icon.dev {
+            color: var(--primary);
+        }
+
+        .support-icon.invest {
+            color: var(--success);
+        }
+
+        .support-icon.share {
+            color: var(--warning);
+        }
+
+        .support-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .support-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .support-list li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: background 0.2s ease;
+        }
+
+        .contact-method:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .donation-section {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid var(--warning);
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .donation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .donation-info {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .donation-info strong {
+            color: var(--primary);
+        }
+
+        .skills-needed {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .testimonial {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--radius);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .footer-info strong {
+            color: var(--text-primary);
+        }
+
+        .footer-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .social-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-methods {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-text">
+                        <a href="/" class="main-title">mapæleitoral</a>
+                        <p class="subtitle">Democracia em Dados</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/projeto" class="nav-link">Projeto</a>
+                    <a href="/apoio" class="nav-link active">Apoio</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Apoie a Democracia</h1>
+            <p class="hero-subtitle">
+                Junte-se a nós para fortalecer a transparência democrática através de dados abertos e tecnologia
+            </p>
+        </section>
+
+        <!-- Chamada Principal -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i>
+                Por que Apoiar?
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    O <strong>Mapa Eleitoral</strong> é uma iniciativa independente e sem fins lucrativos que promove a transparência 
+                    democrática através do acesso facilitado a dados eleitorais. Nosso trabalho é essencial para:
+                </p>
+                <div class="support-grid">
+                    <div class="support-card">
+                        <div class="support-icon">🏛️</div>
+                        <h3 class="support-title">Fortalecer a Democracia</h3>
+                        <p class="support-description">
+                            Cidadãos informados são a base de uma democracia forte. Facilitamos o acesso a dados que 
+                            permitem decisões eleitorais mais conscientes.
+                        </p>
+                    </div>
+                    <div class="support-card">
+                        <div class="support-icon">📊</div>
+                        <h3 class="support-title">Promover Transparência</h3>
+                        <p class="support-description">
+                            Transformamos dados complexos em visualizações claras, tornando as informações eleitorais 
+                            acessíveis para todos os brasileiros.
+                        </p>
+                    </div>
+                    <div class="support-card">
+                        <div class="support-icon">🎓</div>
+                        <h3 class="support-title">Apoiar Pesquisa</h3>
+                        <p class="support-description">
+                            Fornecemos ferramentas para pesquisadores, jornalistas e estudantes interessados em 
+                            análise política e comportamento eleitoral.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formas de Apoio -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-hands-helping"></i>
+                Como Você Pode Ajudar
+            </h2>
+            <div class="support-grid">
+                <!-- Apoio Técnico -->
+                <div class="support-card highlight">
+                    <div class="support-icon dev">💻</div>
+                    <h3 class="support-title">Desenvolvedores</h3>
+                    <p class="support-description">
+                        Procuramos desenvolvedores apaixonados por democracia e tecnologia para expandir nossa plataforma.
+                    </p>
+                    <ul class="support-list">
+                        <li>Desenvolvimento Frontend (React, Vue.js)</li>
+                        <li>Backend Python/Django</li>
+                        <li>Análise de dados e Machine Learning</li>
+                        <li>DevOps e infraestrutura</li>
+                        <li>Design UX/UI</li>
+                        <li>Desenvolvimento mobile</li>
+                    </ul>
+                    <div class="skills-needed">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Data Science</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Redis</span>
+                    </div>
+                    <br>
+                    <a href="https://github.com/diasfilipe" class="btn btn-primary" target="_blank">
+                        <i class="fab fa-github"></i>
+                        Ver no GitHub
+                    </a>
+                </div>
+
+                <!-- Apoio Financeiro -->
+                <div class="support-card">
+                    <div class="support-icon invest">💰</div>
+                    <h3 class="support-title">Investidores Sociais</h3>
+                    <p class="support-description">
+                        Seu apoio financeiro nos permite dedicar mais tempo ao projeto e expandir para novas funcionalidades.
+                    </p>
+                    <ul class="support-list">
+                        <li>Manutenção de servidores e infraestrutura</li>
+                        <li>Aquisição de dados e APIs premium</li>
+                        <li>Desenvolvimento de novas funcionalidades</li>
+                        <li>Expansão para outras cidades</li>
+                        <li>Melhorias de performance e segurança</li>
+                    </ul>
+                    <a href="#donation" class="btn btn-success">
+                        <i class="fas fa-donate"></i>
+                        Fazer Doação
+                    </a>
+                </div>
+
+                <!-- Apoio de Divulgação -->
+                <div class="support-card">
+                    <div class="support-icon share">📢</div>
+                    <h3 class="support-title">Divulgadores</h3>
+                    <p class="support-description">
+                        Ajude a espalhar a palavra sobre o projeto e sua importância para a democracia brasileira.
+                    </p>
+                    <ul class="support-list">
+                        <li>Compartilhe nas redes sociais</li>
+                        <li>Escreva artigos sobre o projeto</li>
+                        <li>Apresente em eventos acadêmicos</li>
+                        <li>Recomende para jornalistas</li>
+                        <li>Use em suas pesquisas</li>
+                    </ul>
+                    <a href="https://twitter.com/intent/tweet?text=Conheça%20o%20Mapa%20Eleitoral%20-%20uma%20ferramenta%20incrível%20para%20visualizar%20dados%20eleitorais!%20https://mapaeleitoral.com.br" class="btn btn-outline" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                        Compartilhar
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Informações de Doação -->
+        <section class="section" id="donation">
+            <div class="donation-section">
+                <h2 class="donation-title">
+                    <i class="fas fa-heart"></i>
+                    Apoio Financeiro
+                </h2>
+                <p class="section-text">
+                    Toda contribuição, por menor que seja, faz a diferença para manter este projeto funcionando e em constante evolução.
+                </p>
+                <div class="donation-info">
+                    <strong>Pix ou Transferência Bancária:</strong>
+                    <br><strong>Banco:</strong> Efí Bank (364) | <strong>Agência:</strong> 0001 | <strong>Conta:</strong> 792139-1
+                    <br><strong>Favorecido:</strong> Filipe de Meireles Dias
+                    <br><strong>CPF:</strong> ***.652.787-**
+                    <br><strong>Chave Pix:</strong> pix@mapaeleitoral.com.br
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                    Todas as doações são utilizadas exclusivamente para manutenção e melhoria da plataforma. 
+                    Relatórios de transparência são disponibilizados periodicamente.
+                </p>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section class="testimonial">
+            <p class="testimonial-text">
+                "O acesso fácil e intuitivo aos dados eleitorais é fundamental para o fortalecimento da nossa democracia. 
+                O Mapa Eleitoral democratiza informações que antes eram complexas e inacessíveis para o cidadão comum."
+            </p>
+            <div class="testimonial-author">- Equipe Mapa Eleitoral</div>
+        </section>
+
+        <!-- Contato -->
+        <section class="contact-info">
+            <h2 class="contact-title">Entre em Contato</h2>
+            <p>Interessado em contribuir? Vamos conversar!</p>
+            <div class="contact-methods">
+                <a href="mailto:contato@mapaeleitoral.com.br" class="contact-method">
+                    <i class="fas fa-envelope"></i>
+                    contato@mapaeleitoral.com.br
+                </a>
+                <a href="https://www.linkedin.com/in/diasfilipe/" class="contact-method" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/diasfilipe" class="contact-method" target="_blank">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+            </div>
+        </section>
+
+        <!-- Próximos Passos -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-roadmap"></i>
+                Roadmap de Desenvolvimento
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    Com seu apoio, poderemos implementar funcionalidades avançadas e expandir nossa cobertura:
+                </p>
+                <div class="support-grid">
+                    <div class="support-card">
+                        <div class="support-icon">🗺️</div>
+                        <h3 class="support-title">Expansão Geográfica</h3>
+                        <p class="support-description">
+                            São Paulo, Belo Horizonte, Curitiba, Salvador, Fortaleza e outras capitais brasileiras.
+                        </p>
+                    </div>
+                    <div class="support-card">
+                        <div class="support-icon">🤖</div>
+                        <h3 class="support-title">Inteligência Artificial</h3>
+                        <p class="support-description">
+                            Análise preditiva, detecção de padrões e chatbot para consultas em linguagem natural.
+                        </p>
+                    </div>
+                    <div class="support-card">
+                        <div class="support-icon">📱</div>
+                        <h3 class="support-title">App Mobile</h3>
+                        <p class="support-description">
+                            Aplicativo nativo para Android e iOS com funcionalidades offline e notificações.
+                        </p>
+                    </div>
+                    <div class="support-card">
+                        <div class="support-icon">🔄</div>
+                        <h3 class="support-title">Dados em Tempo Real</h3>
+                        <p class="support-description">
+                            Integração com APIs oficiais para atualizações automáticas e dados sempre atualizados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
+                    <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
+                    <p><strong>Licença:</strong> Projeto de código aberto para fins educacionais</p>
+                    <p><strong>Contato:</strong> contato@mapaeleitoral.com.br</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

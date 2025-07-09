@@ -1,9 +1,0 @@
-# Ignorar todos os certificados por segurança
-*.p12
-*.pem
-*.crt
-*.key
-
-# Manter apenas o README
-!README.md
-!.gitignore

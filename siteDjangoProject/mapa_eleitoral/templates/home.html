@@ -414,6 +414,31 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
         /* Footer otimizado */
         .footer {
             background: var(--surface);
@@ -489,6 +514,11 @@
                 font-size: 1.8rem;
             }
 
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
             .controls-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
@@ -551,6 +581,11 @@
                         <p class="subtitle">Democracia em Dados</p>
                     </div>
                 </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/projeto/" class="nav-link">Projeto</a>
+                    <a href="/apoio/" class="nav-link">Apoio</a>
+                </nav>
             </div>
         </div>
     </header>
@@ -672,44 +707,7 @@
                 Alguns bairros podem não apresentar dados devido à ausência de locais de votação ou falhas na coleta de votos.
             </div>
         </div>
-
-        <div class="alert" role="alert">
-            <span class="alert-icon" aria-hidden="true">💝</span>
-            <div class="alert-content">
-                <div class="alert-title">APOIE O PROJETO</div>
-                Este site é <strong>uma iniciativa independente</strong> e sem apoio financeiro institucional. 
-                <br>Se você aprecia o projeto e deseja contribuir, considere fazer uma doação, sua ajuda é fundamental 
-                <br>para mantê-lo atualizado e em funcionamento.
-                <br><strong>Todo suporte é sempre bem-vindo.</strong>
-                <br>Muitíssimo Obrigado!
-                <br>
-            </div>
-            <div class="alert" role="alert">
-                <div class="alert-content"> 
-                    <strong>Pix ou Transferência Bancária:</strong> 
-                    <br><strong>Banco:</strong> Efí Bank (364) | Agência: 0001 | Conta: 792139-1
-                    <br><strong>Favorecido:</strong> Filipe de Meireles Dias
-                    <br><strong>CPF:</strong> ***.652.787-**
-                    <br><strong>Chave Pix:</strong> mapaeleitoral@outlook.com
-                </div>
-            </div>
-        </div>
-
-        <div class="alert" role="alert">
-            <span class="alert-icon" aria-hidden="true">🗺️</span>
-            <div class="alert-content">
-                <div class="alert-title">PRÓXIMOS PASSOS</div>
-                Todos os meses, o mapa é atualizado com os dados mais recentes das eleições.
-                Planejamos expandir o mapa para incluir dados de outros municípios, tornando-o uma ferramenta abrangente para a visualização de dados eleitorais em todo o país.
-                <br>
-                <br><strong>Road Map:</strong>
-                <br><del>Rio de Janeiro Capital até <strong>Julho de 25</strong></del>
-                <br>São Paulo Capital até <strong>Outubro de 25</strong>
-                <br>Belo Horizonte, Curitiba até <strong>Janeiro 26</strong>
-                <br>Salvador, Fortaleza, Porto Alegre, Recife até <strong>Outubro 26</strong>
-                <br>Essas cidades foram escolhidas com base em critérios como população, relevância política e sobretudo disponibilidade de dados geoespaciais.
-            </div>
-        </div>
+        
     </main>
 
     <!-- Footer -->
@@ -719,7 +717,8 @@
                 <div class="footer-info">
                     <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
                     <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
-                    <p><strong>Versão:</strong> 2.0 - {% if load_time %}Carregado em {{ load_time }}{% else %}Site em desenvolvimento{% endif %}</p>
+                    <p><strong>Versão:</strong> 4.44 - {% if load_time %}Carregado em {{ load_time }}{% else %}Site em desenvolvimento{% endif %}</p>
+                    <p><strong>Próxima Versão:</strong> 5.0 - Em breve (Adição de novas funcionalidades)</p>
                     <p><strong>Tecnologias:</strong> Python, Folium, Django, SQL, Git, GitHub, Ubuntu CLI, Claude Code AI.</p>
                 </div>
                 <div class="footer-meta">
@@ -730,16 +729,18 @@
                         <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://www.facebook.com/mapaeleitoral.contato" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
                         <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="LinkedIn">
                             <i class="fab fa-linkedin-in"></i> 
                         </a>
                         <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="GitHub">
                             <i class="fab fa-github"></i>
                         </a>
+                        <a href="https://www.doesanguedoevida.com.br/banco-de-sangue-serum" target="_blank" rel="noopener" style="color: #f10606; margin: 0 10px; text-decoration: none;" title="Banco de Sangue">
+                            <i class="fas fa-heart"></i>
+                        </a>
                     </div>
+                    <br><strong>contato@mapaeleitoral.com.br</strong>
+                    <br>
                     <br>Última atualização: <strong>Julho/2025</strong>
                 </div>
             </div>

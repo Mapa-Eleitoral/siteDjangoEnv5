@@ -789,6 +789,14 @@ def debug_candidato_view(request):
     
     return JsonResponse(debug_info, json_dumps_params={'ensure_ascii': False})
 
+def projeto_view(request):
+    """View para página do projeto"""
+    return render(request, 'projeto.html')
+
+def apoio_view(request):
+    """View para página de apoio"""
+    return render(request, 'apoio.html')
+
 def generate_map_view(request):
     """View para gerar mapas dinamicamente via AJAX"""
     candidato = request.GET.get('candidato')

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Projeto - Mapa Eleitoral | Democracia em Dados</title>
+    
+    <!-- Meta tags otimizadas para SEO -->
+    <meta name="description" content="Conheça o projeto Mapa Eleitoral - uma ferramenta de transparência democrática que visualiza dados eleitorais por bairros do Rio de Janeiro.">
+    <meta name="keywords" content="projeto, mapa eleitoral, transparência, democracia, dados eleitorais, rio de janeiro">
+    <meta name="author" content="Filipe Dias">
+
+    <!-- Open Graph para redes sociais -->
+    <meta property="og:title" content="Projeto - Mapa Eleitoral | Democracia em Dados">
+    <meta property="og:description" content="Conheça o projeto que democratiza o acesso aos dados eleitorais através de visualizações interativas.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mapaeleitoral.com.br/projeto">
+    <meta property="og:image" content="https://mapaeleitoral.com.br/static/EduardoPaesViz.png">
+    <meta property="og:site_name" content="Mapa Eleitoral">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #123F32;
+            --primary-dark: #0e3229;
+            --primary-light: #1a4f3f;
+            --secondary: #64748b;
+            --success: #10b981;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 100;
+            color: var(--primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 100;
+            color: var(--secondary);
+            margin-top: 0.25rem;
+            margin-left: 4rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            color: white;
+            margin-bottom: 3rem;
+            border-radius: var(--radius);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .section-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tech-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .footer-info strong {
+            color: var(--text-primary);
+        }
+
+        .footer-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .social-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-text">
+                        <a href="/" class="main-title">mapæleitoral</a>
+                        <p class="subtitle">Democracia em Dados</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/projeto" class="nav-link active">Projeto</a>
+                    <a href="/apoio" class="nav-link">Apoio</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Democracia em Dados</h1>
+            <p class="hero-subtitle">
+                Transformando informações eleitorais em conhecimento acessível para fortalecer nossa democracia
+            </p>
+        </section>
+
+        <!-- Sobre o Projeto -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                O que é o Mapa Eleitoral?
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    O <strong>Mapa Eleitoral</strong> é uma plataforma digital inovadora que democratiza o acesso aos dados eleitorais brasileiros. 
+                    Através de visualizações interativas e mapas dinâmicos, tornamos as informações complexas do processo eleitoral 
+                    acessíveis a todos os cidadãos, pesquisadores, jornalistas e interessados em política.
+                </p>
+                <p class="section-text">
+                    Nossa missão é promover a transparência democrática, facilitando o entendimento dos resultados eleitorais 
+                    por meio de tecnologia moderna e design intuitivo. Acreditamos que cidadãos bem informados são fundamentais 
+                    para uma democracia forte e participativa.
+                </p>
+            </div>
+        </section>
+
+        <!-- Funcionalidades -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Funcionalidades
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3 class="feature-title">Mapas Interativos</h3>
+                    <p class="feature-description">
+                        Visualize resultados eleitorais por bairro com mapas coropléticos que mostram 
+                        a distribuição de votos de forma clara e intuitiva.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Análise por Região</h3>
+                    <p class="feature-description">
+                        Explore dados eleitorais filtrados por ano, partido, candidato e localização 
+                        específica dentro da cidade.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Busca Avançada</h3>
+                    <p class="feature-description">
+                        Sistema de filtros dinâmicos que permite consultas personalizadas 
+                        nos dados eleitorais disponíveis.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Design Responsivo</h3>
+                    <p class="feature-description">
+                        Acesse a plataforma em qualquer dispositivo com interface otimizada 
+                        para desktop, tablet e smartphone.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Performance Otimizada</h3>
+                    <p class="feature-description">
+                        Carregamento rápido e eficiente dos dados através de cache inteligente 
+                        e otimizações de banco de dados.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Dados Confiáveis</h3>
+                    <p class="feature-description">
+                        Todas as informações são extraídas diretamente do TSE (Tribunal Superior Eleitoral) 
+                        e fontes governamentais oficiais.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dados e Estatísticas -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar"></i>
+                Dados e Alcance
+            </h2>
+            <div class="section-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">160+</span>
+                        <p class="stat-label">Bairros Mapeados</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">5+</span>
+                        <p class="stat-label">Eleições Disponíveis</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">100%</span>
+                        <p class="stat-label">Dados Oficiais TSE</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">24/7</span>
+                        <p class="stat-label">Disponibilidade</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tecnologias -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                Tecnologias Utilizadas
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    O projeto foi desenvolvido utilizando tecnologias modernas e robustas para garantir 
+                    performance, segurança e escalabilidade:
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">MySQL</span>
+                    <span class="tech-badge">Redis</span>
+                    <span class="tech-badge">Folium</span>
+                    <span class="tech-badge">JavaScript</span>
+                    <span class="tech-badge">HTML5/CSS3</span>
+                    <span class="tech-badge">Ubuntu</span>
+                    <span class="tech-badge">Git/GitHub</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fontes de Dados -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-database"></i>
+                Fontes de Dados
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    <strong>Tribunal Superior Eleitoral (TSE):</strong> Dados oficiais de resultados eleitorais, 
+                    incluindo votação por zona eleitoral, informações de candidatos e partidos.
+                </p>
+                <p class="section-text">
+                    <strong>DATA.RIO:</strong> Portal de dados abertos da Prefeitura do Rio de Janeiro, 
+                    fornecendo informações geoespaciais dos bairros e divisões administrativas.
+                </p>
+                <p class="section-text">
+                    <strong>IBGE:</strong> Dados complementares sobre divisões territoriais e 
+                    informações censitárias para contextualização geográfica.
+                </p>
+            </div>
+        </section>
+
+        <!-- Roadmap -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-road"></i>
+                Próximos Passos
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    Nosso objetivo é expandir a plataforma para cobrir todo o território brasileiro, 
+                    democratizando o acesso a dados eleitorais em escala nacional:
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3 class="feature-title">Rio de Janeiro</h3>
+                        <p class="feature-description">
+                            <strong>Concluído</strong> - Dados completos da capital fluminense 
+                            com mais de 160 bairros mapeados.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3 class="feature-title">São Paulo</h3>
+                        <p class="feature-description">
+                            <strong>Outubro 2025</strong> - Maior colégio eleitoral do país 
+                            com dados detalhados por distrito.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3 class="feature-title">Belo Horizonte & Curitiba</h3>
+                        <p class="feature-description">
+                            <strong>Janeiro 2026</strong> - Expansão para importantes 
+                            centros urbanos do Sudeste e Sul.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3 class="feature-title">Capitais Nordeste</h3>
+                        <p class="feature-description">
+                            <strong>Outubro 2026</strong> - Salvador, Fortaleza, Porto Alegre 
+                            e Recife completando a cobertura nacional.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impacto Social -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-users"></i>
+                Impacto Social
+            </h2>
+            <div class="section-content">
+                <p class="section-text">
+                    O Mapa Eleitoral contribui diretamente para o fortalecimento da democracia brasileira ao:
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3 class="feature-title">Educação Cívica</h3>
+                        <p class="feature-description">
+                            Facilita o entendimento do processo eleitoral e seus resultados, 
+                            promovendo maior consciência política.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3 class="feature-title">Transparência</h3>
+                        <p class="feature-description">
+                            Torna dados públicos mais acessíveis, promovendo accountability 
+                            e participação cidadã informada.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📰</div>
+                        <h3 class="feature-title">Jornalismo de Dados</h3>
+                        <p class="feature-description">
+                            Apoia profissionais de comunicação com ferramentas para análise 
+                            e visualização de informações eleitorais.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3 class="feature-title">Pesquisa Acadêmica</h3>
+                        <p class="feature-description">
+                            Oferece recursos para pesquisadores, estudantes e acadêmicos 
+                            interessados em ciência política e sociologia eleitoral.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
+                    <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
+                    <p><strong>Licença:</strong> Projeto de código aberto para fins educacionais</p>
+                    <p><strong>Contato:</strong> contato@mapaeleitoral.com.br</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
