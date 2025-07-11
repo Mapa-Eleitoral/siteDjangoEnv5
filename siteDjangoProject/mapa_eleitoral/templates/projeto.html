@@ -148,11 +148,30 @@
 
         .hero-section {
             text-align: center;
-            padding: 3rem 0;
+            padding: 2rem 2rem;
             background: linear-gradient(135deg, var(--primary), var(--success));
             color: white;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
         .hero-title {
@@ -174,54 +193,118 @@
         }
 
         .section-title {
-            font-size: 2rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 500;
             color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--success));
+            border-radius: 2px;
         }
 
         .section-content {
             background: var(--surface);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--success), transparent);
         }
 
         .section-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1.7;
             margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .section-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-text strong {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
         }
 
         .feature-card {
             background: var(--surface);
-            padding: 1.25rem;
+            padding: 1.5rem;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(18, 63, 50, 0.1);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
 
         .feature-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
+            font-size: 1.125rem;
             margin-bottom: 0.75rem;
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(18, 63, 50, 0.08);
+            border-radius: 6px;
+            color: var(--primary);
+            transition: all 0.2s ease;
+        }
+
+        .feature-icon:hover {
+            background: rgba(18, 63, 50, 0.12);
+            transform: translateY(-1px);
         }
 
         .feature-title {
@@ -239,18 +322,24 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
         .stat-card {
-            background: var(--surface);
-            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--surface), #f8fafc);
+            padding: 1.5rem;
             border-radius: var(--radius);
             text-align: center;
-            box-shadow: var(--shadow);
             border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .stat-number {
@@ -269,17 +358,22 @@
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
         }
 
         .tech-badge {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
+            padding: 0.4rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .tech-badge:hover {
+            transform: translateY(-1px);
         }
 
         /* Footer */
@@ -331,6 +425,45 @@
             color: var(--primary);
         }
 
+        /* Visual enhancements */
+        .section:nth-child(even) .section-content {
+            background: linear-gradient(135deg, #fafbfc, var(--surface));
+        }
+
+        /* Emoji icons have consistent styling above */
+
+        /* Scroll animations */
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Modern spacing */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Clean borders */
+        .feature-card,
+        .stat-card,
+        .section-content {
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -352,12 +485,22 @@
                 font-size: 1.1rem;
             }
 
+            .hero-section {
+                padding: 1.5rem 1rem;
+            }
+
             .features-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .section-content {
+                padding: 1.5rem;
             }
 
             .footer-content {
@@ -401,7 +544,6 @@
         <!-- Sobre o Projeto -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-info-circle"></i>
                 O que é o Mapa Eleitoral?
             </h2>
             <div class="section-content">
@@ -437,12 +579,11 @@
         <!-- Funcionalidades -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-cogs"></i>
                 Funcionalidades
             </h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🗺️</div>
+                    <div class="feature-icon"><i class="fas fa-map"></i></div>
                     <h3 class="feature-title">Mapas Interativos</h3>
                     <p class="feature-description">
                         Visualize resultados eleitorais por bairro com mapas coropléticos que mostram 
@@ -450,7 +591,7 @@
                     </p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon"><i class="fas fa-chart-area"></i></div>
                     <h3 class="feature-title">Análise por Região</h3>
                     <p class="feature-description">
                         Explore dados eleitorais filtrados por ano, partido, candidato e localização 
@@ -458,7 +599,7 @@
                     </p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
+                    <div class="feature-icon"><i class="fas fa-search"></i></div>
                     <h3 class="feature-title">Busca Avançada</h3>
                     <p class="feature-description">
                         Sistema de filtros dinâmicos que permite consultas personalizadas 
@@ -466,7 +607,7 @@
                     </p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h3 class="feature-title">Design Responsivo</h3>
                     <p class="feature-description">
                         Acesse a plataforma em qualquer dispositivo com interface otimizada 
@@ -474,7 +615,7 @@
                     </p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                     <h3 class="feature-title">Performance Otimizada</h3>
                     <p class="feature-description">
                         Carregamento rápido e eficiente dos dados através de cache inteligente 
@@ -482,7 +623,7 @@
                     </p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
                     <h3 class="feature-title">Dados Confiáveis</h3>
                     <p class="feature-description">
                         Todas as informações são extraídas diretamente do TSE (Tribunal Superior Eleitoral) 
@@ -495,7 +636,6 @@
         <!-- Dados e Estatísticas -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-chart-bar"></i>
                 Dados e Alcance
             </h2>
             <div class="section-content">
@@ -523,7 +663,6 @@
         <!-- Tecnologias -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-code"></i>
                 Tecnologias Utilizadas
             </h2>
             <div class="section-content">
@@ -548,7 +687,6 @@
         <!-- Fontes de Dados -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-database"></i>
                 Fontes de Dados
             </h2>
             <div class="section-content">
@@ -570,7 +708,6 @@
         <!-- Roadmap -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-road"></i>
                 Próximos Passos
             </h2>
             <div class="section-content">
@@ -580,7 +717,7 @@
                 </p>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">✅</div>
+                        <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
                         <h3 class="feature-title">Rio de Janeiro</h3>
                         <p class="feature-description">
                             <strong>Concluído</strong> - Dados completos da capital fluminense 
@@ -588,7 +725,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🔄</div>
+                        <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
                         <h3 class="feature-title">São Paulo</h3>
                         <p class="feature-description">
                             <strong>Outubro 2025</strong> - Maior colégio eleitoral do país 
@@ -596,7 +733,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">📅</div>
+                        <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
                         <h3 class="feature-title">Belo Horizonte & Curitiba</h3>
                         <p class="feature-description">
                             <strong>Janeiro 2026</strong> - Expansão para importantes 
@@ -604,7 +741,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🚀</div>
+                        <div class="feature-icon"><i class="fas fa-rocket"></i></div>
                         <h3 class="feature-title">Capitais Nordeste</h3>
                         <p class="feature-description">
                             <strong>Outubro 2026</strong> - Salvador, Fortaleza, Porto Alegre 
@@ -618,7 +755,6 @@
         <!-- Impacto Social -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-users"></i>
                 Impacto Social
             </h2>
             <div class="section-content">
@@ -627,7 +763,7 @@
                 </p>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">📚</div>
+                        <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
                         <h3 class="feature-title">Educação Cívica</h3>
                         <p class="feature-description">
                             Facilita o entendimento do processo eleitoral e seus resultados, 
@@ -635,7 +771,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🔍</div>
+                        <div class="feature-icon"><i class="fas fa-eye"></i></div>
                         <h3 class="feature-title">Transparência</h3>
                         <p class="feature-description">
                             Torna dados públicos mais acessíveis, promovendo accountability 
@@ -643,7 +779,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">📰</div>
+                        <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
                         <h3 class="feature-title">Jornalismo de Dados</h3>
                         <p class="feature-description">
                             Apoia profissionais de comunicação com ferramentas para análise 
@@ -651,7 +787,7 @@
                         </p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">🎓</div>
+                        <div class="feature-icon"><i class="fas fa-university"></i></div>
                         <h3 class="feature-title">Pesquisa Acadêmica</h3>
                         <p class="feature-description">
                             Oferece recursos para pesquisadores, estudantes e acadêmicos 

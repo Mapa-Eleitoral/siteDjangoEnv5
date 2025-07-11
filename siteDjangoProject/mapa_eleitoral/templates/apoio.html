@@ -233,15 +233,15 @@
         }
 
         .support-icon.dev {
-            color: var(--primary);
+            background: rgba(18, 63, 50, 0.1);
         }
 
         .support-icon.invest {
-            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
         }
 
         .support-icon.share {
-            color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
         }
 
         .support-title {
@@ -473,6 +473,25 @@
             color: var(--primary);
         }
 
+        /* Visual enhancements */
+        .section:nth-child(even) .section-content {
+            background: linear-gradient(135deg, #fafbfc, var(--surface));
+        }
+
+        /* Modern spacing */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Clean borders */
+        .support-card,
+        .section-content,
+        .donation-section,
+        .contact-info,
+        .testimonial {
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -494,8 +513,17 @@
                 font-size: 1.1rem;
             }
 
+            .hero-section {
+                padding: 1.5rem 1rem;
+            }
+
             .support-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .section-content {
+                padding: 1.5rem;
             }
 
             .contact-methods {
@@ -544,7 +572,6 @@
         <!-- Chamada Principal -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-heart"></i>
                 Por que Apoiar?
             </h2>
             <div class="section-content">
@@ -554,7 +581,7 @@
                 </p>
                 <div class="support-grid">
                     <div class="support-card">
-                        <div class="support-icon">🏛️</div>
+                        <div class="support-icon"><i class="fas fa-landmark"></i></div>
                         <h3 class="support-title">Fortalecer a Democracia</h3>
                         <p class="support-description">
                             Cidadãos informados são a base de uma democracia forte. Facilitamos o acesso a dados que 
@@ -562,7 +589,7 @@
                         </p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon">📊</div>
+                        <div class="support-icon"><i class="fas fa-chart-line"></i></div>
                         <h3 class="support-title">Promover Transparência</h3>
                         <p class="support-description">
                             Transformamos dados complexos em visualizações claras, tornando as informações eleitorais 
@@ -570,7 +597,7 @@
                         </p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon">🎓</div>
+                        <div class="support-icon"><i class="fas fa-graduation-cap"></i></div>
                         <h3 class="support-title">Apoiar Pesquisa</h3>
                         <p class="support-description">
                             Fornecemos ferramentas para pesquisadores, jornalistas e estudantes interessados em 
@@ -584,13 +611,12 @@
         <!-- Formas de Apoio -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-hands-helping"></i>
                 Como Você Pode Ajudar
             </h2>
             <div class="support-grid">
                 <!-- Apoio Técnico -->
                 <div class="support-card highlight">
-                    <div class="support-icon dev">💻</div>
+                    <div class="support-icon dev"><i class="fas fa-laptop-code"></i></div>
                     <h3 class="support-title">Desenvolvedores</h3>
                     <p class="support-description">
                         Procuramos desenvolvedores apaixonados por democracia e tecnologia para expandir nossa plataforma.
@@ -621,7 +647,7 @@
 
                 <!-- Apoio Financeiro -->
                 <div class="support-card">
-                    <div class="support-icon invest">💰</div>
+                    <div class="support-icon invest"><i class="fas fa-hand-holding-usd"></i></div>
                     <h3 class="support-title">Investidores Sociais</h3>
                     <p class="support-description">
                         Seu apoio financeiro nos permite dedicar mais tempo ao projeto e expandir para novas funcionalidades.
@@ -641,7 +667,7 @@
 
                 <!-- Apoio de Divulgação -->
                 <div class="support-card">
-                    <div class="support-icon share">📢</div>
+                    <div class="support-icon share"><i class="fas fa-bullhorn"></i></div>
                     <h3 class="support-title">Divulgadores</h3>
                     <p class="support-description">
                         Ajude a espalhar a palavra sobre o projeto e sua importância para a democracia brasileira.
@@ -717,7 +743,6 @@
         <!-- Próximos Passos -->
         <section class="section">
             <h2 class="section-title">
-                <i class="fas fa-roadmap"></i>
                 Roadmap de Desenvolvimento
             </h2>
             <div class="section-content">
@@ -726,28 +751,28 @@
                 </p>
                 <div class="support-grid">
                     <div class="support-card">
-                        <div class="support-icon">🗺️</div>
+                        <div class="support-icon"><i class="fas fa-map-marked-alt"></i></div>
                         <h3 class="support-title">Expansão Geográfica</h3>
                         <p class="support-description">
                             São Paulo, Belo Horizonte, Curitiba, Salvador, Fortaleza e outras capitais brasileiras.
                         </p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon">🤖</div>
+                        <div class="support-icon"><i class="fas fa-robot"></i></div>
                         <h3 class="support-title">Inteligência Artificial</h3>
                         <p class="support-description">
                             Análise preditiva, detecção de padrões e chatbot para consultas em linguagem natural.
                         </p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon">📱</div>
+                        <div class="support-icon"><i class="fas fa-mobile-alt"></i></div>
                         <h3 class="support-title">App Mobile</h3>
                         <p class="support-description">
                             Aplicativo nativo para Android e iOS com funcionalidades offline e notificações.
                         </p>
                     </div>
                     <div class="support-card">
-                        <div class="support-icon">🔄</div>
+                        <div class="support-icon"><i class="fas fa-sync-alt"></i></div>
                         <h3 class="support-title">Dados em Tempo Real</h3>
                         <p class="support-description">
                             Integração com APIs oficiais para atualizações automáticas e dados sempre atualizados.
