@@ -184,10 +184,21 @@ class ElectoralMapApp {
 
         const iframe = document.createElement('iframe');
         iframe.style.width = '100%';
-        iframe.style.height = '600px';
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.setAttribute('title', `Mapa de ${candidatoInfo.nome}`);
+        
+        // Responsive height based on screen size
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (isSmallMobile) {
+            iframe.style.height = '300px';
+        } else if (isMobile) {
+            iframe.style.height = '350px';
+        } else {
+            iframe.style.height = '600px';
+        }
 
         this.elements.mapContent.innerHTML = '';
         this.elements.mapContent.appendChild(iframe);
@@ -324,6 +335,44 @@ class PerformanceMonitor {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ElectoralMapApp();
+    
+    // Mobile-specific optimizations
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+        
+        // Improve touch interactions
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+            select.style.fontSize = '16px'; // Prevent zoom on iOS
+        });
+        
+        // Add touch-friendly button sizing
+        const buttons = document.querySelectorAll('button, .btn');
+        buttons.forEach(button => {
+            if (button.style.minHeight === '') {
+                button.style.minHeight = '44px';
+            }
+        });
+    }
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            const mapIframes = document.querySelectorAll('iframe');
+            mapIframes.forEach(iframe => {
+                const isMobile = window.innerWidth <= 768;
+                const isSmallMobile = window.innerWidth <= 480;
+                
+                if (isSmallMobile) {
+                    iframe.style.height = '300px';
+                } else if (isMobile) {
+                    iframe.style.height = '350px';
+                } else {
+                    iframe.style.height = '600px';
+                }
+            });
+        }, 500); // Delay to ensure viewport has updated
+    });
 });
 
 // Expose for debugging

@@ -17,7 +17,15 @@
       "Bash(cp:*)",
       "Bash(curl:*)",
       "Bash(gh repo create:*)",
-      "Bash(git --version)"
+      "Bash(git --version)",
+      "Bash(python:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:www.alerj.rj.gov.br)",
+      "WebFetch(domain:www.gazetadopovo.com.br)",
+      "WebFetch(domain:diariodorio.com)",
+      "WebFetch(domain:www.camara.rj.gov.br)",
+      "Bash(echo)",
+      "WebFetch(domain:claude.ai)"
     ],
     "deny": []
   }

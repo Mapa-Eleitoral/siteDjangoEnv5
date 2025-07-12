@@ -294,6 +294,10 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+    
     .form-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -304,11 +308,57 @@ body {
     }
     
     .form-section {
-        padding: 1.5rem;
+        padding: 1rem;
     }
     
     .map-content {
-        height: 400px;
+        height: 350px;
+    }
+    
+    .form-control, .btn {
+        min-height: 48px;
+        font-size: 0.9rem;
+        padding: 0.875rem 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Tablets e telas médias */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .map-content {
+        height: 450px;
+    }
+}
+
+/* Dispositivos muito pequenos */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.5rem;
+    }
+    
+    .header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .form-section {
+        padding: 0.75rem;
+    }
+    
+    .map-content {
+        height: 300px;
+    }
+    
+    .form-control, .btn {
+        min-height: 44px;
     }
 }
 
