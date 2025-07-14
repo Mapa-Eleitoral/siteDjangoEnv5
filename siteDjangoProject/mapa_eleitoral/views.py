@@ -802,6 +802,7 @@ def blog_view(request):
     import os
     import markdown
     from datetime import datetime
+    from .models import BlogArticle, get_or_create_blog_article
     
     # Caminho para os artigos do blog
     # Navegar até o diretório principal do projeto
@@ -841,13 +842,19 @@ def blog_view(request):
                         stat = os.stat(filepath)
                         date_modified = datetime.fromtimestamp(stat.st_mtime)
                         
+                        # Obter ou criar registro no banco para tracking
+                        slug = filename.replace('.md', '')
+                        blog_article = get_or_create_blog_article(slug, title)
+                        view_count = blog_article.get_views_count()
+                        
                         articles.append({
                             'title': title,
-                            'slug': filename.replace('.md', ''),
+                            'slug': slug,
                             'excerpt': excerpt,
                             'date': date_modified,
                             'content': html_content,
-                            'filename': filename
+                            'filename': filename,
+                            'view_count': view_count
                         })
                 except Exception as e:
                     print(f"Erro ao processar {filename}: {e}")
@@ -856,9 +863,37 @@ def blog_view(request):
     # Ordenar artigos por data (mais recentes primeiro)
     articles.sort(key=lambda x: x['date'], reverse=True)
     
+    # ===== ARTIGOS MAIS ACESSADOS (DADOS REAIS DO BANCO) =====
+    # Buscar os 3 artigos mais visualizados do banco de dados
+    most_viewed_blog_articles = BlogArticle.get_most_viewed(limit=3)
+    
+    # Combinar dados do banco com dados dos arquivos markdown
+    most_accessed_articles = []
+    for blog_article in most_viewed_blog_articles:
+        # Encontrar o artigo correspondente na lista de artigos
+        for article in articles:
+            if article['slug'] == blog_article.slug:
+                article_copy = article.copy()
+                article_copy['access_count'] = blog_article.total_views
+                most_accessed_articles.append(article_copy)
+                break
+    
+    # ===== FALLBACK PARA CONFIGURAÇÃO MANUAL (caso não haja dados no banco ainda) =====
+    # Se não há artigos com visualizações no banco, usar configuração manual temporária
+    if not most_accessed_articles:
+        fallback_slugs = ['abstencao_rio2024', 'evolucao_partidaria_brasil', 'abstencao_rio_2016']
+        for slug in fallback_slugs:
+            for article in articles:
+                if article['slug'] == slug:
+                    article_copy = article.copy()
+                    article_copy['access_count'] = 0  # Começar com 0 visualizações
+                    most_accessed_articles.append(article_copy)
+                    break
+    
     context = {
         'articles': articles,
-        'articles_count': len(articles)
+        'articles_count': len(articles),
+        'most_accessed_articles': most_accessed_articles
     }
     
     return render(request, 'blog.html', context)
@@ -869,6 +904,7 @@ def blog_post_view(request, slug):
     import markdown
     from datetime import datetime
     from django.http import Http404
+    from .models import get_or_create_blog_article
     
     # Caminho para os artigos do blog
     # Navegar até o diretório principal do projeto
@@ -905,13 +941,36 @@ def blog_post_view(request, slug):
         stat = os.stat(filepath)
         date_modified = datetime.fromtimestamp(stat.st_mtime)
         
+        # ===== TRACKING DE VISUALIZAÇÕES =====
+        # Obter ou criar registro do artigo no banco
+        blog_article = get_or_create_blog_article(slug, title)
+        
+        # Registrar visualização (com proteção anti-spam)
+        def get_client_ip(request):
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            return ip
+        
+        # Incrementar contador de visualizações
+        ip_address = get_client_ip(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        view_counted = blog_article.increment_views(ip_address, user_agent)
+        
+        # Obter contador atual de visualizações
+        view_count = blog_article.get_views_count()
+        
         article = {
             'title': title,
             'slug': slug,
             'excerpt': excerpt,
             'date': date_modified,
             'content': html_content,
-            'filename': f"{slug}.md"
+            'filename': f"{slug}.md",
+            'view_count': view_count,
+            'view_counted': view_counted  # Se esta visualização foi contada (para debug)
         }
         
         context = {
@@ -923,6 +982,64 @@ def blog_post_view(request, slug):
     except Exception as e:
         print(f"Erro ao processar {slug}: {e}")
         raise Http404("Erro ao carregar o artigo")
+
+def blog_analytics_view(request):
+    """View simples para analytics do blog (apenas para admins)"""
+    from django.http import JsonResponse
+    from .models import BlogArticle, BlogArticleView
+    from django.db.models import Count
+    from datetime import datetime, timedelta
+    
+    # Verificação simples de admin (pode ser melhorada)
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'Acesso negado'}, status=403)
+    
+    # Estatísticas gerais
+    total_articles = BlogArticle.objects.count()
+    total_views = sum(article.total_views for article in BlogArticle.objects.all())
+    
+    # Top 10 artigos mais visualizados
+    top_articles = BlogArticle.objects.filter(is_active=True).order_by('-total_views')[:10]
+    
+    # Visualizações dos últimos 7 dias
+    last_week = datetime.now() - timedelta(days=7)
+    recent_views = BlogArticleView.objects.filter(viewed_at__gte=last_week).count()
+    
+    # Estatísticas por dia (últimos 7 dias)
+    daily_stats = []
+    for i in range(7):
+        date = datetime.now() - timedelta(days=i)
+        day_start = date.replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_start + timedelta(days=1)
+        
+        views_count = BlogArticleView.objects.filter(
+            viewed_at__gte=day_start,
+            viewed_at__lt=day_end
+        ).count()
+        
+        daily_stats.append({
+            'date': day_start.strftime('%d/%m'),
+            'views': views_count
+        })
+    
+    analytics_data = {
+        'total_articles': total_articles,
+        'total_views': total_views,
+        'recent_views_7_days': recent_views,
+        'top_articles': [
+            {
+                'title': article.title,
+                'slug': article.slug,
+                'views': article.total_views,
+                'url': f'/blog/{article.slug}/'
+            }
+            for article in top_articles
+        ],
+        'daily_stats': list(reversed(daily_stats)),  # Ordem cronológica
+        'generated_at': datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    }
+    
+    return JsonResponse(analytics_data, json_dumps_params={'ensure_ascii': False, 'indent': 2})
 
 def generate_map_view(request):
     """View para gerar mapas dinamicamente via AJAX"""

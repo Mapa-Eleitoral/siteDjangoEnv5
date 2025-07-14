@@ -315,6 +315,162 @@
         .blog-post-image.color-5 { background: #f8f9fa; border-color: #e9ecef; }
         .blog-post-image.color-6 { background: #f8f9fa; border-color: #e9ecef; }
 
+        /* Most Accessed Articles Section */
+        .most-accessed-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title i {
+            color: #ff4444;
+            font-size: 1.25rem;
+        }
+
+        .most-accessed-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .most-accessed-post {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--background);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .most-accessed-post:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .post-rank {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            min-width: 60px;
+        }
+
+        .rank-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rank-icon {
+            color: var(--secondary);
+            font-size: 0.875rem;
+        }
+
+        .post-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .post-title:hover {
+            color: var(--primary);
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-meta i {
+            margin-right: 0.25rem;
+        }
+
+        .access-count {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .post-image-small {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            flex-shrink: 0;
+        }
+
+        .icon-display {
+            font-size: 1.5rem;
+            filter: grayscale(20%);
+        }
+
+        /* Ranking badges */
+        .most-accessed-post:nth-child(1) .rank-number {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .most-accessed-post:nth-child(2) .rank-number {
+            background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .most-accessed-post:nth-child(3) .rank-number {
+            background: linear-gradient(135deg, #cd7f32, #deb887);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         /* Coming Soon Section */
         .coming-soon {
             background: var(--surface);
@@ -472,6 +628,42 @@
             .newsletter {
                 flex-direction: column;
             }
+
+            /* Most Accessed Articles - Mobile */
+            .most-accessed-section {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .most-accessed-post {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .post-rank {
+                flex-direction: row;
+                gap: 0.5rem;
+                min-width: auto;
+            }
+
+            .post-content {
+                order: 2;
+            }
+
+            .post-image-small {
+                order: 3;
+                margin-top: 0.5rem;
+            }
+
+            .post-meta {
+                justify-content: center;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -546,6 +738,48 @@
                 </div>
             </div>
         </article>
+        {% endif %}
+
+        <!-- Most Accessed Articles -->
+        {% if most_accessed_articles %}
+        <section class="most-accessed-section">
+            <h2 class="section-title">
+                <i class="fas fa-fire"></i>
+                Artigos Mais Acessados
+            </h2>
+            <div class="most-accessed-grid">
+                {% for article in most_accessed_articles %}
+                <article class="most-accessed-post">
+                    <div class="post-rank">
+                        <span class="rank-number">{{ forloop.counter }}</span>
+                        <i class="fas fa-eye rank-icon"></i>
+                    </div>
+                    <div class="post-content">
+                        <a href="{% url 'mapa_eleitoral:blog_post' article.slug %}" class="post-title">{{ article.title }}</a>
+                        <div class="post-meta">
+                            <span><i class="fas fa-calendar-alt"></i> {{ article.date|date:"d/m/Y" }}</span>
+                            <span class="access-count">
+                                <i class="fas fa-eye"></i> 
+                                {% if article.access_count %}{{ article.access_count }} visualizações{% else %}Popular{% endif %}
+                            </span>
+                        </div>
+                        <p class="post-excerpt">{{ article.excerpt|truncatechars:120 }}</p>
+                    </div>
+                    <div class="post-image-small">
+                        {% if 'abstencao' in article.slug %}
+                            <div class="icon-display">📊</div>
+                        {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
+                            <div class="icon-display">🏛️</div>
+                        {% elif 'ateismo' in article.slug %}
+                            <div class="icon-display">🤔</div>
+                        {% else %}
+                            <div class="icon-display">📈</div>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
         {% endif %}
 
         <!-- Blog Posts -->

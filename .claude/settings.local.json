@@ -33,7 +33,8 @@
       "Bash(sudo apt install:*)",
       "Bash(../Scripts/python.exe -c \"import markdown; print(''Markdown available'')\")",
       "Bash(../Scripts/python.exe -m pip install:*)",
-      "Bash(../Scripts/python.exe:*)"
+      "Bash(../Scripts/python.exe:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
