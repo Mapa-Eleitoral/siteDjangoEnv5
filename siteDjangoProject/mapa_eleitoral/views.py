@@ -853,41 +853,84 @@ def blog_view(request):
                         
                     # Processar o conteúdo se não estiver vazio
                     if content.strip():
-                        # Usar markdown para converter
-                        md = markdown.Markdown(extensions=['meta'])
-                        html_content = md.convert(content)
-                        
-                        # Extrair título da primeira linha ou do filename
+                        # Processar frontmatter YAML se existir
                         title = filename.replace('.md', '').replace('_', ' ').title()
-                        if content.startswith('#'):
-                            title = content.split('\n')[0].replace('#', '').strip()
-                        
-                        # Extrair excerpt - procurar por **Resumo**: primeiro
-                        excerpt = ""
+                        description = ""
+                        keywords = ""
+                        author = "Filipe Dias"
                         date_from_content = None
+                        excerpt = ""
                         
-                        lines = content.split('\n')
-                        for line in lines:
-                            if line.startswith('**Resumo**:'):
-                                excerpt = line.replace('**Resumo**:', '').strip()
-                                break
-                            elif line.startswith('**Data**:'):
-                                try:
-                                    date_str = line.replace('**Data**:', '').strip()
-                                    date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
-                                except:
-                                    pass
+                        # Verificar se há frontmatter YAML
+                        if content.startswith('---'):
+                            try:
+                                import yaml
+                                # Dividir frontmatter do conteúdo
+                                parts = content.split('---', 2)
+                                if len(parts) >= 3:
+                                    frontmatter_str = parts[1].strip()
+                                    content_body = parts[2].strip()
+                                    
+                                    # Parse do frontmatter YAML
+                                    frontmatter = yaml.safe_load(frontmatter_str)
+                                    
+                                    if frontmatter:
+                                        title = frontmatter.get('title', title)
+                                        description = frontmatter.get('description', '')
+                                        keywords = frontmatter.get('keywords', '')
+                                        author = frontmatter.get('author', author)
+                                        
+                                        # Parse da data
+                                        if 'date' in frontmatter:
+                                            try:
+                                                date_str = frontmatter['date']
+                                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                            except:
+                                                pass
+                                        
+                                        # Usar description como excerpt
+                                        excerpt = description
+                                    
+                                    # Usar o conteúdo sem frontmatter para markdown
+                                    content = content_body
+                            except ImportError:
+                                # Se PyYAML não estiver disponível, fallback para método antigo
+                                pass
+                            except Exception as e:
+                                print(f"Erro ao processar frontmatter em {filename}: {e}")
                         
-                        # Se não encontrou resumo, usar primeiros 200 chars
+                        # Se não há frontmatter, usar método antigo
                         if not excerpt:
-                            excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+                            # Extrair título da primeira linha se começar com #
+                            if content.startswith('#'):
+                                title = content.split('\n')[0].replace('#', '').strip()
+                            
+                            # Procurar por **Resumo**: ou usar primeiros 200 chars
+                            lines = content.split('\n')
+                            for line in lines:
+                                if line.startswith('**Resumo**:'):
+                                    excerpt = line.replace('**Resumo**:', '').strip()
+                                    break
+                                elif line.startswith('**Data**:'):
+                                    try:
+                                        date_str = line.replace('**Data**:', '').strip()
+                                        date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                    except:
+                                        pass
+                            
+                            if not excerpt:
+                                excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
                         
                         # Usar data do conteúdo ou data de modificação do arquivo
-                        if date_from_content:
-                            date_modified = date_from_content
-                        else:
+                        if not date_from_content:
                             stat = os.stat(filepath)
                             date_modified = datetime.fromtimestamp(stat.st_mtime)
+                        else:
+                            date_modified = date_from_content
+                        
+                        # Converter markdown para HTML
+                        md = markdown.Markdown(extensions=['meta'])
+                        html_content = md.convert(content)
                         
                         # Obter ou criar registro no banco para tracking
                         slug = filename.replace('.md', '')
@@ -898,6 +941,9 @@ def blog_view(request):
                             'title': title,
                             'slug': slug,
                             'excerpt': excerpt,
+                            'description': description,
+                            'keywords': keywords,
+                            'author': author,
                             'date': date_modified,
                             'content': html_content,
                             'filename': filename,
@@ -998,25 +1044,53 @@ def blog_post_view(request, slug):
         if not content.strip():
             raise Http404("Artigo vazio")
         
-        # Usar markdown para converter com metadados
-        md = markdown.Markdown(extensions=['meta', 'codehilite', 'toc'])
-        html_content = md.convert(content)
-        
-        # Extrair metadados do frontmatter
-        meta = md.Meta if hasattr(md, 'Meta') else {}
-        
-        # Título: usar meta title > primeira linha > filename
+        # Processar frontmatter YAML se existir
         title = slug.replace('_', ' ').title()
-        if meta.get('title'):
-            title = meta['title'][0] if isinstance(meta['title'], list) else meta['title']
-        elif content.startswith('#'):
-            title = content.split('\n')[0].replace('#', '').strip()
-        
-        # Descrição: usar meta description > excerpt auto
         description = ""
-        if meta.get('description'):
-            description = meta['description'][0] if isinstance(meta['description'], list) else meta['description']
-        else:
+        keywords = ""
+        author = "Filipe Dias"
+        canonical = ""
+        date_from_content = None
+        
+        # Verificar se há frontmatter YAML
+        if content.startswith('---'):
+            try:
+                import yaml
+                # Dividir frontmatter do conteúdo
+                parts = content.split('---', 2)
+                if len(parts) >= 3:
+                    frontmatter_str = parts[1].strip()
+                    content_body = parts[2].strip()
+                    
+                    # Parse do frontmatter YAML
+                    frontmatter = yaml.safe_load(frontmatter_str)
+                    
+                    if frontmatter:
+                        title = frontmatter.get('title', title)
+                        description = frontmatter.get('description', '')
+                        keywords = frontmatter.get('keywords', '')
+                        author = frontmatter.get('author', author)
+                        canonical = frontmatter.get('canonical', '')
+                        
+                        # Parse da data
+                        if 'date' in frontmatter:
+                            try:
+                                date_str = frontmatter['date']
+                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                            except:
+                                pass
+                    
+                    # Usar o conteúdo sem frontmatter para markdown
+                    content = content_body
+            except Exception as e:
+                print(f"Erro ao processar frontmatter: {e}")
+        
+        # Fallback para método antigo se não há frontmatter
+        if not title or title == slug.replace('_', ' ').title():
+            if content.startswith('#'):
+                title = content.split('\n')[0].replace('#', '').strip()
+        
+        if not description:
             # Extrair primeiro parágrafo significativo
             lines = content.split('\n')
             for line in lines:
@@ -1025,26 +1099,19 @@ def blog_post_view(request, slug):
                     description = clean_line[:160] + '...'
                     break
         
-        # Keywords
-        keywords = ""
-        if meta.get('keywords'):
-            keywords = meta['keywords'][0] if isinstance(meta['keywords'], list) else meta['keywords']
+        # Converter markdown para HTML
+        md = markdown.Markdown(extensions=['meta', 'codehilite', 'toc'])
+        html_content = md.convert(content)
         
-        # Data: usar meta date > data do arquivo
-        date_from_meta = None
-        if meta.get('date'):
-            try:
-                from datetime import datetime
-                date_str = meta['date'][0] if isinstance(meta['date'], list) else meta['date']
-                date_from_meta = datetime.strptime(date_str, '%Y-%m-%d')
-            except:
-                pass
-        
+        # Definir excerpt baseado na descrição ou conteúdo
         excerpt = description or content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
         
-        # Obter data de modificação do arquivo
-        stat = os.stat(filepath)
-        date_modified = datetime.fromtimestamp(stat.st_mtime)
+        # Usar data do frontmatter ou data de modificação do arquivo
+        if date_from_content:
+            date_modified = date_from_content
+        else:
+            stat = os.stat(filepath)
+            date_modified = datetime.fromtimestamp(stat.st_mtime)
         
         # ===== TRACKING DE VISUALIZAÇÕES =====
         # Obter ou criar registro do artigo no banco
@@ -1073,13 +1140,14 @@ def blog_post_view(request, slug):
             'excerpt': excerpt,
             'description': description,
             'keywords': keywords,
-            'date': date_from_meta or date_modified,
+            'author': author,
+            'canonical': canonical,
+            'date': date_modified,
             'content': html_content,
             'filename': f"{slug}.md",
             'view_count': view_count,
             'view_counted': view_counted,
-            'canonical_url': f"https://mapaeleitoral.com.br/blog/{slug}/",
-            'meta': meta  # Metadados completos para uso avançado
+            'canonical_url': canonical or f"https://mapaeleitoral.com.br/blog/{slug}/"
         }
         
         context = {
