@@ -835,12 +835,32 @@ def blog_view(request):
                         if content.startswith('#'):
                             title = content.split('\n')[0].replace('#', '').strip()
                         
-                        # Extrair excerpt (primeiros 200 caracteres do texto)
-                        excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+                        # Extrair excerpt - procurar por **Resumo**: primeiro
+                        excerpt = ""
+                        date_from_content = None
                         
-                        # Obter data de modificação do arquivo
-                        stat = os.stat(filepath)
-                        date_modified = datetime.fromtimestamp(stat.st_mtime)
+                        lines = content.split('\n')
+                        for line in lines:
+                            if line.startswith('**Resumo**:'):
+                                excerpt = line.replace('**Resumo**:', '').strip()
+                                break
+                            elif line.startswith('**Data**:'):
+                                try:
+                                    date_str = line.replace('**Data**:', '').strip()
+                                    date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                except:
+                                    pass
+                        
+                        # Se não encontrou resumo, usar primeiros 200 chars
+                        if not excerpt:
+                            excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+                        
+                        # Usar data do conteúdo ou data de modificação do arquivo
+                        if date_from_content:
+                            date_modified = date_from_content
+                        else:
+                            stat = os.stat(filepath)
+                            date_modified = datetime.fromtimestamp(stat.st_mtime)
                         
                         # Obter ou criar registro no banco para tracking
                         slug = filename.replace('.md', '')
