@@ -998,17 +998,49 @@ def blog_post_view(request, slug):
         if not content.strip():
             raise Http404("Artigo vazio")
         
-        # Usar markdown para converter
+        # Usar markdown para converter com metadados
         md = markdown.Markdown(extensions=['meta', 'codehilite', 'toc'])
         html_content = md.convert(content)
         
-        # Extrair título da primeira linha ou do filename
+        # Extrair metadados do frontmatter
+        meta = md.Meta if hasattr(md, 'Meta') else {}
+        
+        # Título: usar meta title > primeira linha > filename
         title = slug.replace('_', ' ').title()
-        if content.startswith('#'):
+        if meta.get('title'):
+            title = meta['title'][0] if isinstance(meta['title'], list) else meta['title']
+        elif content.startswith('#'):
             title = content.split('\n')[0].replace('#', '').strip()
         
-        # Extrair excerpt (primeiros 200 caracteres do texto)
-        excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+        # Descrição: usar meta description > excerpt auto
+        description = ""
+        if meta.get('description'):
+            description = meta['description'][0] if isinstance(meta['description'], list) else meta['description']
+        else:
+            # Extrair primeiro parágrafo significativo
+            lines = content.split('\n')
+            for line in lines:
+                clean_line = line.strip().replace('#', '').replace('**', '')
+                if len(clean_line) > 50 and not line.startswith('**Data**:'):
+                    description = clean_line[:160] + '...'
+                    break
+        
+        # Keywords
+        keywords = ""
+        if meta.get('keywords'):
+            keywords = meta['keywords'][0] if isinstance(meta['keywords'], list) else meta['keywords']
+        
+        # Data: usar meta date > data do arquivo
+        date_from_meta = None
+        if meta.get('date'):
+            try:
+                from datetime import datetime
+                date_str = meta['date'][0] if isinstance(meta['date'], list) else meta['date']
+                date_from_meta = datetime.strptime(date_str, '%Y-%m-%d')
+            except:
+                pass
+        
+        excerpt = description or content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
         
         # Obter data de modificação do arquivo
         stat = os.stat(filepath)
@@ -1039,11 +1071,15 @@ def blog_post_view(request, slug):
             'title': title,
             'slug': slug,
             'excerpt': excerpt,
-            'date': date_modified,
+            'description': description,
+            'keywords': keywords,
+            'date': date_from_meta or date_modified,
             'content': html_content,
             'filename': f"{slug}.md",
             'view_count': view_count,
-            'view_counted': view_counted  # Se esta visualização foi contada (para debug)
+            'view_counted': view_counted,
+            'canonical_url': f"https://mapaeleitoral.com.br/blog/{slug}/",
+            'meta': meta  # Metadados completos para uso avançado
         }
         
         context = {

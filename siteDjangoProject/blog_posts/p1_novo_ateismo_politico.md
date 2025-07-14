@@ -1,7 +1,15 @@
-# O Novo Ateísmo Político – Parte 1: O que é?
+---
+title: "O Novo Ateísmo Político no Brasil: Definição e Impacto nas Eleições 2024"
+description: "Análise crítica do novo ateísmo político brasileiro: como a desconfiança no Estado democrático influencia o comportamento eleitoral e a participação política."
+keywords: "ateísmo político, eleições brasil 2024, comportamento eleitoral, ceticismo político, democracia brasileira, participação eleitoral"
+author: "Filipe Dias"
+date: "2025-07-12"
+canonical: "https://mapaeleitoral.com.br/blog/p1_novo_ateismo_politico/"
+---
 
-**Data**: 2025-07-12
-**Resumo**: Primeira parte da série sobre o novo ateísmo político, questionando a sacralização do Estado democrático moderno e propondo uma crítica radical às estruturas de poder político.
+# O Novo Ateísmo Político no Brasil: Definição e Impacto nas Eleições 2024
+
+**Palavras-chave**: ateísmo político, eleições brasil, comportamento eleitoral, política brasileira
 
 ## Por que precisamos repensar a nossa fé no Estado?
 

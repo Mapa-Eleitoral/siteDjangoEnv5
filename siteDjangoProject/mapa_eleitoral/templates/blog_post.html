@@ -7,9 +7,40 @@
     <title>{{ article.title }} - Mapa Eleitoral</title>
     
     <!-- Meta tags otimizadas para SEO -->
-    <meta name="description" content="{{ article.excerpt }}">
-    <meta name="keywords" content="blog, estudos eleitorais, análises políticas, rio de janeiro, eleições, dados eleitorais">
+    <meta name="description" content="{{ article.description|default:article.excerpt }}">
+    <meta name="keywords" content="{{ article.keywords|default:'blog, estudos eleitorais, análises políticas, rio de janeiro, eleições, dados eleitorais' }}">
     <meta name="author" content="Filipe Dias">
+    <link rel="canonical" href="{{ article.canonical_url }}">
+    
+    <!-- Structured Data - JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ article.title }}",
+        "description": "{{ article.description|default:article.excerpt }}",
+        "author": {
+            "@type": "Person",
+            "name": "Filipe Dias",
+            "url": "https://github.com/diasfilipe"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Mapa Eleitoral",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://mapaeleitoral.com.br/static/EduardoPaesViz.png"
+            }
+        },
+        "datePublished": "{{ article.date|date:'c' }}",
+        "dateModified": "{{ article.date|date:'c' }}",
+        "url": "{{ article.canonical_url }}",
+        "mainEntityOfPage": "{{ article.canonical_url }}",
+        "image": "https://mapaeleitoral.com.br/static/EduardoPaesViz.png",
+        "genre": "Political Analysis",
+        "keywords": "{{ article.keywords|default:'eleições, política, dados eleitorais, rio de janeiro' }}"
+    }
+    </script>
 
     <!-- Open Graph para redes sociais -->
     <meta property="og:title" content="{{ article.title }} - Mapa Eleitoral">
