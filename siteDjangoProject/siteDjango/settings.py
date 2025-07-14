@@ -80,7 +80,23 @@ if config('DATABASE_URL', default=None):
             conn_max_age=3600,  # Aumentado para 1h
             conn_health_checks=True,
             ssl_require=config('DB_SSL', default=False, cast=bool)
-        )
+        ),
+        'blog': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'blog',
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default='3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+                'autocommit': True,
+            },
+            'CONN_MAX_AGE': 3600,
+            'CONN_HEALTH_CHECKS': True,
+            'ssl_require': config('DB_SSL', default=False, cast=bool)
+        }
     }
     # Otimizações específicas para produção
     DATABASES['default']['OPTIONS'] = {
@@ -105,8 +121,25 @@ else:
                 'autocommit': True,
             },
             'CONN_MAX_AGE': 300,  # 5 minutos em dev
+        },
+        'blog': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'blog',
+            'USER': config('DB_USER', default='root'),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+                'autocommit': True,
+            },
+            'CONN_MAX_AGE': 300,
         }
     }
+
+# === DATABASE ROUTER ===
+DATABASE_ROUTERS = ['siteDjango.db_router.DatabaseRouter']
 
 # === CONFIGURAÇÕES DE CACHE SIMPLIFICADAS ===
 # Usar cache em memória por padrão para evitar problemas

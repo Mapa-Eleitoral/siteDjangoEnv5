@@ -86,10 +86,10 @@ class BlogArticle(models.Model):
         if not cache.get(cache_key):
             # Incrementar contador
             self.total_views = models.F('total_views') + 1
-            self.save(update_fields=['total_views'])
+            self.save(using='blog', update_fields=['total_views'])
             
             # Registrar visualização detalhada
-            BlogArticleView.objects.create(
+            BlogArticleView.objects.using('blog').create(
                 article=self,
                 ip_address=ip_address[:15] if ip_address else None,  # Truncar para segurança
                 user_agent=(user_agent[:200] if user_agent else None)  # Truncar para performance
@@ -124,7 +124,7 @@ class BlogArticle(models.Model):
         """
         Retorna os artigos mais visualizados
         """
-        return cls.objects.filter(is_active=True).order_by('-total_views')[:limit]
+        return cls.objects.using('blog').filter(is_active=True).order_by('-total_views')[:limit]
 
 
 class BlogArticleView(models.Model):
@@ -156,15 +156,15 @@ def get_or_create_blog_article(slug, title=None):
     Obtém ou cria um artigo do blog baseado no slug
     """
     try:
-        article = BlogArticle.objects.get(slug=slug)
+        article = BlogArticle.objects.using('blog').get(slug=slug)
         # Atualizar título se fornecido e diferente
         if title and article.title != title:
             article.title = title
-            article.save(update_fields=['title'])
+            article.save(using='blog', update_fields=['title'])
         return article
     except BlogArticle.DoesNotExist:
         # Criar novo artigo
-        return BlogArticle.objects.create(
+        return BlogArticle.objects.using('blog').create(
             slug=slug,
             title=title or slug.replace('_', ' ').title()
         )
