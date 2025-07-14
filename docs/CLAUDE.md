@@ -124,3 +124,19 @@ python siteDjangoProject/manage.py shell
 - Redis is required for production but has local memory fallback for development
 - GeoJSON file is critical for map generation and should not be modified
 - Performance optimizations are extensively documented in `OTIMIZACOES.md`
+
+## Design Guidelines
+
+### UI/UX Standards
+- **❌ NO EMOJIS**: Never use emojis in any interface elements
+- **✅ FontAwesome Icons**: Use only FontAwesome flat icons (fas fa-*)
+- **📏 Compact Design**: Prefer smaller, more compact cards and elements
+- **🎨 Clean Layout**: Minimal, professional design aesthetic
+- **📱 Mobile-First**: Always consider responsive design (3 col → 2 col → 1 col)
+
+### Icon Usage
+- **Charts/Analytics**: `fas fa-chart-bar`, `fas fa-chart-line`
+- **Politics/Government**: `fas fa-university`, `fas fa-vote-yea`
+- **Data/Research**: `fas fa-brain`, `fas fa-search`
+- **Time/Calendar**: `fas fa-calendar-alt`, `fas fa-clock`
+- **Views/Eyes**: `fas fa-eye`, `fas fa-users`

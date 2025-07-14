@@ -344,37 +344,50 @@
 
         .most-accessed-grid {
             display: grid;
-            gap: 1.5rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
         }
 
         .most-accessed-post {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
             background: var(--background);
             border-radius: var(--radius);
             border: 1px solid var(--border);
             transition: all 0.3s ease;
             position: relative;
+            height: 100%;
+            min-height: 200px;
         }
 
         .most-accessed-post:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary);
         }
 
+        .most-accessed-post:hover .post-image-small {
+            border-color: var(--primary);
+            background: var(--background);
+        }
+
+        .most-accessed-post:hover .icon-display {
+            color: var(--primary);
+        }
+
         .post-rank {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: 0.25rem;
-            min-width: 60px;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
         }
 
         .rank-number {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--primary);
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -385,22 +398,23 @@
 
         .rank-icon {
             color: var(--secondary);
-            font-size: 0.875rem;
+            font-size: 0.8rem;
         }
 
         .post-content {
             flex: 1;
-            min-width: 0;
+            text-align: center;
         }
 
         .post-title {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-primary);
             text-decoration: none;
             display: block;
             margin-bottom: 0.5rem;
             line-height: 1.3;
+            min-height: 2.6rem;
         }
 
         .post-title:hover {
@@ -409,12 +423,12 @@
 
         .post-meta {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 0.25rem;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-bottom: 0.5rem;
-            flex-wrap: wrap;
         }
 
         .post-meta i {
@@ -428,25 +442,28 @@
 
         .post-excerpt {
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.4;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            text-align: center;
+            margin-bottom: 0.75rem;
         }
 
         .post-image-small {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--surface);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             border-radius: var(--radius);
+            margin: 0 auto 0.75rem auto;
             flex-shrink: 0;
         }
 
         .icon-display {
-            font-size: 1.5rem;
-            filter: grayscale(20%);
+            font-size: 1.25rem;
+            color: var(--text-secondary);
         }
 
         /* Ranking badges */
@@ -466,6 +483,13 @@
 
         .most-accessed-post:nth-child(3) .rank-number {
             background: linear-gradient(135deg, #cd7f32, #deb887);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .most-accessed-post:nth-child(4) .rank-number {
+            background: linear-gradient(135deg, #4a5568, #718096);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -569,7 +593,24 @@
             opacity: 0.8;
         }
 
-        /* Responsive */
+        /* Responsive - Tablets */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .most-accessed-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
+            }
+
+            .most-accessed-post {
+                padding: 1rem;
+                min-height: 220px;
+            }
+
+            .post-title {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Responsive - Mobile */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -638,31 +679,42 @@
                 font-size: 1.25rem;
             }
 
-            .most-accessed-post {
-                flex-direction: column;
-                text-align: center;
+            .most-accessed-grid {
+                grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+
+            .most-accessed-post {
                 padding: 1rem;
+                gap: 0.5rem;
+                min-height: 200px;
             }
 
             .post-rank {
-                flex-direction: row;
-                gap: 0.5rem;
-                min-width: auto;
+                justify-content: center;
             }
 
-            .post-content {
-                order: 2;
+            .rank-number {
+                font-size: 1.25rem;
             }
 
             .post-image-small {
-                order: 3;
-                margin-top: 0.5rem;
+                width: 40px;
+                height: 40px;
+                margin-bottom: 0.5rem;
             }
 
-            .post-meta {
-                justify-content: center;
-                gap: 0.5rem;
+            .icon-display {
+                font-size: 1rem;
+            }
+
+            .post-title {
+                font-size: 0.85rem;
+                min-height: auto;
+            }
+
+            .post-excerpt {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -754,8 +806,24 @@
                         <span class="rank-number">{{ forloop.counter }}</span>
                         <i class="fas fa-eye rank-icon"></i>
                     </div>
+                    
+                    <div class="post-image-small">
+                        {% if 'abstencao' in article.slug %}
+                            <i class="fas fa-chart-bar icon-display"></i>
+                        {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
+                            <i class="fas fa-university icon-display"></i>
+                        {% elif 'ateismo' in article.slug %}
+                            <i class="fas fa-brain icon-display"></i>
+                        {% else %}
+                            <i class="fas fa-chart-line icon-display"></i>
+                        {% endif %}
+                    </div>
+
                     <div class="post-content">
                         <a href="{% url 'mapa_eleitoral:blog_post' article.slug %}" class="post-title">{{ article.title }}</a>
+                        
+                        <p class="post-excerpt">{{ article.excerpt|truncatechars:100 }}</p>
+                        
                         <div class="post-meta">
                             <span><i class="fas fa-calendar-alt"></i> {{ article.date|date:"d/m/Y" }}</span>
                             <span class="access-count">
@@ -763,18 +831,6 @@
                                 {% if article.access_count %}{{ article.access_count }} visualizações{% else %}Popular{% endif %}
                             </span>
                         </div>
-                        <p class="post-excerpt">{{ article.excerpt|truncatechars:120 }}</p>
-                    </div>
-                    <div class="post-image-small">
-                        {% if 'abstencao' in article.slug %}
-                            <div class="icon-display">📊</div>
-                        {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
-                            <div class="icon-display">🏛️</div>
-                        {% elif 'ateismo' in article.slug %}
-                            <div class="icon-display">🤔</div>
-                        {% else %}
-                            <div class="icon-display">📈</div>
-                        {% endif %}
                     </div>
                 </article>
                 {% endfor %}

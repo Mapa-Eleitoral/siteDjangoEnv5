@@ -864,8 +864,8 @@ def blog_view(request):
     articles.sort(key=lambda x: x['date'], reverse=True)
     
     # ===== ARTIGOS MAIS ACESSADOS (DADOS REAIS DO BANCO) =====
-    # Buscar os 3 artigos mais visualizados do banco de dados
-    most_viewed_blog_articles = BlogArticle.get_most_viewed(limit=3)
+    # Buscar os 4 artigos mais visualizados do banco de dados
+    most_viewed_blog_articles = BlogArticle.get_most_viewed(limit=4)
     
     # Combinar dados do banco com dados dos arquivos markdown
     most_accessed_articles = []
