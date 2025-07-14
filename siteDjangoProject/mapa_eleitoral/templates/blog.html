@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Blog - Mapa Eleitoral | Estudos e Análises</title>
+    
+    <!-- Meta tags otimizadas para SEO -->
+    <meta name="description" content="Estudos e análises eleitorais do Rio de Janeiro. Insights sobre comportamento eleitoral, tendências políticas e análises de dados.">
+    <meta name="keywords" content="blog, estudos eleitorais, análises políticas, rio de janeiro, eleições, dados eleitorais">
+    <meta name="author" content="Filipe Dias">
+
+    <!-- Open Graph para redes sociais -->
+    <meta property="og:title" content="Blog - Mapa Eleitoral | Estudos e Análises">
+    <meta property="og:description" content="Estudos aprofundados sobre eleições no Rio de Janeiro com análises de dados e insights políticos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mapaeleitoral.com.br/blog">
+    <meta property="og:image" content="https://mapaeleitoral.com.br/static/EduardoPaesViz.png">
+    <meta property="og:site_name" content="Mapa Eleitoral">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Above-the-fold Critical - Inline para melhor FCP */
+        :root {
+            --primary: #123F32;
+            --primary-dark: #0e3229;
+            --primary-light: #1a4f3f;
+            --secondary: #64748b;
+            --success: #10b981;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 0.75rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+            font-display: swap;
+            contain: layout style paint;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header otimizado para LCP */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            z-index: 100;
+            contain: layout style paint;
+            transform: translateZ(0); /* Force GPU acceleration */
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 100;
+            color: var(--primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 100;
+            color: var(--secondary);
+            margin-top: 0.25rem;
+            margin-left: 4rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-link[style*="background"] {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+
+        /* Main content otimizado */
+        .main-content {
+            display: grid;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        /* Card base otimizado */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            contain: layout style paint;
+        }
+
+        .hero {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Blog Posts Grid - Nate Silver Style */
+        .blog-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-post {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+        .blog-post:last-child {
+            border-bottom: none;
+        }
+
+        .blog-post-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 120px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--background);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .blog-post-content {
+            flex: 1;
+        }
+
+        .blog-post-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            text-decoration: none;
+            display: block;
+        }
+
+        .blog-post-title:hover {
+            color: var(--primary);
+        }
+
+        .blog-post-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .blog-post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-meta i {
+            font-size: 0.75rem;
+            margin-right: 0.25rem;
+        }
+
+        .blog-post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--background);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+        }
+
+        /* Featured Post Style */
+        .featured-post {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .featured-post .blog-post-image {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 1.5rem;
+            background: var(--background);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .featured-post .blog-post-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-post .blog-post-excerpt {
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Minimal variations for post images */
+        .blog-post-image.color-1 { background: #f8f9fa; border-color: #e9ecef; }
+        .blog-post-image.color-2 { background: #f8f9fa; border-color: #e9ecef; }
+        .blog-post-image.color-3 { background: #f8f9fa; border-color: #e9ecef; }
+        .blog-post-image.color-4 { background: #f8f9fa; border-color: #e9ecef; }
+        .blog-post-image.color-5 { background: #f8f9fa; border-color: #e9ecef; }
+        .blog-post-image.color-6 { background: #f8f9fa; border-color: #e9ecef; }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .coming-soon h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .coming-soon p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .newsletter {
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            background: var(--background);
+        }
+
+        .newsletter button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .newsletter button:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-info p {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .footer-meta {
+            text-align: right;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .main-title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                margin-left: 2rem;
+                font-size: 0.8rem;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .blog-post {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .blog-post-image {
+                width: 100%;
+                height: 150px;
+            }
+
+            .featured-post {
+                padding: 1.5rem;
+            }
+
+            .featured-post .blog-post-title {
+                font-size: 1.5rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-meta {
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .newsletter {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-text">
+                        <h1 class="main-title">mapæleitoral</h1>
+                        <p class="subtitle">Democracia em Dados</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/projeto/" class="nav-link">Projeto</a>
+                    <a href="/blog/" class="nav-link" style="background: var(--primary); color: white;">Blog</a>
+                    <a href="/apoio/" class="nav-link">Apoio</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Estudos Eleitorais</h1>
+            <p>Análises aprofundadas sobre eleições no Rio de Janeiro com insights baseados em dados reais do TSE</p>
+        </section>
+
+        <!-- Featured Post -->
+        <article class="featured-post">
+            <div class="blog-post-image">
+                Análise Destaque
+            </div>
+            <div class="blog-post-content">
+                <a href="#" class="blog-post-title">Análise do Comportamento Eleitoral por Bairros</a>
+                <div class="blog-post-meta">
+                    <span><i class="fas fa-clock"></i> Em breve</span>
+                    <span><i class="fas fa-book-open"></i> 8 min de leitura</span>
+                    <span><i class="fas fa-star"></i> Artigo destaque</span>
+                </div>
+                <p class="blog-post-excerpt">
+                    Estudo detalhado sobre como diferentes bairros do Rio de Janeiro votam, 
+                    identificando padrões geográficos e socioeconômicos que influenciam as decisões eleitorais. 
+                    Uma análise completa usando dados do TSE para revelar insights únicos sobre o comportamento do eleitorado carioca.
+                </p>
+                <div class="blog-post-tags">
+                    <span class="tag">Geografia Eleitoral</span>
+                    <span class="tag">Análise de Dados</span>
+                    <span class="tag">Rio de Janeiro</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Blog Posts -->
+        <section class="blog-grid">
+            <!-- Post 1 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-1">
+                    Partidos<br>Políticos
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Evolução Partidária: 2018-2024</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 12 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Análise temporal da performance dos principais partidos no Rio de Janeiro, 
+                        mostrando crescimento, declínio e migração de votos entre as legendas.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Partidos Políticos</span>
+                        <span class="tag">Análise Temporal</span>
+                        <span class="tag">Eleições</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 2 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-2">
+                    Correlação<br>de Votos
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Prefeitos vs Vereadores: Correlação de Votos</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 10 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Investigação sobre a correlação entre votos para prefeito e vereadores do mesmo partido, 
+                        analisando coligações e transferência de votos.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Coligações</span>
+                        <span class="tag">Correlação</span>
+                        <span class="tag">Eleições Municipais</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 3 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-3">
+                    Mapa de<br>Calor
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Mapa de Calor: Zonas Eleitorais Mais Disputadas</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 6 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Visualização interativa das zonas eleitorais com maior competitividade, 
+                        identificando regiões onde a disputa é mais acirrada.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Visualização</span>
+                        <span class="tag">Zonas Eleitorais</span>
+                        <span class="tag">Competitividade</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 4 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-4">
+                    Abstenção<br>Eleitoral
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Abstenção Eleitoral: Padrões e Tendências</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 9 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Estudo sobre abstenção eleitoral no Rio de Janeiro, analisando fatores socioeconômicos 
+                        e geográficos que influenciam a participação eleitoral.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Abstenção</span>
+                        <span class="tag">Participação</span>
+                        <span class="tag">Demografia</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 5 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-5">
+                    Metodologia<br>de Análise
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Metodologia: Como Analisamos os Dados Eleitorais</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 15 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Explicação detalhada sobre nossa metodologia de análise de dados eleitorais, 
+                        ferramentas utilizadas e como garantimos a precisão das informações.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Metodologia</span>
+                        <span class="tag">Ciência de Dados</span>
+                        <span class="tag">Transparência</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 6 -->
+            <article class="blog-post">
+                <div class="blog-post-image color-6">
+                    Redes<br>Sociais
+                </div>
+                <div class="blog-post-content">
+                    <a href="#" class="blog-post-title">Impacto das Redes Sociais nas Eleições de 2024</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> Em breve</span>
+                        <span><i class="fas fa-book-open"></i> 11 min de leitura</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        Como candidatos utilizaram Instagram, TikTok e Facebook para mobilizar eleitores no Rio de Janeiro, 
+                        com análise de engajamento e correlação com resultados eleitorais.
+                    </p>
+                    <div class="blog-post-tags">
+                        <span class="tag">Redes Sociais</span>
+                        <span class="tag">Engajamento</span>
+                        <span class="tag">Campanhas</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Coming Soon Section -->
+        <section class="coming-soon">
+            <h2>Conteúdo em Desenvolvimento</h2>
+            <p>Estamos preparando estudos detalhados e análises exclusivas sobre eleições no Rio de Janeiro. 
+            Cadastre-se para receber notificações quando os artigos forem publicados!</p>
+            
+            <form class="newsletter">
+                <input type="email" placeholder="Seu e-mail" required>
+                <button type="submit">Notificar</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
+                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" style="color: white;">Filipe Dias</a></p>
+                    <p><strong>Versão:</strong> 5.0 - Blog de Estudos Eleitorais</p>
+                </div>
+                <div class="footer-meta">
+                    <div class="social-links">
+                        <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <p><strong>contato@mapaeleitoral.com.br</strong></p>
+                    <p>Última atualização: <strong>Julho/2025</strong></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Newsletter form handling
+        document.querySelector('.newsletter').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            if (email) {
+                alert('Obrigado! Você será notificado quando novos estudos forem publicados.');
+                this.querySelector('input[type="email"]').value = '';
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

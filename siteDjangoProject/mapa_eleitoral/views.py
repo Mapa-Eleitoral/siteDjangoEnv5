@@ -797,6 +797,10 @@ def apoio_view(request):
     """View para página de apoio"""
     return render(request, 'apoio.html')
 
+def blog_view(request):
+    """View para página de blog com estudos eleitorais"""
+    return render(request, 'blog.html')
+
 def generate_map_view(request):
     """View para gerar mapas dinamicamente via AJAX"""
     candidato = request.GET.get('candidato')

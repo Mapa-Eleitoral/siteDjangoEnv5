@@ -25,7 +25,8 @@
       "WebFetch(domain:diariodorio.com)",
       "WebFetch(domain:www.camara.rj.gov.br)",
       "Bash(echo)",
-      "WebFetch(domain:claude.ai)"
+      "WebFetch(domain:claude.ai)",
+      "WebFetch(domain:www.natesilver.net)"
     ],
     "deny": []
   }
