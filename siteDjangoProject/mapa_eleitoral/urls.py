@@ -16,5 +16,7 @@ urlpatterns = [
     path('healthcheck/', views.healthcheck_view, name='healthcheck'),
     path('debug-candidato/', views.debug_candidato_view, name='debug_candidato'),
     path('generate-map/', views.generate_map_view, name='generate_map'),
+    path('get_zonas_secoes_ajax/', views.get_zonas_secoes_ajax, name='get_zonas_secoes_ajax'),
+    path('get_votos_zona_secao_ajax/', views.get_votos_zona_secao_ajax, name='get_votos_zona_secao_ajax'),
 ]
 

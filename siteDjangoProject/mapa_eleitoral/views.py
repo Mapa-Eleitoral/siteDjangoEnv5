@@ -844,4 +844,124 @@ def generate_map_view(request):
         return JsonResponse({
             'error': 'Erro interno do servidor'
         }, status=500)
+
+def get_zonas_secoes_ajax(request):
+    """API para buscar zonas-seções disponíveis"""
+    ano = request.GET.get('ano')
+    
+    if not ano:
+        return JsonResponse({
+            'error': 'Parâmetro ano é obrigatório'
+        }, status=400)
+    
+    try:
+        # Buscar zonas-seções distintas para o ano
+        zonas_secoes = (DadoEleitoral.objects
+                       .filter(ano_eleicao=ano, zona_secao__isnull=False)
+                       .values_list('zona_secao', flat=True)
+                       .distinct()
+                       .order_by('zona_secao'))
+        
+        zonas_secoes_list = list(zonas_secoes)
+        
+        # Separar e organizar por zona e seção
+        zonas_organizadas = {}
+        for zona_secao in zonas_secoes_list:
+            if '-' in zona_secao:
+                try:
+                    zona, secao = zona_secao.split('-')
+                    zona = zona.strip()
+                    secao = secao.strip()
+                    
+                    if zona not in zonas_organizadas:
+                        zonas_organizadas[zona] = []
+                    
+                    zonas_organizadas[zona].append({
+                        'secao': secao,
+                        'zona_secao': zona_secao
+                    })
+                except ValueError:
+                    continue
+        
+        # Ordenar seções dentro de cada zona
+        for zona in zonas_organizadas:
+            zonas_organizadas[zona].sort(key=lambda x: int(x['secao']) if x['secao'].isdigit() else x['secao'])
+        
+        return JsonResponse({
+            'success': True,
+            'zonas_secoes': zonas_secoes_list,
+            'zonas_organizadas': zonas_organizadas
+        })
+        
+    except Exception as e:
+        logging.error(f"Erro ao buscar zonas-seções: {e}")
+        return JsonResponse({
+            'error': 'Erro interno do servidor'
+        }, status=500)
+
+def get_votos_zona_secao_ajax(request):
+    """API para buscar votos por zona-seção específica"""
+    ano = request.GET.get('ano')
+    zona_secao = request.GET.get('zona_secao')
+    
+    if not all([ano, zona_secao]):
+        return JsonResponse({
+            'error': 'Parâmetros obrigatórios: ano, zona_secao'
+        }, status=400)
+    
+    try:
+        # Buscar votos por candidato na zona-seção
+        votos_por_candidato = (DadoEleitoral.objects
+                              .filter(ano_eleicao=ano, zona_secao=zona_secao)
+                              .values('nm_urna_candidato', 'sg_partido')
+                              .annotate(total_votos=models.Sum('qt_votos'))
+                              .order_by('-total_votos'))
+        
+        if not votos_por_candidato:
+            return JsonResponse({
+                'success': True,
+                'data': [],
+                'total_votos': 0,
+                'zona_secao': zona_secao,
+                'message': 'Nenhum candidato encontrado para esta zona-seção'
+            })
+        
+        votos_list = list(votos_por_candidato)
+        total_votos_zona_secao = sum(item['total_votos'] or 0 for item in votos_list)
+        
+        resultado = []
+        for item in votos_list:
+            votos = item['total_votos'] or 0
+            resultado.append({
+                'candidato': item['nm_urna_candidato'],
+                'partido': item['sg_partido'],
+                'votos': int(votos),
+                'percentual': round((votos / total_votos_zona_secao) * 100, 1) if total_votos_zona_secao > 0 else 0
+            })
+        
+        # Separar zona e seção para display
+        zona = ""
+        secao = ""
+        if '-' in zona_secao:
+            try:
+                zona, secao = zona_secao.split('-')
+                zona = zona.strip()
+                secao = secao.strip()
+            except ValueError:
+                pass
+        
+        return JsonResponse({
+            'success': True,
+            'data': resultado,
+            'total_votos': total_votos_zona_secao,
+            'zona_secao': zona_secao,
+            'zona': zona,
+            'secao': secao
+        })
+        
+    except Exception as e:
+        logging.error(f"Erro ao buscar votos por zona-seção: {e}")
+        return JsonResponse({
+            'error': 'Erro interno do servidor'
+        }, status=500)
             

@@ -22,6 +22,7 @@ class DadoEleitoral(models.Model):
     nr_turno = models.IntegerField(db_column='NR_TURNO', verbose_name="Número do Turno")
     qt_votos = models.DecimalField(max_digits=10, decimal_places=0, db_column='QT_VOTOS', verbose_name="Quantidade de Votos")
     nm_bairro = models.CharField(max_length=100, db_column='NM_BAIRRO', verbose_name="Nome do Bairro")
+    zona_secao = models.CharField(max_length=20, db_column='ZONA_SECAO', verbose_name="Zona-Seção", null=True, blank=True)
     nr_latitude = models.CharField(max_length=100, db_column='NR_LATITUDE', verbose_name="Latitude")
     nr_longitude = models.CharField(max_length=100, db_column='NR_LONGITUDE', verbose_name="Longitude")
     
@@ -36,6 +37,7 @@ class DadoEleitoral(models.Model):
             models.Index(fields=['ano_eleicao', 'nm_bairro'], name='idx_ano_bairro'),
             models.Index(fields=['nm_urna_candidato'], name='idx_candidato'),
             models.Index(fields=['ano_eleicao', 'sg_partido', 'nm_urna_candidato'], name='idx_completo'),
+            models.Index(fields=['zona_secao'], name='idx_zona_secao'),
         ]
     
     def __str__(self):

@@ -414,6 +414,7 @@
             to { transform: rotate(360deg); }
         }
 
+
         /* Navigation */
         .nav {
             display: flex;
@@ -814,6 +815,7 @@
                             partido: '{{ map_data.partido }}',
                             ano: '{{ map_data.ano }}'
                         });
+                        
                     } else {
                         document.addEventListener('DOMContentLoaded', () => {
                             loadDynamicMap({
@@ -847,6 +849,43 @@
             <div class="alert-content">
                 <div class="alert-title">ATENÇÃO</div>
                 Alguns bairros podem não apresentar dados devido à ausência de locais de votação ou falhas na coleta de votos.
+            </div>
+        </div>
+
+        <!-- Filtro Zona-Seção -->
+        <div class="card" style="margin-top: 1rem;">
+            <div style="padding: 1rem; border-bottom: 1px solid var(--border);">
+                <h3 style="margin: 0; color: var(--primary); font-size: 1.1rem;">Consulta por Zona e Seção</h3>
+                <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                    Selecione uma zona e seção específica para ver os resultados de votação
+                </p>
+            </div>
+            <div style="padding: 1rem;">
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label for="zona" class="form-label">Zona</label>
+                        <select class="form-select" id="zona" name="zona" aria-label="Selecione a zona">
+                            <option value="">Selecione uma zona</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="secao" class="form-label">Seção</label>
+                        <select class="form-select" id="secao" name="secao" aria-label="Selecione a seção">
+                            <option value="">Selecione uma seção</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="consultarZonaSecao" aria-label="Consultar votos da zona e seção">
+                        Consultar
+                    </button>
+                </div>
+                
+                <!-- Resultado da consulta -->
+                <div id="resultadoZonaSecao" style="margin-top: 1rem; display: none;">
+                    <div style="padding: 1rem; background-color: var(--background); border-radius: 0.5rem; border: 1px solid var(--border);">
+                        <h4 style="margin: 0 0 0.5rem 0; color: var(--primary); font-size: 1rem;">Resultado da Consulta</h4>
+                        <div id="dadosZonaSecao"></div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1242,6 +1281,7 @@
                     });
                 }
 
+
                 // Enviar formulário (reload da página com novos parâmetros)
                 this.elements.form.submit();
 
@@ -1367,6 +1407,7 @@
             }, 100);
         });
 
+
         // === FUNÇÃO PARA CARREGAR MAPAS DINÂMICOS ===
         window.loadDynamicMap = async function(mapData) {
             const mapWrapper = document.getElementById('mapWrapper');
@@ -1442,6 +1483,219 @@
         window.addEventListener('unhandledrejection', function(e) {
             console.error('Promise rejeitada:', e.reason);
             e.preventDefault(); // Evitar log no console
+        });
+
+        // === ZONA-SEÇÃO MANAGEMENT ===
+        class ZonaSecaoManager {
+            constructor() {
+                this.cache = new SmartCache();
+                this.zonaSelect = document.getElementById('zona');
+                this.secaoSelect = document.getElementById('secao');
+                this.consultarBtn = document.getElementById('consultarZonaSecao');
+                this.resultadoDiv = document.getElementById('resultadoZonaSecao');
+                this.dadosDiv = document.getElementById('dadosZonaSecao');
+                
+                this.setupEventListeners();
+            }
+            
+            setupEventListeners() {
+                // Carregar zonas quando o ano mudar
+                document.getElementById('ano').addEventListener('change', () => {
+                    this.loadZonas();
+                });
+                
+                // Carregar seções quando a zona mudar
+                this.zonaSelect.addEventListener('change', () => {
+                    this.loadSecoes();
+                });
+                
+                // Consultar quando clicar no botão
+                this.consultarBtn.addEventListener('click', () => {
+                    this.consultarZonaSecao();
+                });
+            }
+            
+            async loadZonas() {
+                const ano = document.getElementById('ano').value;
+                if (!ano) {
+                    this.clearSelects();
+                    return;
+                }
+                
+                try {
+                    const cacheKey = `zonas_${ano}`;
+                    let zonas = this.cache.get(cacheKey);
+                    
+                    if (!zonas) {
+                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}`);
+                        zonas = response.zonas_secoes || [];
+                        this.cache.set(cacheKey, zonas);
+                    }
+                    
+                    this.populateZonas(zonas);
+                } catch (error) {
+                    console.error('Erro ao carregar zonas:', error);
+                    this.showError('Erro ao carregar zonas');
+                }
+            }
+            
+            populateZonas(zonasSecoes) {
+                const zonas = new Set();
+                
+                zonasSecoes.forEach(zonaSecao => {
+                    const [zona] = zonaSecao.split('-');
+                    if (zona) zonas.add(zona);
+                });
+                
+                this.zonaSelect.innerHTML = '<option value="">Selecione uma zona</option>';
+                Array.from(zonas).sort((a, b) => parseInt(a) - parseInt(b)).forEach(zona => {
+                    const option = document.createElement('option');
+                    option.value = zona;
+                    option.textContent = `Zona ${zona}`;
+                    this.zonaSelect.appendChild(option);
+                });
+                
+                this.secaoSelect.innerHTML = '<option value="">Selecione uma seção</option>';
+                this.hideResult();
+            }
+            
+            async loadSecoes() {
+                const ano = document.getElementById('ano').value;
+                const zona = this.zonaSelect.value;
+                
+                if (!ano || !zona) {
+                    this.secaoSelect.innerHTML = '<option value="">Selecione uma seção</option>';
+                    this.hideResult();
+                    return;
+                }
+                
+                try {
+                    const cacheKey = `zonas_${ano}`;
+                    let zonasSecoes = this.cache.get(cacheKey);
+                    
+                    if (!zonasSecoes) {
+                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}`);
+                        zonasSecoes = response.zonas_secoes || [];
+                        this.cache.set(cacheKey, zonasSecoes);
+                    }
+                    
+                    this.populateSecoes(zonasSecoes, zona);
+                } catch (error) {
+                    console.error('Erro ao carregar seções:', error);
+                    this.showError('Erro ao carregar seções');
+                }
+            }
+            
+            populateSecoes(zonasSecoes, zonaEscolhida) {
+                const secoes = [];
+                
+                zonasSecoes.forEach(zonaSecao => {
+                    const [zona, secao] = zonaSecao.split('-');
+                    if (zona === zonaEscolhida && secao) {
+                        secoes.push(secao);
+                    }
+                });
+                
+                this.secaoSelect.innerHTML = '<option value="">Selecione uma seção</option>';
+                secoes.sort((a, b) => parseInt(a) - parseInt(b)).forEach(secao => {
+                    const option = document.createElement('option');
+                    option.value = secao;
+                    option.textContent = `Seção ${secao}`;
+                    this.secaoSelect.appendChild(option);
+                });
+                
+                this.hideResult();
+            }
+            
+            async consultarZonaSecao() {
+                const ano = document.getElementById('ano').value;
+                const zona = this.zonaSelect.value;
+                const secao = this.secaoSelect.value;
+                
+                if (!ano || !zona || !secao) {
+                    this.showError('Por favor, selecione o ano, zona e seção');
+                    return;
+                }
+                
+                try {
+                    this.consultarBtn.disabled = true;
+                    this.consultarBtn.textContent = 'Consultando...';
+                    
+                    const zonaSecao = `${zona}-${secao}`;
+                    const response = await Utils.fetchWithRetry(`/get_votos_zona_secao_ajax/?ano=${ano}&zona_secao=${zonaSecao}`);
+                    
+                    this.showResult(response, zona, secao);
+                } catch (error) {
+                    console.error('Erro ao consultar zona-seção:', error);
+                    this.showError('Erro ao consultar dados');
+                } finally {
+                    this.consultarBtn.disabled = false;
+                    this.consultarBtn.textContent = 'Consultar';
+                }
+            }
+            
+            showResult(data, zona, secao) {
+                if (!data.data || data.data.length === 0) {
+                    this.showError('Nenhum dado encontrado para esta zona e seção');
+                    return;
+                }
+                
+                let html = `
+                    <p><strong>Zona:</strong> ${zona} | <strong>Seção:</strong> ${secao}</p>
+                    <p><strong>Total de votos:</strong> ${data.total_votos.toLocaleString()}</p>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+                        <thead>
+                            <tr style="background-color: var(--primary); color: white;">
+                                <th style="padding: 0.5rem; text-align: left; border: 1px solid var(--border);">Candidato</th>
+                                <th style="padding: 0.5rem; text-align: left; border: 1px solid var(--border);">Partido</th>
+                                <th style="padding: 0.5rem; text-align: right; border: 1px solid var(--border);">Votos</th>
+                                <th style="padding: 0.5rem; text-align: right; border: 1px solid var(--border);">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                data.data.forEach(voto => {
+                    html += `
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border);">${voto.candidato}</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border);">${voto.partido}</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border); text-align: right;">${voto.votos.toLocaleString()}</td>
+                            <td style="padding: 0.5rem; border: 1px solid var(--border); text-align: right;">${voto.percentual}%</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                
+                this.dadosDiv.innerHTML = html;
+                this.resultadoDiv.style.display = 'block';
+            }
+            
+            showError(message) {
+                this.dadosDiv.innerHTML = `<p style="color: var(--text-secondary);">${message}</p>`;
+                this.resultadoDiv.style.display = 'block';
+            }
+            
+            hideResult() {
+                this.resultadoDiv.style.display = 'none';
+            }
+            
+            clearSelects() {
+                this.zonaSelect.innerHTML = '<option value="">Selecione uma zona</option>';
+                this.secaoSelect.innerHTML = '<option value="">Selecione uma seção</option>';
+                this.hideResult();
+            }
+        }
+        
+        // === INICIALIZAÇÃO ===
+        document.addEventListener('DOMContentLoaded', function() {
+            window.zonaSecaoManager = new ZonaSecaoManager();
+            // Carregar zonas se já há um ano selecionado
+            const ano = document.getElementById('ano').value;
+            if (ano) {
+                window.zonaSecaoManager.loadZonas();
+            }
         });
 
         // === SERVICE WORKER (SE DISPONÍVEL) ===
