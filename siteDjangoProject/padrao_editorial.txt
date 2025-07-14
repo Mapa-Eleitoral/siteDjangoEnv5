@@ -1,0 +1,267 @@
+# PADRÃO EDITORIAL - MAPA ELEITORAL
+## Diretrizes Obrigatórias para Publicação de Artigos .md
+
+### 📋 CHECKLIST PRÉ-PUBLICAÇÃO
+
+#### ✅ 1. FRONTMATTER OBRIGATÓRIO
+```yaml
+---
+title: "Título SEO Otimizado com Keywords Principais (máx 60 caracteres)"
+description: "Meta description clara e atrativa de 150-160 caracteres para Google"
+keywords: "keyword1, keyword2, keyword3, localização, ano"
+author: "Filipe Dias"
+date: "YYYY-MM-DD"
+canonical: "https://mapaeleitoral.com.br/blog/slug-do-artigo/"
+---
+```
+
+#### ✅ 2. ESTRUTURA DE HEADERS
+- ✅ Apenas 1 H1 por artigo (título principal)
+- ✅ H2 para seções principais
+- ✅ H3 para subseções
+- ✅ H4 apenas se necessário (usar com moderação)
+- ✅ Headers nunca vazios
+
+#### ✅ 3. FORMATAÇÃO DE TEXTO
+- ✅ **Negrito**: Conceitos importantes, números-chave, nomes relevantes
+- ✅ *Itálico*: Termos técnicos, citações curtas, palavras estrangeiras
+- ✅ Parágrafos máximo 3-4 linhas
+- ✅ Frases máximo 25-30 palavras
+
+#### ✅ 4. DADOS E NÚMEROS
+- ✅ Números grandes: **1.532.093** (pontos para milhares)
+- ✅ Percentuais: **30,58%** (vírgula decimal)
+- ✅ Datas: **06/10/2024** (formato brasileiro)
+- ✅ Valores: **R$ 1.250,00**
+- ✅ Períodos: **2016-2020** (hífen)
+
+#### ✅ 5. NOMES E SIGLAS
+- ✅ Primeira menção: **Tribunal Superior Eleitoral (TSE)**
+- ✅ Menções seguintes: **TSE**
+- ✅ Candidatos: **Eduardo Paes (PSD)**
+- ✅ Locais: **Rio de Janeiro** → **RJ**
+
+#### ✅ 6. LISTAS E ESTRUTURAS
+- ✅ Listas numeradas para sequências/processos
+- ✅ Bullet points para itens sem ordem
+- ✅ Máximo 7-8 itens por lista
+- ✅ Tabelas com headers claros
+
+#### ✅ 7. LINKS E REFERÊNCIAS
+- ✅ Links internos: [texto](/blog/slug-artigo/)
+- ✅ Links externos: [TSE](https://www.tse.jus.br)
+- ✅ Todos os links funcionando
+- ✅ Fonte ao final: *Fonte: TSE - Tribunal Superior Eleitoral*
+
+#### ✅ 8. SEO E KEYWORDS
+- ✅ Keywords naturalmente integradas
+- ✅ Densidade de keyword 1-2%
+- ✅ Title tag otimizado
+- ✅ Meta description atrativa
+- ✅ URL slug limpo
+
+#### ✅ 9. QUALIDADE DO CONTEÚDO
+- ✅ Mínimo 800 palavras (artigos educativos)
+- ✅ Ortografia e gramática revisadas
+- ✅ Informações atualizadas e precisas
+- ✅ Tom profissional mas acessível
+- ✅ Baseado em dados e evidências
+
+#### ✅ 10. ELEMENTOS DE ENGAJAMENTO
+- ✅ Introdução clara e atrativa
+- ✅ Seção "Artigos Relacionados" no final
+- ✅ Call-to-action implícito
+- ✅ Citações destacadas (blockquotes)
+
+### 🚫 ERROS QUE DEVEM SER EVITADOS
+
+#### ❌ FRONTMATTER
+- ❌ Frontmatter incompleto ou ausente
+- ❌ Title muito longo (>60 caracteres)
+- ❌ Description muito curta (<140) ou longa (>160)
+- ❌ Keywords stuffing
+- ❌ Data fora do padrão YYYY-MM-DD
+
+#### ❌ ESTRUTURA
+- ❌ Múltiplos H1 no mesmo artigo
+- ❌ Headers fora de ordem (H2 → H4)
+- ❌ Headers vazios sem conteúdo
+- ❌ Parágrafos muito longos (>5 linhas)
+
+#### ❌ FORMATAÇÃO
+- ❌ Uso excessivo de negrito/itálico
+- ❌ Formatação inconsistente de números
+- ❌ Datas em formato americano (MM/DD/YYYY)
+- ❌ Mistura de vírgula/ponto em decimais
+
+#### ❌ CONTEÚDO
+- ❌ Informações desatualizadas
+- ❌ Dados sem fonte
+- ❌ Gírias ou linguagem muito informal
+- ❌ Artefatos de IA (:contentReference[oaicite:X])
+- ❌ Encoding incorreto (caracteres �)
+
+#### ❌ SEO
+- ❌ Keywords forçadas no texto
+- ❌ Links internos quebrados
+- ❌ Meta description genérica
+- ❌ Title sem keywords principais
+- ❌ Ausência de links relacionados
+
+#### ❌ QUALIDADE
+- ❌ Artigos muito curtos (<600 palavras)
+- ❌ Repetição excessiva de palavras
+- ❌ Falta de dados concretos
+- ❌ Opinião sem embasamento
+- ❌ Conclusão ausente ou fraca
+
+### 📏 TAMANHOS RECOMENDADOS
+
+#### 📰 ARTIGOS EDUCATIVOS
+- **Mínimo**: 800 palavras
+- **Ideal**: 1.200-1.800 palavras
+- **Máximo**: 3.000 palavras
+
+#### 📊 ANÁLISES DE DADOS
+- **Mínimo**: 1.000 palavras
+- **Ideal**: 1.500-2.500 palavras
+- **Incluir**: Tabelas e gráficos descritivos
+
+#### 💭 ARTIGOS DE OPINIÃO
+- **Mínimo**: 600 palavras
+- **Ideal**: 800-1.500 palavras
+
+### 🎯 KEYWORDS ESTRATÉGICAS
+
+#### 🥇 ALTA PRIORIDADE
+- "eleições rio de janeiro 2024"
+- "como funciona urna eletrônica"
+- "sistema eleitoral brasileiro"
+- "dados eleitorais tse"
+- "mapa eleitoral rio"
+
+#### 🥈 MÉDIA PRIORIDADE
+- "abstenção eleitoral brasil"
+- "partidos políticos brasil"
+- "segundo turno eleições"
+- "coeficiente eleitoral"
+- "voto majoritário proporcional"
+
+#### 🥉 BAIXA PRIORIDADE (LONG-TAIL)
+- "como interpretar mapa eleitoral"
+- "diferença deputado federal estadual"
+- "o que é federação partidária"
+- "como calcular quociente eleitoral"
+
+### 🔄 PROCESSO DE REVISÃO
+
+#### 1ª REVISÃO - ESTRUTURA
+- ✅ Frontmatter completo
+- ✅ Headers hierárquicos
+- ✅ Parágrafos bem divididos
+- ✅ Listas organizadas
+
+#### 2ª REVISÃO - CONTEÚDO
+- ✅ Ortografia e gramática
+- ✅ Dados e fontes
+- ✅ Links funcionando
+- ✅ Informações atualizadas
+
+#### 3ª REVISÃO - SEO
+- ✅ Keywords integradas
+- ✅ Meta dados otimizados
+- ✅ Links internos
+- ✅ Estrutura para featured snippets
+
+#### 4ª REVISÃO - QUALIDADE
+- ✅ Tom editorial consistente
+- ✅ Valor para o leitor
+- ✅ Call-to-action
+- ✅ Artigos relacionados
+
+### 📈 MÉTRICAS DE SUCESSO
+
+#### 🎯 OBJETIVOS POR ARTIGO
+- **Tempo de leitura**: 4-8 minutos
+- **Taxa de rejeição**: <60%
+- **Páginas/sessão**: >2 (via links internos)
+- **Compartilhamentos**: >10 por mês
+
+#### 📊 KPIs DE CONTEÚDO
+- **Ranking Google**: Top 10 para keyword principal
+- **CTR**: >3% nas SERPs
+- **Tráfego orgânico**: +15% mensal
+- **Conversão para newsletter**: >2%
+
+### ⚡ COMANDOS RÁPIDOS
+
+#### VERIFICAÇÃO RÁPIDA
+```bash
+# Verificar frontmatter
+grep -A 8 "^---$" arquivo.md
+
+# Contar palavras
+wc -w arquivo.md
+
+# Verificar links internos
+grep -o "\[.*\](/blog/.*)" arquivo.md
+
+# Verificar keywords
+grep -i "keyword_principal" arquivo.md
+```
+
+#### TEMPLATE BÁSICO
+```markdown
+---
+title: ""
+description: ""
+keywords: ""
+author: "Filipe Dias"
+date: ""
+canonical: ""
+---
+
+# Título Principal
+
+Introdução atrativa com **keyword principal**.
+
+## Seção Principal
+
+Conteúdo estruturado com dados concretos.
+
+### Subseção
+
+Detalhes específicos.
+
+## Conclusão
+
+Resumo dos pontos principais.
+
+## Artigos Relacionados
+- [Link 1](/blog/artigo1/)
+- [Link 2](/blog/artigo2/)
+
+*Fonte: Fonte oficial*
+```
+
+### 🎓 TREINAMENTO EDITORIAL
+
+#### LEITURA OBRIGATÓRIA
+1. Manual de SEO do Google
+2. Guia de Redação Web
+3. Boas Práticas de UX Writing
+4. Diretrizes de Acessibilidade
+
+#### FERRAMENTAS RECOMENDADAS
+- **SEO**: Google Search Console, Ubersuggest
+- **Gramática**: LanguageTool, Corretor Ortográfico
+- **Leitura**: Hemingway Editor
+- **Analytics**: Google Analytics
+
+---
+
+**IMPORTANTE**: Este documento deve ser consultado ANTES de publicar qualquer artigo .md no blog do Mapa Eleitoral. O cumprimento dessas diretrizes garante qualidade, SEO e consistência editorial.
+
+**Última atualização**: 2025-07-14
+**Versão**: 1.0
+**Responsável**: Filipe Dias
