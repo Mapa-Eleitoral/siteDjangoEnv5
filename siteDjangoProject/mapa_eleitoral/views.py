@@ -809,7 +809,7 @@ def blog_view(request):
     project_dir = os.path.dirname(current_dir)  # siteDjangoProject
     main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
     parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
-    blog_path = os.path.join(parent_dir, 'blog', 'post')
+    blog_path = os.path.join(parent_dir, 'produtos', 'blog', 'post')
     
     articles = []
     
@@ -876,7 +876,7 @@ def blog_post_view(request, slug):
     project_dir = os.path.dirname(current_dir)  # siteDjangoProject
     main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
     parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
-    blog_path = os.path.join(parent_dir, 'blog', 'post')
+    blog_path = os.path.join(parent_dir, 'produtos', 'blog', 'post')
     filepath = os.path.join(blog_path, f"{slug}.md")
     
     if not os.path.exists(filepath):
