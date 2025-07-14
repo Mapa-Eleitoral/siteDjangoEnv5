@@ -35,7 +35,8 @@
       "Bash(../Scripts/python.exe -m pip install:*)",
       "Bash(../Scripts/python.exe:*)",
       "Bash(mv:*)",
-      "WebFetch(domain:mapaeleitoral.com.br)"
+      "WebFetch(domain:mapaeleitoral.com.br)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }
