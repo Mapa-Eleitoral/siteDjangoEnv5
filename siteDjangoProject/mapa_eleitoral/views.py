@@ -804,18 +804,33 @@ def blog_view(request):
     from datetime import datetime
     from .models import BlogArticle, get_or_create_blog_article
     
-    # Caminho para os artigos do blog
-    # Navegar até o diretório principal do projeto
+    # Caminho para os artigos do blog - múltiplas tentativas
     current_dir = os.path.dirname(__file__)  # mapa_eleitoral
     project_dir = os.path.dirname(current_dir)  # siteDjangoProject
-    main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
-    parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
-    blog_path = os.path.join(parent_dir, 'produtos', 'blog', 'post')
+    
+    # Possíveis localizações dos artigos
+    possible_paths = [
+        # Estrutura local de desenvolvimento
+        os.path.join(os.path.dirname(os.path.dirname(project_dir)), 'produtos', 'blog', 'post'),
+        # Dentro do projeto Django
+        os.path.join(project_dir, 'blog_posts'),
+        os.path.join(current_dir, 'blog_posts'),
+        # Na raiz do projeto
+        os.path.join(project_dir, 'produtos', 'blog', 'post'),
+        # Caminho absoluto para desenvolvimento
+        '/mnt/c/users/filip/onedrive/mapaeleitoral/produtos/blog/post'
+    ]
+    
+    blog_path = None
+    for path in possible_paths:
+        if os.path.exists(path):
+            blog_path = path
+            break
     
     articles = []
     
-    # Verificar se o diretório existe
-    if os.path.exists(blog_path):
+    # Verificar se encontrou um diretório válido
+    if blog_path and os.path.exists(blog_path):
         # Ler todos os arquivos .md do diretório
         for filename in os.listdir(blog_path):
             if filename.endswith('.md'):

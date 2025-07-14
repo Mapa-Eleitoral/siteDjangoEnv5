@@ -1,0 +1,84 @@
+# A Ascensão da Abstenção nas Eleições Municipais de 2016: Diagnóstico e Implicações para a Democracia Brasileira
+
+## Resumo Executivo
+
+As eleições municipais de 2016 marcaram um aumento expressivo na abstenção eleitoral no Brasil. Com mais de 25 milhões de eleitores ausentes no primeiro turno, o pleito revelou sinais preocupantes de distanciamento entre o eleitorado e as instituições políticas locais. Este artigo analisa os fatores que contribuíram para o crescimento da abstenção, com foco exclusivo na cidade do Rio de Janeiro, e discute as implicações para a democracia representativa.
+
+## 1. Introdução
+
+Embora o voto seja obrigatório no Brasil, a abstenção nas eleições municipais de 2016 atingiu níveis recordes. Em um contexto de crise política generalizada, rejeição aos partidos e desencanto com a classe política, muitos eleitores simplesmente optaram por não comparecer às urnas. Este fenômeno desafia a legitimidade dos eleitos e levanta questões sobre a saúde da democracia brasileira.
+
+## 2. Perfil da Abstenção no Rio de Janeiro (2016)
+
+### Dados Oficiais do TSE/TRE-RJ
+
+**1º turno (02/10/2016):**
+
+- Eleitores aptos: 4.898.044
+- Abstenções: 1.189.187
+- Taxa de abstenção: 24,28%
+
+**2º turno (30/10/2016):**
+
+- Abstenções: 1.314.950
+- Taxa de abstenção: 26,85%
+
+> Isso significa que mais de um em cada quatro eleitores da cidade do Rio de Janeiro não compareceu às urnas em ambos os turnos.
+
+## 3. Possíveis Causas para a Alta Abstenção
+
+### 3.1 Crise de Representatividade
+
+A eleição ocorreu em um momento de forte desilusão política. A cidade acabava de sair do ciclo Pezão–Cabral, marcado por escândalos de corrupção. O impeachment de Dilma Rousseff e a Lava Jato também contribuíram para a desconfiança generalizada.
+
+### 3.2 Rejeição aos Candidatos
+
+O segundo turno foi disputado entre Marcelo Crivella (PRB) e Marcelo Freixo (PSOL), dois candidatos com perfis ideológicos opostos e elevados índices de rejeição. Muitos eleitores optaram pelo "não voto" como forma de protesto.
+
+### 3.3 Desigualdade Espacial
+
+Regiões da Zona Oeste e Norte apresentaram maiores índices de abstenção, refletindo desigualdades históricas em acesso à informação e participação cívica.
+
+### 3.4 Fatores de Segurança e Mobilidade
+
+A violência urbana e dificuldades logísticas em regiões periféricas também podem ter contribuído para o aumento da abstenção.
+
+## 4. Gráfico Comparativo da Abstenção
+
+```markdown
+![Abstenção no Rio 2016](../imagens/abstencao_rj_2016.png)
+```
+
+Gráfico com barras (percentual) e linha (número absoluto de eleitores ausentes) para os dois turnos da eleição municipal de 2016.
+
+## 5. Consequências Políticas
+
+- **Legitimidade enfraquecida**: Crivella foi eleito com apenas 34,7% do eleitorado total.
+- **Maioria ausente**: Brancos, nulos e abstenções somaram mais de 50% no segundo turno.
+- **Desconexão cidadã**: A ausência massiva indicou rupturas na relação entre cidadãos e o sistema político.
+
+## 6. Comparativo Histórico da Abstenção no Rio
+
+| Eleição  | Abstenção 1º Turno (%) | Abstenção 2º Turno (%) |
+| -------- | ---------------------- | ---------------------- |
+| 2008     | 17,7%                  | 20,0%                  |
+| 2012     | 20,5%                  | 24,3%                  |
+| **2016** | **24,3%**              | **26,8%**              |
+
+## 7. Recomendações para Estudos Futuros
+
+1. Análise espacial da abstenção por zona/seção eleitoral
+2. Estudos qualitativos sobre motivações do não comparecimento
+3. Análise da relação entre insegurança e ausência nas urnas
+
+## 8. Fontes
+
+- Tribunal Superior Eleitoral (TSE)
+- Boletins de Urna – Eleições 2016
+- Jornais Folha de S.Paulo e O Globo
+- Dados extraídos de [tse.jus.br](https://www.tse.jus.br/)
+
+---
+
+*Este artigo faz parte de uma série sobre participação política no Brasil urbano. Edição aberta para colaborações.*
+
