@@ -953,21 +953,47 @@ def blog_post_view(request, slug):
     from django.http import Http404
     from .models import get_or_create_blog_article
     
-    # Caminho para os artigos do blog
-    # Navegar até o diretório principal do projeto
+    # Caminho para os artigos do blog - múltiplas tentativas
     current_dir = os.path.dirname(__file__)  # mapa_eleitoral
     project_dir = os.path.dirname(current_dir)  # siteDjangoProject
-    main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
-    parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
-    blog_path = os.path.join(parent_dir, 'produtos', 'blog', 'post')
-    filepath = os.path.join(blog_path, f"{slug}.md")
     
-    if not os.path.exists(filepath):
+    # Possíveis localizações dos artigos
+    possible_paths = [
+        # Estrutura local de desenvolvimento
+        os.path.join(os.path.dirname(os.path.dirname(project_dir)), 'produtos', 'blog', 'post'),
+        # Dentro do projeto Django
+        os.path.join(project_dir, 'blog_posts'),
+        os.path.join(current_dir, 'blog_posts'),
+        # Na raiz do projeto
+        os.path.join(project_dir, 'produtos', 'blog', 'post'),
+        # Caminho absoluto para desenvolvimento
+        '/mnt/c/users/filip/onedrive/mapaeleitoral/produtos/blog/post'
+    ]
+    
+    filepath = None
+    for path in possible_paths:
+        test_filepath = os.path.join(path, f"{slug}.md")
+        if os.path.exists(test_filepath):
+            filepath = test_filepath
+            break
+    
+    if not filepath or not os.path.exists(filepath):
         raise Http404("Artigo não encontrado")
     
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
+        # Tentar diferentes encodings
+        encodings = ['utf-8', 'latin-1', 'cp1252']
+        content = None
+        for encoding in encodings:
+            try:
+                with open(filepath, 'r', encoding=encoding) as f:
+                    content = f.read()
+                break
+            except UnicodeDecodeError:
+                continue
+        
+        if content is None:
+            raise Http404("Não foi possível decodificar o artigo")
             
         if not content.strip():
             raise Http404("Artigo vazio")
