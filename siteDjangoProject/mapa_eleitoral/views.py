@@ -821,8 +821,20 @@ def blog_view(request):
             if filename.endswith('.md'):
                 filepath = os.path.join(blog_path, filename)
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
-                        content = f.read()
+                    # Tentar diferentes encodings
+                    encodings = ['utf-8', 'latin-1', 'cp1252']
+                    content = None
+                    for encoding in encodings:
+                        try:
+                            with open(filepath, 'r', encoding=encoding) as f:
+                                content = f.read()
+                            break
+                        except UnicodeDecodeError:
+                            continue
+                    
+                    if content is None:
+                        print(f"Não foi possível decodificar {filename}")
+                        continue
                         
                     # Processar o conteúdo se não estiver vazio
                     if content.strip():

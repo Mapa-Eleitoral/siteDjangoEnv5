@@ -7,13 +7,13 @@ class DatabaseRouter:
     
     def db_for_read(self, model, **hints):
         """Escolher banco para leitura"""
-        if model._meta.app_label == 'mapa_eleitoral' and model._name in ['blogarticle', 'blogarticleview']:
+        if model._meta.app_label == 'mapa_eleitoral' and model.__name__.lower() in ['blogarticle', 'blogarticleview']:
             return 'blog'
         return 'default'
 
     def db_for_write(self, model, **hints):
         """Escolher banco para escrita"""
-        if model._meta.app_label == 'mapa_eleitoral' and model._name in ['blogarticle', 'blogarticleview']:
+        if model._meta.app_label == 'mapa_eleitoral' and model.__name__.lower() in ['blogarticle', 'blogarticleview']:
             return 'blog'
         return 'default'
 
@@ -26,7 +26,7 @@ class DatabaseRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         """Controlar quais migrations vão para qual banco"""
-        if app_label == 'mapa_eleitoral' and model_name in ['blogarticle', 'blogarticleview']:
+        if app_label == 'mapa_eleitoral' and model_name and model_name.lower() in ['blogarticle', 'blogarticleview']:
             return db == 'blog'
         elif app_label == 'mapa_eleitoral':
             return db == 'default'
