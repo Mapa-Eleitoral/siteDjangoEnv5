@@ -498,13 +498,31 @@
 
     <!-- Main Content -->
     <main class="container main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>Estudos Eleitorais</h1>
-            <p>Análises aprofundadas sobre eleições no Rio de Janeiro com insights baseados em dados reais do TSE</p>
-        </section>
 
         <!-- Featured Post -->
+        {% if articles %}
+        <article class="featured-post">
+            <div class="blog-post-image">
+                Análise Destaque
+            </div>
+            <div class="blog-post-content">
+                <a href="{% url 'mapa_eleitoral:blog_post' articles.0.slug %}" class="blog-post-title">{{ articles.0.title }}</a>
+                <div class="blog-post-meta">
+                    <span><i class="fas fa-clock"></i> {{ articles.0.date|date:"d/m/Y" }}</span>
+                    <span><i class="fas fa-book-open"></i> Leitura disponível</span>
+                    <span><i class="fas fa-star"></i> Artigo destaque</span>
+                </div>
+                <p class="blog-post-excerpt">
+                    {{ articles.0.excerpt }}
+                </p>
+                <div class="blog-post-tags">
+                    <span class="tag">Análise Eleitoral</span>
+                    <span class="tag">Dados TSE</span>
+                    <span class="tag">Rio de Janeiro</span>
+                </div>
+            </div>
+        </article>
+        {% else %}
         <article class="featured-post">
             <div class="blog-post-image">
                 Análise Destaque
@@ -528,10 +546,49 @@
                 </div>
             </div>
         </article>
+        {% endif %}
 
         <!-- Blog Posts -->
         <section class="blog-grid">
-            <!-- Post 1 -->
+            {% for article in articles|slice:"1:" %}
+            <article class="blog-post">
+                <div class="blog-post-image color-{{ forloop.counter }}">
+                    {% if 'abstencao' in article.slug %}
+                        Abstenção<br>Eleitoral
+                    {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
+                        Partidos<br>Políticos
+                    {% else %}
+                        Análise<br>Eleitoral
+                    {% endif %}
+                </div>
+                <div class="blog-post-content">
+                    <a href="{% url 'mapa_eleitoral:blog_post' article.slug %}" class="blog-post-title">{{ article.title }}</a>
+                    <div class="blog-post-meta">
+                        <span><i class="fas fa-clock"></i> {{ article.date|date:"d/m/Y" }}</span>
+                        <span><i class="fas fa-book-open"></i> Leitura disponível</span>
+                    </div>
+                    <p class="blog-post-excerpt">
+                        {{ article.excerpt }}
+                    </p>
+                    <div class="blog-post-tags">
+                        {% if 'abstencao' in article.slug %}
+                            <span class="tag">Abstenção</span>
+                            <span class="tag">Participação</span>
+                            <span class="tag">Demografia</span>
+                        {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
+                            <span class="tag">Partidos Políticos</span>
+                            <span class="tag">Análise Temporal</span>
+                            <span class="tag">Eleições</span>
+                        {% else %}
+                            <span class="tag">Análise Eleitoral</span>
+                            <span class="tag">Dados TSE</span>
+                            <span class="tag">Rio de Janeiro</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <!-- Fallback posts se não houver artigos -->
             <article class="blog-post">
                 <div class="blog-post-image color-1">
                     Partidos<br>Políticos
@@ -543,8 +600,7 @@
                         <span><i class="fas fa-book-open"></i> 12 min de leitura</span>
                     </div>
                     <p class="blog-post-excerpt">
-                        Análise temporal da performance dos principais partidos no Rio de Janeiro, 
-                        mostrando crescimento, declínio e migração de votos entre as legendas.
+                        Análise temporal da performance dos principais partidos no Rio de Janeiro.
                     </p>
                     <div class="blog-post-tags">
                         <span class="tag">Partidos Políticos</span>
@@ -553,121 +609,7 @@
                     </div>
                 </div>
             </article>
-
-            <!-- Post 2 -->
-            <article class="blog-post">
-                <div class="blog-post-image color-2">
-                    Correlação<br>de Votos
-                </div>
-                <div class="blog-post-content">
-                    <a href="#" class="blog-post-title">Prefeitos vs Vereadores: Correlação de Votos</a>
-                    <div class="blog-post-meta">
-                        <span><i class="fas fa-clock"></i> Em breve</span>
-                        <span><i class="fas fa-book-open"></i> 10 min de leitura</span>
-                    </div>
-                    <p class="blog-post-excerpt">
-                        Investigação sobre a correlação entre votos para prefeito e vereadores do mesmo partido, 
-                        analisando coligações e transferência de votos.
-                    </p>
-                    <div class="blog-post-tags">
-                        <span class="tag">Coligações</span>
-                        <span class="tag">Correlação</span>
-                        <span class="tag">Eleições Municipais</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Post 3 -->
-            <article class="blog-post">
-                <div class="blog-post-image color-3">
-                    Mapa de<br>Calor
-                </div>
-                <div class="blog-post-content">
-                    <a href="#" class="blog-post-title">Mapa de Calor: Zonas Eleitorais Mais Disputadas</a>
-                    <div class="blog-post-meta">
-                        <span><i class="fas fa-clock"></i> Em breve</span>
-                        <span><i class="fas fa-book-open"></i> 6 min de leitura</span>
-                    </div>
-                    <p class="blog-post-excerpt">
-                        Visualização interativa das zonas eleitorais com maior competitividade, 
-                        identificando regiões onde a disputa é mais acirrada.
-                    </p>
-                    <div class="blog-post-tags">
-                        <span class="tag">Visualização</span>
-                        <span class="tag">Zonas Eleitorais</span>
-                        <span class="tag">Competitividade</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Post 4 -->
-            <article class="blog-post">
-                <div class="blog-post-image color-4">
-                    Abstenção<br>Eleitoral
-                </div>
-                <div class="blog-post-content">
-                    <a href="#" class="blog-post-title">Abstenção Eleitoral: Padrões e Tendências</a>
-                    <div class="blog-post-meta">
-                        <span><i class="fas fa-clock"></i> Em breve</span>
-                        <span><i class="fas fa-book-open"></i> 9 min de leitura</span>
-                    </div>
-                    <p class="blog-post-excerpt">
-                        Estudo sobre abstenção eleitoral no Rio de Janeiro, analisando fatores socioeconômicos 
-                        e geográficos que influenciam a participação eleitoral.
-                    </p>
-                    <div class="blog-post-tags">
-                        <span class="tag">Abstenção</span>
-                        <span class="tag">Participação</span>
-                        <span class="tag">Demografia</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Post 5 -->
-            <article class="blog-post">
-                <div class="blog-post-image color-5">
-                    Metodologia<br>de Análise
-                </div>
-                <div class="blog-post-content">
-                    <a href="#" class="blog-post-title">Metodologia: Como Analisamos os Dados Eleitorais</a>
-                    <div class="blog-post-meta">
-                        <span><i class="fas fa-clock"></i> Em breve</span>
-                        <span><i class="fas fa-book-open"></i> 15 min de leitura</span>
-                    </div>
-                    <p class="blog-post-excerpt">
-                        Explicação detalhada sobre nossa metodologia de análise de dados eleitorais, 
-                        ferramentas utilizadas e como garantimos a precisão das informações.
-                    </p>
-                    <div class="blog-post-tags">
-                        <span class="tag">Metodologia</span>
-                        <span class="tag">Ciência de Dados</span>
-                        <span class="tag">Transparência</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Post 6 -->
-            <article class="blog-post">
-                <div class="blog-post-image color-6">
-                    Redes<br>Sociais
-                </div>
-                <div class="blog-post-content">
-                    <a href="#" class="blog-post-title">Impacto das Redes Sociais nas Eleições de 2024</a>
-                    <div class="blog-post-meta">
-                        <span><i class="fas fa-clock"></i> Em breve</span>
-                        <span><i class="fas fa-book-open"></i> 11 min de leitura</span>
-                    </div>
-                    <p class="blog-post-excerpt">
-                        Como candidatos utilizaram Instagram, TikTok e Facebook para mobilizar eleitores no Rio de Janeiro, 
-                        com análise de engajamento e correlação com resultados eleitorais.
-                    </p>
-                    <div class="blog-post-tags">
-                        <span class="tag">Redes Sociais</span>
-                        <span class="tag">Engajamento</span>
-                        <span class="tag">Campanhas</span>
-                    </div>
-                </div>
-            </article>
+            {% endfor %}
         </section>
 
         <!-- Coming Soon Section -->

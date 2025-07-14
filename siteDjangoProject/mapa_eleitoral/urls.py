@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('projeto/', views.projeto_view, name='projeto'),
     path('blog/', views.blog_view, name='blog'),
+    path('blog/<slug:slug>/', views.blog_post_view, name='blog_post'),
     path('apoio/', views.apoio_view, name='apoio'),
     path('get_candidatos_ajax/', views.get_candidatos_ajax, name='get_candidatos_ajax'),
     path('get_partidos_ajax/', views.get_partidos_ajax, name='get_partidos_ajax'),

@@ -799,7 +799,130 @@ def apoio_view(request):
 
 def blog_view(request):
     """View para página de blog com estudos eleitorais"""
-    return render(request, 'blog.html')
+    import os
+    import markdown
+    from datetime import datetime
+    
+    # Caminho para os artigos do blog
+    # Navegar até o diretório principal do projeto
+    current_dir = os.path.dirname(__file__)  # mapa_eleitoral
+    project_dir = os.path.dirname(current_dir)  # siteDjangoProject
+    main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
+    parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
+    blog_path = os.path.join(parent_dir, 'blog', 'post')
+    
+    articles = []
+    
+    # Verificar se o diretório existe
+    if os.path.exists(blog_path):
+        # Ler todos os arquivos .md do diretório
+        for filename in os.listdir(blog_path):
+            if filename.endswith('.md'):
+                filepath = os.path.join(blog_path, filename)
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        
+                    # Processar o conteúdo se não estiver vazio
+                    if content.strip():
+                        # Usar markdown para converter
+                        md = markdown.Markdown(extensions=['meta'])
+                        html_content = md.convert(content)
+                        
+                        # Extrair título da primeira linha ou do filename
+                        title = filename.replace('.md', '').replace('_', ' ').title()
+                        if content.startswith('#'):
+                            title = content.split('\n')[0].replace('#', '').strip()
+                        
+                        # Extrair excerpt (primeiros 200 caracteres do texto)
+                        excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+                        
+                        # Obter data de modificação do arquivo
+                        stat = os.stat(filepath)
+                        date_modified = datetime.fromtimestamp(stat.st_mtime)
+                        
+                        articles.append({
+                            'title': title,
+                            'slug': filename.replace('.md', ''),
+                            'excerpt': excerpt,
+                            'date': date_modified,
+                            'content': html_content,
+                            'filename': filename
+                        })
+                except Exception as e:
+                    print(f"Erro ao processar {filename}: {e}")
+                    continue
+    
+    # Ordenar artigos por data (mais recentes primeiro)
+    articles.sort(key=lambda x: x['date'], reverse=True)
+    
+    context = {
+        'articles': articles,
+        'articles_count': len(articles)
+    }
+    
+    return render(request, 'blog.html', context)
+
+def blog_post_view(request, slug):
+    """View para exibir um post individual do blog"""
+    import os
+    import markdown
+    from datetime import datetime
+    from django.http import Http404
+    
+    # Caminho para os artigos do blog
+    # Navegar até o diretório principal do projeto
+    current_dir = os.path.dirname(__file__)  # mapa_eleitoral
+    project_dir = os.path.dirname(current_dir)  # siteDjangoProject
+    main_dir = os.path.dirname(project_dir)  # sitedjangoenvv5
+    parent_dir = os.path.dirname(main_dir)  # mapaeleitoral
+    blog_path = os.path.join(parent_dir, 'blog', 'post')
+    filepath = os.path.join(blog_path, f"{slug}.md")
+    
+    if not os.path.exists(filepath):
+        raise Http404("Artigo não encontrado")
+    
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+            
+        if not content.strip():
+            raise Http404("Artigo vazio")
+        
+        # Usar markdown para converter
+        md = markdown.Markdown(extensions=['meta', 'codehilite', 'toc'])
+        html_content = md.convert(content)
+        
+        # Extrair título da primeira linha ou do filename
+        title = slug.replace('_', ' ').title()
+        if content.startswith('#'):
+            title = content.split('\n')[0].replace('#', '').strip()
+        
+        # Extrair excerpt (primeiros 200 caracteres do texto)
+        excerpt = content.replace('#', '').replace('\n', ' ').strip()[:200] + '...'
+        
+        # Obter data de modificação do arquivo
+        stat = os.stat(filepath)
+        date_modified = datetime.fromtimestamp(stat.st_mtime)
+        
+        article = {
+            'title': title,
+            'slug': slug,
+            'excerpt': excerpt,
+            'date': date_modified,
+            'content': html_content,
+            'filename': f"{slug}.md"
+        }
+        
+        context = {
+            'article': article
+        }
+        
+        return render(request, 'blog_post.html', context)
+        
+    except Exception as e:
+        print(f"Erro ao processar {slug}: {e}")
+        raise Http404("Erro ao carregar o artigo")
 
 def generate_map_view(request):
     """View para gerar mapas dinamicamente via AJAX"""

@@ -19,3 +19,6 @@ requests>=2.28.0
 
 # Para desenvolvimento local (opcional)
 python-dotenv>=1.0.0
+
+# Markdown para blog
+markdown>=3.4.0
