@@ -39,7 +39,21 @@
       "Bash(cat:*)",
       "Bash(railway login:*)",
       "Bash(gh auth:*)",
-      "Bash(ssh-keygen:*)"
+      "Bash(ssh-keygen:*)",
+      "Bash(. Scripts/activate)",
+      "Bash(Scripts/python.exe --version)",
+      "Bash(Scripts/python.exe -m pip:*)",
+      "Bash(mysql:*)",
+      "Bash(../../Scripts/python.exe:*)",
+      "Bash(timeout 10 mysql -h gondola.proxy.rlwy.net -P 29860 -u root -pMHOyVWaRdBsIxajzheoDtesardXtYhmP -e \"SHOW DATABASES;\")",
+      "Bash(timeout 15 mysql -h gondola.proxy.rlwy.net -P 29860 -u root -pMHOyVWaRdBsIxajzheoDtesardXtYhmP -e \"SHOW DATABASES;\")",
+      "Bash(timeout 10 mysql -h gondola.proxy.rlwy.net -P 29860 -u root -pMHOyVWaRdBsIxajzheoDtesardXtYhmP -D blog -e \"SELECT 1 as test;\")",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(apt:*)",
+      "Bash(/mnt/c/Windows/System32/mysql --version)",
+      "Bash(chmod:*)",
+      "Bash(./execute_mysql.sh)"
     ],
     "deny": []
   }

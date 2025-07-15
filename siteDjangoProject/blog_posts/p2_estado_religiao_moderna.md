@@ -76,9 +76,9 @@ A crise atual das democracias liberais pode ser interpretada como uma **crise de
 
 ## Para Onde Caminha o Ateísmo Político?
 
-Se o Estado não pode mais funcionar como religião, que alternativas emergem?
+Se o Estado não pode mais funcionar como uma religião secular, que alternativas emergem para a organização social?
 
-Na **terceira e última parte** desta série, exploraremos as implicações práticas do novo ateísmo político: como organizar a vida social sem recorrer à sacralização do poder, e que formas de **autonomia política** podem surgir dessa postura cética.
+Na **terceira e última parte** desta série, exploraremos as implicações práticas do novo ateísmo político: como organizar a vida em sociedade sem recorrer à sacralização do poder e que formas de **autonomia política** podem surgir a partir de uma postura cética e questionadora.
 
 ## Artigos Relacionados
 - [Parte 1: Definindo o Novo Ateísmo Político](/blog/p1_novo_ateismo_politico/)

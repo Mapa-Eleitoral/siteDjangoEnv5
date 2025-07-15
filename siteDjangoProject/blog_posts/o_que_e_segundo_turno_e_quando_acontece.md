@@ -167,53 +167,50 @@ Maioria Absoluta = (Votos Válidos ÷ 2) + 1
 ## Histórico e Estatísticas
 
 ### Implementação no Brasil
-- **Constituição de 1988**: Criação do sistema atual
-- **Primeira aplicação**: Eleições de 1989 (Collor vs Lula)
-- **Municípios**: Desde 1996 para cidades grandes
-- **Estabilidade**: Sistema consolidado
+- **Constituição de 1988**: Instituiu o sistema de dois turnos.
+- **Primeira aplicação**: Eleições presidenciais de 1989, com a disputa entre Fernando Collor e Luiz Inácio Lula da Silva.
+- **Municípios**: Adotado para cidades com mais de 200 mil eleitores a partir de 1996.
+- **Consolidação**: O sistema se mostrou estável e funcional ao longo de mais de três décadas.
 
 ### Estatísticas Relevantes
 **Eleições Presidenciais (1989-2022):**
 - **Total de eleições**: 9 pleitos
-- **Segundo turno**: 8 eleições (89%)
-- **Primeiro turno**: 1 eleição (2022 - quase)
+- **Decididas em segundo turno**: 8 eleições (89% dos casos)
+- **Decididas em primeiro turno**: Apenas 1 eleição (1998, com a reeleição de FHC).
 
-**Governadores (média por ciclo):**
-- **Estados com 2º turno**: 15-20 estados
-- **Primeiro turno**: 7-12 estados
-- **Variação**: Depende do cenário político
+**Governadores (média por ciclo eleitoral):**
+- **Estados com 2º turno**: Entre 15 e 20 estados, dependendo do equilíbrio político local.
+- **Decisão em 1º turno**: Entre 7 e 12 estados.
 
 ### Casos Marcantes
-- **1989**: Primeira eleição direta pós-ditadura
-- **1998**: FHC eleito no primeiro turno
-- **2018**: Polarização extrema Bolsonaro vs Haddad
-- **2022**: Lula vs Bolsonaro - eleição mais acirrada
+- **1989**: A primeira eleição direta para presidente após a ditadura militar, inaugurando o segundo turno.
+- **1998**: A única vez em que a disputa presidencial foi decidida em primeiro turno.
+- **2018**: Uma das eleições mais polarizadas, entre Jair Bolsonaro e Fernando Haddad.
+- **2022**: A disputa mais acirrada da história, entre Lula e Bolsonaro, com uma diferença mínima de votos.
 
 ## Comparação Internacional
 
 ### Sistemas Similares
-- **França**: Presidente eleito em dois turnos
-- **Argentina**: Sistema similar ao brasileiro
-- **Chile**: Segundo turno para presidente
+- **França**: O presidente é eleito em um sistema de dois turnos.
+- **Argentina**: Adota um sistema similar ao brasileiro para a eleição presidencial.
+- **Chile**: Também utiliza o segundo turno para a escolha do presidente.
 
 ### Sistemas Diferentes
-- **EUA**: Colégio eleitoral
-- **Reino Unido**: Sistema parlamentarista
-- **Alemanha**: Chanceler eleito pelo parlamento
+- **EUA**: Sistema de Colégio Eleitoral, onde o voto popular é indireto.
+- **Reino Unido**: Parlamentarismo, onde o primeiro-ministro é o líder do partido majoritário no parlamento.
+- **Alemanha**: O chanceler é eleito pelo parlamento (Bundestag).
 
 ## Perspectivas e Debates
 
 ### Propostas de Reforma
-- **Voto distrital**: Mudança no sistema proporcional
-- **Lista fechada**: Alteração na escolha de deputados
-- **Financiamento**: Mudanças no custeio de campanhas
-- **Prazos**: Discussões sobre cronograma
+- **Voto distrital**: Mudança no sistema de eleição de deputados, sem impacto direto no segundo turno.
+- **Lista fechada**: Alteração na forma de escolha dos parlamentares.
+- **Prazos e financiamento**: Debates constantes sobre ajustes no cronograma e nos custos das campanhas.
 
 ### Tendências Futuras
-- **Tecnologia**: Urna eletrônica aprimorada
-- **Transparência**: Maior acompanhamento em tempo real
-- **Participação**: Novos canais de engajamento
-- **Sustentabilidade**: Redução de custos ambientais
+- **Aprimoramento da urna eletrônica**: Modernização contínua da tecnologia de votação.
+- **Transparência em tempo real**: Ferramentas para acompanhamento mais detalhado da apuração.
+- **Engajamento digital**: Uso de novas plataformas para a mobilização de eleitores.
 
 ## Conclusão
 
@@ -235,4 +232,4 @@ O sistema tem se mostrado **estável e eficaz** ao longo de mais de três décad
 - [Quais São os Cargos Eletivos no Brasil](/blog/quais_sao_os_cargos_eletivos_no_brasil/)
 - [Como São Calculadas as Cadeiras na Câmara dos Deputados](/blog/como_sao_calculadas_as_cadeiras_na_camara_dos_deputados/)
 
-*Fonte: TSE - Tribunal Superior Eleitoral e Constituição Federal de 1988*
+*Fonte: Tribunal Superior Eleitoral (TSE) e Constituição Federal de 1988*

@@ -218,22 +218,22 @@ Candidato D: 80.000 votos → Não eleito
 ## Consequências Práticas
 
 ### Para os Partidos
-- **Planejamento**: Quantos candidatos lançar por estado
-- **Recursos**: Como distribuir investimentos
-- **Alianças**: Federações para somar votos
-- **Estratégia**: Focar em candidatos puxadores
+- **Planejamento estratégico**: Definir quantos candidatos lançar em cada estado.
+- **Distribuição de recursos**: Decidir como investir o fundo partidário e o tempo de TV.
+- **Formação de alianças**: Criar federações para somar votos e atingir o quociente.
+- **Foco em puxadores de voto**: Impulsionar candidatos populares para eleger mais nomes do partido.
 
 ### Para os Candidatos
-- **Viabilidade**: Avaliar chances de eleição
-- **Campanha**: Intensidade necessária
-- **Alianças**: Apoio dentro do partido
-- **Regionalização**: Focar em bases eleitorais
+- **Análise de viabilidade**: Calcular as chances reais de eleição com base nas projeções.
+- **Estratégia de campanha**: Definir a intensidade e o foco geográfico da campanha.
+- **Articulação interna**: Buscar apoio dentro do partido para garantir um bom posicionamento na lista.
+- **Construção de base**: Concentrar esforços em regiões com maior potencial de votos.
 
 ### Para os Eleitores
-- **Escolha**: Candidato vs partido
-- **Impacto**: Como o voto influencia resultado
-- **Tática**: Voto útil vs voto ideológico
-- **Compreensão**: Entender o sistema
+- **Dilema da escolha**: Decidir entre votar em um candidato específico ou na legenda do partido.
+- **Impacto do voto**: Entender que o voto em um candidato também fortalece o partido dele.
+- **Voto útil vs. ideológico**: Avaliar se vale a pena votar em um candidato com mais chances ou manter a fidelidade ideológica.
+- **Necessidade de compreensão**: Esforçar-se para entender o sistema para fazer uma escolha mais informada.
 
 ## Simulações e Cenários
 
@@ -289,4 +289,4 @@ O sistema brasileiro busca equilibrar **representatividade**, **proporcionalidad
 - [Quais São os Cargos Eletivos no Brasil](/blog/quais_sao_os_cargos_eletivos_no_brasil/)
 - [Como Funciona o Sistema Eleitoral Brasileiro](/blog/como_funciona_o_sistema_eleitoral_brasileiro/)
 
-*Fonte: TSE - Tribunal Superior Eleitoral, IBGE e Constituição Federal de 1988*
+*Fonte: Tribunal Superior Eleitoral (TSE), Instituto Brasileiro de Geografia e Estatística (IBGE) e Constituição Federal de 1988*

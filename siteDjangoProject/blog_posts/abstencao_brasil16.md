@@ -1,5 +1,5 @@
 ---
-title: "Abstenção Recorde Eleições 2016 Brasil: Análise do Fenômeno Político"
+title: "Abstenção Recorde nas Eleições de 2016 no Brasil: Análise"
 description: "Análise completa da abstenção recorde de 17,5% nas eleições municipais de 2016 no Brasil. Causas, consequências e impacto na democracia brasileira."
 keywords: "abstenção eleitoral brasil 2016, eleições municipais, crise política, lava jato, impeachment dilma"
 author: "Filipe Dias"
@@ -50,7 +50,7 @@ Mais importante, o fenômeno de 2016 abriu caminho para o fortalecimento de disc
 
 A abstenção de 2016 foi um **ponto de inflexão** na democracia brasileira. Ela demonstrou que, em uma democracia, o silêncio das urnas pode ser ensurdecedor, sinalizando uma ruptura no pacto de representação e deixando um legado que ainda hoje influencia a política brasileira.
 
-### Explore Mais
+## Artigos Relacionados
 - [Abstenção no Rio de Janeiro 2024](/blog/abstencao_rio2024/)
 - [Como a Crise Política Afeta as Eleições](/blog/evolucao_partidaria_brasil/)
 

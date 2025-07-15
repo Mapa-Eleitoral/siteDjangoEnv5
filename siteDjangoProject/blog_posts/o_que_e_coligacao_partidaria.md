@@ -1,306 +1,322 @@
-# O que é Coligação Partidária: Entendendo as Alianças Eleitorais no Brasil
+---
+title: "O que Ã© ColigaÃ§Ã£o PartidÃ¡ria: Guia de AlianÃ§as Eleitorais no Brasil"
+description: "Entenda o que sÃ£o coligaÃ§Ãµes partidÃ¡rias, como funcionavam antes da proibiÃ§Ã£o para vereadores e deputados, e a diferenÃ§a para as novas federaÃ§Ãµes."
+keywords: "o que Ã© coligaÃ§Ã£o partidÃ¡ria, alianÃ§as eleitorais, federaÃ§Ã£o partidÃ¡ria, sistema eleitoral brasileiro, reforma eleitoral"
+author: "Filipe Dias"
+date: "2024-07-25"
+canonical: "https://mapaeleitoral.com.br/blog/o-que-e-coligacao-partidaria/"
+---
 
-## Introdução
+# O que Ã© ColigaÃ§Ã£o PartidÃ¡ria: Entendendo as AlianÃ§as Eleitorais no Brasil
 
-As coligações partidárias são uma das características mais marcantes do sistema eleitoral brasileiro, permitindo que partidos políticos se unam temporariamente para disputar eleições com maior força e representatividade. Compreender como funcionam essas alianças é fundamental para entender a dinâmica política nacional e como se formam os governos no Brasil.
+## IntroduÃ§Ã£o
 
-## Definição e Conceito
+As **coligaÃ§Ãµes partidÃ¡rias** sÃ£o uma das caracterÃ­sticas mais marcantes do sistema eleitoral brasileiro, permitindo que partidos polÃ­ticos se unam temporariamente para disputar eleiÃ§Ãµes com maior forÃ§a e representatividade. Compreender como funcionam essas alianÃ§as Ã© fundamental para entender a dinÃ¢mica polÃ­tica nacional e como se formam os governos no Brasil.
 
-### O que é uma Coligação Partidária
-Uma coligação partidária é uma **aliança temporária entre dois ou mais partidos políticos** com o objetivo de disputar eleições específicas. Durante o período eleitoral, os partidos coligados funcionam como se fossem uma única agremiação para fins de campanha, distribuição de tempo de televisão e rádio, e cálculos de representação proporcional.
+## DefiniÃ§Ã£o e Conceito
 
-### Características Principais
-- **Temporariedade**: Vigora apenas durante o período eleitoral específico
+### O que Ã© uma ColigaÃ§Ã£o PartidÃ¡ria
+Uma coligaÃ§Ã£o partidÃ¡ria Ã© uma **alianÃ§a temporÃ¡ria entre dois ou mais partidos polÃ­ticos** com o objetivo de disputar eleiÃ§Ãµes especÃ­ficas. Durante o perÃ­odo eleitoral, os partidos coligados funcionam como se fossem uma Ãºnica agremiaÃ§Ã£o para fins de campanha, distribuiÃ§Ã£o de tempo de televisÃ£o e rÃ¡dio, e cÃ¡lculos de representaÃ§Ã£o proporcional.
+
+### CaracterÃ­sticas Principais
+- **Temporariedade**: Vigora apenas durante o perÃ­odo eleitoral especÃ­fico
 - **Voluntariedade**: Partidos aderem por livre escolha
-- **Formalização**: Deve ser registrada na Justiça Eleitoral
-- **Unidade**: Partidos funcionam como um só para fins eleitorais
+- **FormalizaÃ§Ã£o**: Deve ser registrada na JustiÃ§a Eleitoral
+- **Unidade**: Partidos funcionam como um sÃ³ para fins eleitorais
 
 ## Base Legal
 
-### Legislação Aplicável
-- **Lei 9.504/97 (Lei das Eleições)**: Regulamenta a formação de coligações
-- **Lei 9.096/95 (Lei dos Partidos Políticos)**: Define regras partidárias
-- **Resoluções do TSE**: Normas específicas para cada eleição
+### LegislaÃ§Ã£o AplicÃ¡vel
+- **Lei 9.504/97 (Lei das EleiÃ§Ãµes)**: Regulamenta a formaÃ§Ã£o de coligaÃ§Ãµes
+- **Lei 9.096/95 (Lei dos Partidos PolÃ­ticos)**: Define regras partidÃ¡rias
+- **ResoluÃ§Ãµes do TSE**: Normas especÃ­ficas para cada eleiÃ§Ã£o
 
 ### Requisitos Legais
-Para formar uma coligação, é necessário:
-1. **Convenção partidária**: Aprovação pelos órgãos competentes de cada partido
-2. **Registro na Justiça Eleitoral**: Formalização perante o TSE ou TRE
-3. **Prazo legal**: Dentro dos prazos estabelecidos pela legislação
-4. **Documentação completa**: Atas, estatutos e demais documentos exigidos
+Para formar uma coligaÃ§Ã£o, Ã© necessÃ¡rio:
+1. **ConvenÃ§Ã£o partidÃ¡ria**: AprovaÃ§Ã£o pelos Ã³rgÃ£os competentes de cada partido
+2. **Registro na JustiÃ§a Eleitoral**: FormalizaÃ§Ã£o perante o TSE ou TRE
+3. **Prazo legal**: Dentro dos prazos estabelecidos pela legislaÃ§Ã£o
+4. **DocumentaÃ§Ã£o completa**: Atas, estatutos e demais documentos exigidos
 
-## Tipos de Coligações
+## Tipos de ColigaÃ§Ãµes
 
-### Por Abrangência Territorial
+### Por AbrangÃªncia Territorial
 
-**Coligações Nacionais**
-- Aplicáveis às eleições para Presidente da República
-- Podem incluir partidos de todo o país
-- Maior complexidade de negociação
+**ColigaÃ§Ãµes Nacionais**
+- AplicÃ¡veis Ã s eleiÃ§Ãµes para Presidente da RepÃºblica
+- Podem incluir partidos de todo o paÃ­s
+- Maior complexidade de negociaÃ§Ã£o
 
-**Coligações Estaduais**
-- Para eleições de Governador, Senador e Deputados
-- Restritas ao âmbito estadual
+**ColigaÃ§Ãµes Estaduais**
+- Para eleiÃ§Ãµes de Governador, Senador e Deputados
+- Restritas ao Ã¢mbito estadual
 - Possibilidade de arranjos diferentes por estado
 
-**Coligações Municipais**
-- Para eleições de Prefeito e Vereador
-- Específicas de cada município
-- Maior flexibilidade de composição
+**ColigaÃ§Ãµes Municipais**
+- Para eleiÃ§Ãµes de Prefeito e Vereador
+- EspecÃ­ficas de cada municÃ­pio
+- Maior flexibilidade de composiÃ§Ã£o
 
-### Por Tipo de Eleição
+### Por Tipo de EleiÃ§Ã£o
 
-**Coligações Majoritárias**
+**ColigaÃ§Ãµes MajoritÃ¡rias**
 - Para cargos de Presidente, Governador e Prefeito
-- Candidato único por coligação
+- Candidato Ãºnico por coligaÃ§Ã£o
 - Soma simples de votos
 
-**Coligações Proporcionais**
+**ColigaÃ§Ãµes Proporcionais**
 - Para Deputados e Vereadores
-- Múltiplos candidatos por partido na coligação
-- Cálculo complexo de distribuição de vagas
+- MÃºltiplos candidatos por partido na coligaÃ§Ã£o
+- CÃ¡lculo complexo de distribuiÃ§Ã£o de vagas
 
-## Funcionamento das Coligações
+## Funcionamento das ColigaÃ§Ãµes
 
-### Formação
-1. **Negociações preliminares**: Conversas entre lideranças partidárias
-2. **Definição de termos**: Acordos sobre candidaturas e programa
-3. **Convenções partidárias**: Aprovação formal pelos partidos
-4. **Registro oficial**: Protocolização na Justiça Eleitoral
+### FormaÃ§Ã£o
+1. **NegociaÃ§Ãµes preliminares**: Conversas entre lideranÃ§as partidÃ¡rias
+2. **DefiniÃ§Ã£o de termos**: Acordos sobre candidaturas e programa
+3. **ConvenÃ§Ãµes partidÃ¡rias**: AprovaÃ§Ã£o formal pelos partidos
+4. **Registro oficial**: ProtocolizaÃ§Ã£o na JustiÃ§a Eleitoral
 
 ### Durante a Campanha
 - **Propaganda unificada**: Material conjunto dos partidos coligados
-- **Tempo de TV e rádio**: Soma dos tempos individuais
+- **Tempo de TV e rÃ¡dio**: Soma dos tempos individuais
 - **Recursos financeiros**: Possibilidade de compartilhamento
-- **Comitês eleitorais**: Estrutura organizacional conjunta
+- **ComitÃªs eleitorais**: Estrutura organizacional conjunta
 
-### Distribuição Proporcional
-Nas eleições proporcionais, a coligação:
+### DistribuiÃ§Ã£o Proporcional
+Nas eleiÃ§Ãµes proporcionais, a coligaÃ§Ã£o:
 - **Recebe votos**: Soma de todos os votos dos candidatos
 - **Calcula quociente**: Divide vagas proporcionalmente
 - **Distribui cadeiras**: Entre os partidos conforme performance
 
-## Vantagens das Coligações
+## Vantagens das ColigaÃ§Ãµes
 
 ### Para os Partidos
 
 **Aumento da Competitividade**
-- Soma de forças eleitorais
-- Maior visibilidade na mídia
-- Ampliação da base de apoio
+- Soma de forÃ§as eleitorais
+- Maior visibilidade na mÃ­dia
+- AmpliaÃ§Ã£o da base de apoio
 
-**Otimização de Recursos**
-- Divisão de custos de campanha
+**OtimizaÃ§Ã£o de Recursos**
+- DivisÃ£o de custos de campanha
 - Compartilhamento de estrutura
-- Aproveitamento de lideranças regionais
+- Aproveitamento de lideranÃ§as regionais
 
-**Acesso a Benefícios**
-- Maior tempo de TV e rádio
+**Acesso a BenefÃ­cios**
+- Maior tempo de TV e rÃ¡dio
 - Melhor posicionamento nas urnas
 - Facilidade para atingir quociente eleitoral
 
-### Para o Sistema Político
+### Para o Sistema PolÃ­tico
 
 **Governabilidade**
-- Formação de maiorias mais amplas
-- Redução da fragmentação
-- Facilitação de alianças governamentais
+- FormaÃ§Ã£o de maiorias mais amplas
+- ReduÃ§Ã£o da fragmentaÃ§Ã£o
+- FacilitaÃ§Ã£o de alianÃ§as governamentais
 
 **Representatividade**
-- Inclusão de partidos menores
-- Diversificação de propostas
-- Ampliação do espectro político
+- InclusÃ£o de partidos menores
+- DiversificaÃ§Ã£o de propostas
+- AmpliaÃ§Ã£o do espectro polÃ­tico
 
-## Desvantagens e Críticas
+## Desvantagens e CrÃ­ticas
 
 ### Problemas Identificados
 
-**Falta de Coerência Ideológica**
-- Alianças meramente eleitorais
-- Partidos com propostas antagônicas
-- Confusão para o eleitor
+**Falta de CoerÃªncia IdeolÃ³gica**
+- AlianÃ§as meramente eleitorais
+- Partidos com propostas antagÃ´nicas
+- ConfusÃ£o para o eleitor
 
-**Pulverização do Sistema**
-- Multiplicação de legendas
-- Dificuldade de identificação partidária
+**PulverizaÃ§Ã£o do Sistema**
+- MultiplicaÃ§Ã£o de legendas
+- Dificuldade de identificaÃ§Ã£o partidÃ¡ria
 - Enfraquecimento dos partidos
 
 **Governabilidade Prejudicada**
-- Alianças instáveis
-- Chantagem política
+- AlianÃ§as instÃ¡veis
+- Chantagem polÃ­tica
 - Dificuldade de implementar programas
 
-### Críticas Acadêmicas
-- **Oportunismo eleitoral**: Alianças sem base programática
-- **Confusão ao eleitor**: Dificuldade de identificar propostas
-- **Instabilidade política**: Coligações que se desfazem após eleições
+### CrÃ­ticas AcadÃªmicas
+- **Oportunismo eleitoral**: AlianÃ§as sem base programÃ¡tica
+- **ConfusÃ£o ao eleitor**: Dificuldade de identificar propostas
+- **Instabilidade polÃ­tica**: ColigaÃ§Ãµes que se desfazem apÃ³s eleiÃ§Ãµes
 
-## Mudanças Recentes
+## MudanÃ§as Recentes
 
-### Fim das Coligações Proporcionais (2020)
-- **Emenda Constitucional 97/2017**: Proibiu coligações para eleições proporcionais
-- **Aplicação**: A partir das eleições de 2020 (municipais) e 2022 (estaduais/federais)
-- **Exceção**: Mantidas para eleições majoritárias
+### Fim das ColigaÃ§Ãµes Proporcionais (2020)
+- **Emenda Constitucional 97/2017**: Proibiu coligaÃ§Ãµes para eleiÃ§Ãµes proporcionais
+- **AplicaÃ§Ã£o**: A partir das eleiÃ§Ãµes de 2020 (municipais) e 2022 (estaduais/federais)
+- **ExceÃ§Ã£o**: Mantidas para eleiÃ§Ãµes majoritÃ¡rias
 
-### Criação das Federações Partidárias
-- **Alternativa às coligações**: União permanente de partidos
-- **Duração**: Mínimo de 4 anos
-- **Funcionamento**: Como partido único nas eleições
-- **Disciplina**: Atuação conjunta obrigatória
+### CriaÃ§Ã£o das FederaÃ§Ãµes PartidÃ¡rias
+- **Alternativa Ã s coligaÃ§Ãµes**: UniÃ£o permanente de partidos
+- **DuraÃ§Ã£o**: MÃ­nimo de 4 anos
+- **Funcionamento**: Como partido Ãºnico nas eleiÃ§Ãµes
+- **Disciplina**: AtuaÃ§Ã£o conjunta obrigatÃ³ria
 
-## Impacto das Mudanças
+## Impacto das MudanÃ§as
 
-### Consequências Imediatas
+### ConsequÃªncias Imediatas
 
 **Para Partidos Pequenos**
 - Maior dificuldade para eleger representantes
-- Necessidade de formar federações
-- Busca por estratégias alternativas
+- Necessidade de formar federaÃ§Ãµes
+- Busca por estratÃ©gias alternativas
 
 **Para o Sistema Eleitoral**
-- Redução do número de legendas
-- Maior clareza ideológica
-- Possível concentração partidária
+- ReduÃ§Ã£o do nÃºmero de legendas
+- Maior clareza ideolÃ³gica
+- PossÃ­vel concentraÃ§Ã£o partidÃ¡ria
 
 **Para a Governabilidade**
-- Alianças mais duradouras (federações)
-- Maior estabilidade política
+- AlianÃ§as mais duradouras (federaÃ§Ãµes)
+- Maior estabilidade polÃ­tica
 - Compromissos de longo prazo
 
 ### Efeitos de Longo Prazo
-- **Fortalecimento partidário**: Partidos mais consistentes
-- **Clareza programática**: Propostas mais definidas
-- **Estabilidade**: Redução da fragmentação excessiva
+- **Fortalecimento partidÃ¡rio**: Partidos mais consistentes
+- **Clareza programÃ¡tica**: Propostas mais definidas
+- **Estabilidade**: ReduÃ§Ã£o da fragmentaÃ§Ã£o excessiva
 
-## Coligações nas Eleições Majoritárias
+## ColigaÃ§Ãµes nas EleiÃ§Ãµes MajoritÃ¡rias
 
 ### Presidenciais
-- **Estratégia comum**: Amplas coligações para segundo turno
-- **Exemplos históricos**: "Coligação Lula Presidente" (2002), "Por um Brasil Justo" (2014)
-- **Negociações**: Incluem vice-presidência e ministérios
+- **EstratÃ©gia comum**: Amplas coligaÃ§Ãµes para segundo turno
+- **Exemplos histÃ©ricos**: "ColigaÃ§Ã£o Lula Presidente" (2002), "Por um Brasil Justo" (2014)
+- **NegociaÃ§Ãµes**: Incluem vice-presidÃªncia e ministÃ©rios
 
 ### Governadoriais
-- **Arranjos estaduais**: Adaptação às realidades locais
-- **Lideranças regionais**: Peso das figuras estaduais
-- **Projetos específicos**: Programas adaptados aos estados
+- **Arranjos estaduais**: AdaptaÃ§Ã£o Ã s realidades locais
+- **LideranÃ§as regionais**: Peso das figuras estaduais
+- **Projetos especÃ­ficos**: Programas adaptados aos estados
 
 ### Municipais
 - **Flexibilidade maior**: Arranjos muito diversos
-- **Questões locais**: Predominância de temas municipais
-- **Personalização**: Peso das lideranças locais
+- **QuestÃµes locais**: PredominÃ¢ncia de temas municipais
+- **PersonalizaÃ§Ã£o**: Peso das lideranÃ§as locais
 
-## Estratégias Eleitorais
+## EstratÃ©gias Eleitorais
 
 ### Para Partidos Grandes
-- **Atração de aliados**: Oferta de espaços e benefícios
-- **Consolidação**: Busca por hegemonia regional
-- **Moderação**: Propostas mais amplas para atrair centro
+- **AtraÃ§Ã£o de aliados**: Oferta de espaÃ§os e benefÃ­cios
+- **ConsolidaÃ§Ã£o**: Busca por hegemonia regional
+- **ModeraÃ§Ã£o**: Propostas mais amplas para atrair centro
 
-### Para Partidos Médios
-- **Posicionamento estratégico**: Escolha entre campos políticos
-- **Barganha**: Negociação de espaços e candidaturas
-- **Especialização**: Foco em temas específicos
+### Para Partidos MÃ©dios
+- **Posicionamento estratÃ©gico**: Escolha entre campos polÃ­ticos
+- **Barganha**: NegociaÃ§Ã£o de espaÃ§os e candidaturas
+- **EspecializaÃ§Ã£o**: Foco em temas especÃ­ficos
 
 ### Para Partidos Pequenos
-- **Sobrevivência**: Busca por viabilidade eleitoral
-- **Influência**: Peso desproporcional em negociações
+- **SobrevivÃªncia**: Busca por viabilidade eleitoral
+- **InfluÃªncia**: Peso desproporcional em negociaÃ§Ãµes
 - **Crescimento**: Oportunidade de ampliar base
 
-## Exemplos Históricos Relevantes
+## Exemplos HistÃ³ricos Relevantes
 
-### Coligação "Brasil Esperança" (2022)
-- **Composição**: PT, PCdoB, PV, PSB
-- **Resultado**: Vitória de Lula no segundo turno
-- **Característica**: União de partidos de centro-esquerda
+### ColigaÃ§Ã£o "Brasil EsperanÃ§a" (2022)
+- **ComposiÃ§Ã£o**: PT, PCdoB, PV, PSB
+- **Resultado**: VitÃ³ria de Lula no segundo turno
+- **CaracterÃ­stica**: UniÃ£o de partidos de centro-esquerda
 
-### Coligação "Pelo Brasil" (2022)
-- **Composição**: PL, PP, Republicanos
+### ColigaÃ§Ã£o "Pelo Brasil" (2022)
+- **ComposiÃ§Ã£o**: PL, PP, Republicanos
 - **Resultado**: Segundo lugar com Bolsonaro
-- **Característica**: Partidos de direita e centro-direita
+- **CaracterÃ­stica**: Partidos de direita e centro-direita
 
-### Coligação "Lula Presidente" (2002)
-- **Composição**: PT, PL, PCB, PMN, PCdoB
-- **Resultado**: Primeira vitória de Lula
-- **Importância**: Marco da ascensão da esquerda
+### ColigaÃ§Ã£o "Lula Presidente" (2002)
+- **ComposiÃ§Ã£o**: PT, PL, PCB, PMN, PCdoB
+- **Resultado**: Primeira vitÃ³ria de Lula
+- **ImportÃ¢ncia**: Marco da ascensÃ£o da esquerda
 
-## Coligações vs. Federações
+## ColigaÃ§Ãµes vs. FederaÃ§Ãµes
 
-### Principais Diferenças
+### Principais DiferenÃ§as
 
-| Aspecto | Coligações | Federações |
+| Aspecto | ColigaÃ§Ãµes | FederaÃ§Ãµes |
 |---------|------------|------------|
-| **Duração** | Apenas período eleitoral | Mínimo 4 anos |
-| **Aplicação** | Só eleições majoritárias | Todas as eleições |
-| **Disciplina** | Flexível | Obrigatória |
-| **Funcionamento** | Independente pós-eleição | Atuação conjunta |
-| **Recursos** | Distribuição negociada | Regras específicas |
+| **DuraÃ§Ã£o** | Apenas perÃ­odo eleitoral | MÃ­nimo 4 anos |
+| **AplicaÃ§Ã£o** | SÃ³ eleiÃ§Ãµes majoritÃ¡rias | Todas as eleiÃ§Ãµes |
+| **Disciplina** | FlexÃ­vel | ObrigatÃ³ria |
+| **Funcionamento** | Independente pÃ³s-eleiÃ§Ã£o | AtuaÃ§Ã£o conjunta |
+| **Recursos** | DistribuiÃ§Ã£o negociada | Regras especÃ­ficas |
 
-### Vantagens das Federações
+### Vantagens das FederaÃ§Ãµes
 - **Estabilidade**: Compromissos de longo prazo
-- **Coerência**: Atuação conjunta obrigatória
-- **Planejamento**: Estratégias de médio prazo
-- **Governabilidade**: Alianças mais duradouras
+- **CoerÃªncia**: AtuaÃ§Ã£o conjunta obrigatÃ³ria
+- **Planejamento**: EstratÃ©gias de mÃ©dio prazo
+- **Governabilidade**: AlianÃ§as mais duradouras
 
 ## Aspectos Financeiros
 
 ### Recursos de Campanha
-- **Fundo Eleitoral**: Distribuição entre coligados
-- **Fundo Partidário**: Compartilhamento possível
-- **Doações**: Arrecadação conjunta permitida
-- **Prestação de contas**: Responsabilidade solidária
+- **Fundo Eleitoral**: DistribuiÃ§Ã£o entre coligados
+- **Fundo PartidÃ¡rio**: Compartilhamento possÃ­vel
+- **DoaÃ§Ãµes**: ArrecadaÃ§Ã£o conjunta permitida
+- **PrestaÃ§Ã£o de contas**: Responsabilidade solidÃ¡ria
 
-### Distribuição de Benefícios
+### DistribuiÃ§Ã£o de BenefÃ­cios
 - **Tempo de TV**: Soma dos tempos individuais
-- **Horário eleitoral**: Programação unificada
-- **Material gráfico**: Produção conjunta
+- **HorÃ¡rio eleitoral**: ProgramaÃ§Ã£o unificada
+- **Material grÃ¡fico**: ProduÃ§Ã£o conjunta
 - **Eventos**: Campanhas unificadas
 
 ## Impacto na Democracia
 
 ### Aspectos Positivos
-- **Inclusão**: Participação de partidos menores
-- **Governabilidade**: Formação de maiorias
-- **Moderação**: Busca pelo centro político
+- **InclusÃ£o**: ParticipaÃ§Ã£o de partidos menores
+- **Governabilidade**: FormaÃ§Ã£o de maiorias
+- **ModeraÃ§Ã£o**: Busca pelo centro polÃ­tico
 - **Representatividade**: Diversidade de correntes
 
-### Aspectos Questionáveis
-- **Confusão**: Dificuldade de identificação pelo eleitor
-- **Oportunismo**: Alianças sem base ideológica
-- **Instabilidade**: Coligações que se desfazem rapidamente
-- **Fragmentação**: Proliferação de siglas
+### Aspectos QuestionÃ¡veis
+- **ConfusÃ£o**: Dificuldade de identificaÃ§Ã£o pelo eleitor
+- **Oportunismo**: AlianÃ§as sem base ideolÃ³gica
+- **Instabilidade**: ColigaÃ§Ãµes que se desfazem rapidamente
+- **FragmentaÃ§Ã£o**: ProliferaÃ§Ã£o de siglas
 
 ## Perspectivas Futuras
 
-### Tendências Observadas
-- **Consolidação partidária**: Fortalecimento de legendas principais
-- **Federações**: Crescimento das uniões permanentes
-- **Clareza ideológica**: Maior definição de campos políticos
-- **Estabilidade**: Redução da volatilidade eleitoral
+### TendÃªncias Observadas
+- **ConsolidaÃ§Ã£o partidÃ¡ria**: Fortalecimento de legendas principais
+- **FederaÃ§Ãµes**: Crescimento das uniÃµes permanentes
+- **Clareza ideolÃ³gica**: Maior definiÃ§Ã£o de campos polÃ­ticos
+- **Estabilidade**: ReduÃ§Ã£o da volatilidade eleitoral
 
-### Possíveis Reformas
-- **Cláusula de barreira**: Endurecimento dos critérios
-- **Financiamento**: Novas regras para coligações
-- **Propaganda**: Limitações adicionais
-- **Fidelidade**: Maior rigor partidário
+### PossÃ­veis Reformas
+- **ClÃ¡usula de barreira**: Endurecimento dos critÃ©rios
+- **Financiamento**: Novas regras para coligaÃ§Ãµes
+- **Propaganda**: LimitaÃ§Ãµes adicionais
+- **Fidelidade**: Maior rigor partidÃ¡rio
 
-## Coligações pelo Mundo
+## ColigaÃ§Ãµes pelo Mundo
 
-### Experiências Internacionais
-- **Alemanha**: Coligações governamentais estáveis
-- **Itália**: Histórico de instabilidade coligacional
-- **França**: Sistema majoritário com alianças
-- **Reino Unido**: Coligações excepcionais
+### ExperiÃªncias Internacionais
+- **Alemanha**: ColigaÃ§Ãµes governamentais estÃ¡veis
+- **ItÃ¡lia**: HistÃ³rico de instabilidade coligacional
+- **FranÃ§a**: Sistema majoritÃ¡rio com alianÃ§as
+- **Reino Unido**: ColigaÃ§Ãµes excepcionais
 
-### Lições Comparadas
-- **Sistemas eleitorais**: Influência no formato das alianças
-- **Cultura política**: Impacto na estabilidade
-- **Regras institucionais**: Incentivos para cooperação
-- **Governabilidade**: Relação com efetividade governamental
+### LiÃ§Ãµes Comparadas
+- **Sistemas eleitorais**: InfluÃªncia no formato das alianÃ§as
+- **Cultura polÃ­tica**: Impacto na estabilidade
+- **Regras institucionais**: Incentivos para cooperao
+- **Governabilidade**: RelaÃ§Ã£o com efetividade governamental
 
-## Conclusão
+## ConclusÃ£o
 
-As coligações partidárias representam um elemento central do sistema político brasileiro, refletindo tanto as características do nosso sistema eleitoral quanto a natureza multipartidária da democracia nacional. Embora tenham sido limitadas às eleições majoritárias a partir de 2020, continuam sendo fundamentais para compreender como se formam os governos e como se organiza a competição política no país.
+As coligaÃ§Ãµes partidÃ¡rias representam um elemento central do sistema polÃ­tico brasileiro, refletindo tanto as caracterÃ­sticas do nosso sistema eleitoral quanto a natureza multipartidÃ¡ria da democracia nacional. Embora tenham sido limitadas Ã s eleiÃ§Ãµes majoritÃ¡rias a partir de 2020, continuam sendo fundamentais para compreender como se formam os governos e como se organiza a competiÃ§Ã£o polÃ­tica no paÃ­s.
 
-A evolução das coligações para as federações partidárias marca uma tentativa de equilibrar a necessidade de alianças eleitorais com a busca por maior estabilidade e coerência política. Esse processo de mudança reflete o amadurecimento do sistema democrático brasileiro e a busca por soluções que combinem representatividade, governabilidade e clareza para os eleitores.
+A evoluÃ§Ã£o das coligaÃ§Ãµes para as federaÃ§Ãµes partidÃ¡rias marca uma tentativa de equilibrar a necessidade de alianÃ§as eleitorais com a busca por maior estabilidade e coerÃªncia polÃ­tica. Esse processo de mudanÃ§a reflete o amadurecimento do sistema democrÃ¡tico brasileiro e a busca por soluÃ§Ãµes que combinem representatividade, governabilidade e clareza para os eleitores.
 
-O futuro das alianças partidárias no Brasil dependerá da capacidade dos atores políticos de construir projetos consistentes e duradouros, que vão além dos interesses eleitorais imediatos e contribuam para o fortalecimento da democracia e da representação política no país.
+O futuro das alianÃ§as partidÃ¡rias no Brasil dependerÃ¡ da capacidade dos atores polÃ­ticos de construir projetos consistentes e duradouros, que vÃ£o alÃ©m dos interesses eleitorais imediatos e contribuam para o fortalecimento da democracia e da representaÃ§Ã£o polÃ­tica no paÃ­s.
+
+## Artigos Relacionados
+- [DiferenÃ§a entre Voto MajoritÃ¡rio e Proporcional](/blog/diferenca_entre_voto_majoritario_e_proporcional/)
+- [EvoluÃ§Ã£o PartidÃ¡ria no Brasil](/blog/evolucao_partidaria_brasil/)
+- [O que Ã© ClÃ¡usula de Barreira](/blog/clausula_de_barreira/)
+
+*Fonte: Tribunal Superior Eleitoral (TSE) e legislaÃ§Ã£o eleitoral brasileira*
