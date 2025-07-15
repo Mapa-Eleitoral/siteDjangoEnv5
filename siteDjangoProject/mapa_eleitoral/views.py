@@ -864,38 +864,63 @@ def blog_view(request):
                         # Verificar se há frontmatter YAML
                         if content.startswith('---'):
                             try:
-                                import yaml
-                                # Dividir frontmatter do conteúdo
-                                parts = content.split('---', 2)
-                                if len(parts) >= 3:
-                                    frontmatter_str = parts[1].strip()
-                                    content_body = parts[2].strip()
+                                # Tentar python-frontmatter primeiro (mais robusto)
+                                import frontmatter
+                                post = frontmatter.loads(content)
+                                
+                                if post.metadata:
+                                    title = post.metadata.get('title', title)
+                                    description = post.metadata.get('description', '')
+                                    keywords = post.metadata.get('keywords', '')
+                                    author = post.metadata.get('author', author)
+                                    canonical = post.metadata.get('canonical', '')
                                     
-                                    # Parse do frontmatter YAML
-                                    frontmatter = yaml.safe_load(frontmatter_str)
+                                    # Parse da data
+                                    if 'date' in post.metadata:
+                                        try:
+                                            date_str = str(post.metadata['date'])
+                                            date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                        except:
+                                            pass
                                     
-                                    if frontmatter:
-                                        title = frontmatter.get('title', title)
-                                        description = frontmatter.get('description', '')
-                                        keywords = frontmatter.get('keywords', '')
-                                        author = frontmatter.get('author', author)
-                                        
-                                        # Parse da data
-                                        if 'date' in frontmatter:
-                                            try:
-                                                date_str = frontmatter['date']
-                                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
-                                            except:
-                                                pass
-                                        
-                                        # Usar description como excerpt
-                                        excerpt = description
+                                    # Usar description como excerpt
+                                    excerpt = description
                                     
-                                    # Usar o conteúdo sem frontmatter para markdown
-                                    content = content_body
+                                    # Usar o conteúdo sem frontmatter
+                                    content = post.content
+                                    
                             except ImportError:
-                                # Se PyYAML não estiver disponível, fallback para método antigo
-                                pass
+                                # Fallback para PyYAML se python-frontmatter não estiver disponível
+                                try:
+                                    import yaml
+                                    parts = content.split('---', 2)
+                                    if len(parts) >= 3:
+                                        frontmatter_str = parts[1].strip()
+                                        content_body = parts[2].strip()
+                                        
+                                        frontmatter_data = yaml.safe_load(frontmatter_str)
+                                        
+                                        if frontmatter_data:
+                                            title = frontmatter_data.get('title', title)
+                                            description = frontmatter_data.get('description', '')
+                                            keywords = frontmatter_data.get('keywords', '')
+                                            author = frontmatter_data.get('author', author)
+                                            canonical = frontmatter_data.get('canonical', '')
+                                            
+                                            if 'date' in frontmatter_data:
+                                                try:
+                                                    date_str = frontmatter_data['date']
+                                                    date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                                except:
+                                                    pass
+                                            
+                                            excerpt = description
+                                            content = content_body
+                                            
+                                except ImportError:
+                                    # Se nem python-frontmatter nem PyYAML estiverem disponíveis
+                                    print(f"Aviso: Nem python-frontmatter nem PyYAML disponíveis para {filename}")
+                                    pass
                             except Exception as e:
                                 print(f"Erro ao processar frontmatter em {filename}: {e}")
                         
@@ -1055,33 +1080,59 @@ def blog_post_view(request, slug):
         # Verificar se há frontmatter YAML
         if content.startswith('---'):
             try:
-                import yaml
-                # Dividir frontmatter do conteúdo
-                parts = content.split('---', 2)
-                if len(parts) >= 3:
-                    frontmatter_str = parts[1].strip()
-                    content_body = parts[2].strip()
+                # Tentar python-frontmatter primeiro (mais robusto)
+                import frontmatter
+                post = frontmatter.loads(content)
+                
+                if post.metadata:
+                    title = post.metadata.get('title', title)
+                    description = post.metadata.get('description', '')
+                    keywords = post.metadata.get('keywords', '')
+                    author = post.metadata.get('author', author)
+                    canonical = post.metadata.get('canonical', '')
                     
-                    # Parse do frontmatter YAML
-                    frontmatter = yaml.safe_load(frontmatter_str)
+                    # Parse da data
+                    if 'date' in post.metadata:
+                        try:
+                            date_str = str(post.metadata['date'])
+                            date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                        except:
+                            pass
                     
-                    if frontmatter:
-                        title = frontmatter.get('title', title)
-                        description = frontmatter.get('description', '')
-                        keywords = frontmatter.get('keywords', '')
-                        author = frontmatter.get('author', author)
-                        canonical = frontmatter.get('canonical', '')
+                    # Usar o conteúdo sem frontmatter
+                    content = post.content
+                    
+            except ImportError:
+                # Fallback para PyYAML se python-frontmatter não estiver disponível
+                try:
+                    import yaml
+                    parts = content.split('---', 2)
+                    if len(parts) >= 3:
+                        frontmatter_str = parts[1].strip()
+                        content_body = parts[2].strip()
                         
-                        # Parse da data
-                        if 'date' in frontmatter:
-                            try:
-                                date_str = frontmatter['date']
-                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
-                            except:
-                                pass
-                    
-                    # Usar o conteúdo sem frontmatter para markdown
-                    content = content_body
+                        frontmatter_data = yaml.safe_load(frontmatter_str)
+                        
+                        if frontmatter_data:
+                            title = frontmatter_data.get('title', title)
+                            description = frontmatter_data.get('description', '')
+                            keywords = frontmatter_data.get('keywords', '')
+                            author = frontmatter_data.get('author', author)
+                            canonical = frontmatter_data.get('canonical', '')
+                            
+                            if 'date' in frontmatter_data:
+                                try:
+                                    date_str = frontmatter_data['date']
+                                    date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                except:
+                                    pass
+                        
+                        content = content_body
+                        
+                except ImportError:
+                    # Se nem python-frontmatter nem PyYAML estiverem disponíveis
+                    print(f"Aviso: Nem python-frontmatter nem PyYAML disponíveis para {slug}")
+                    pass
             except Exception as e:
                 print(f"Erro ao processar frontmatter: {e}")
         
