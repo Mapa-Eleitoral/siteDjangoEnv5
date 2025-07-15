@@ -36,7 +36,10 @@
       "Bash(../Scripts/python.exe:*)",
       "Bash(mv:*)",
       "WebFetch(domain:mapaeleitoral.com.br)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(railway login:*)",
+      "Bash(gh auth:*)",
+      "Bash(ssh-keygen:*)"
     ],
     "deny": []
   }
