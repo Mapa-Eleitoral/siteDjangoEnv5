@@ -418,55 +418,52 @@
         /* Navigation */
         .nav {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         .nav-link {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             text-decoration: none;
-            font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: var(--radius);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .nav-link:hover {
-            color: var(--primary);
-            background: rgba(18, 63, 50, 0.1);
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
 
-        .nav-link.active {
-            color: var(--primary);
-            background: rgba(18, 63, 50, 0.1);
+        .nav-link[style*="background"] {
+            background: var(--primary) !important;
+            color: white !important;
         }
 
-        /* Footer otimizado */
+        /* Footer */
         .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
+            background: var(--primary);
+            color: white;
             padding: 2rem 0;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
             align-items: center;
         }
 
-        .footer-info {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .footer-info strong {
-            color: var(--text-primary);
+        .footer-info p {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+            font-size: 0.9rem;
         }
 
         .footer-info a {
-            color: var(--primary);
+            color: white;
             text-decoration: none;
         }
 
@@ -475,9 +472,25 @@
         }
 
         .footer-meta {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
             text-align: right;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
         }
 
         /* Performance indicator (debug) */
@@ -725,7 +738,7 @@
                     </div>
                 </div>
                 <nav class="nav">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/" class="nav-link" style="background: var(--primary); color: white;">Home</a>
                     <a href="/projeto/" class="nav-link">Projeto</a>
                     <a href="/blog/" class="nav-link">Blog</a>
                     <a href="/apoio/" class="nav-link">Apoio</a>
@@ -899,31 +912,25 @@
                 <div class="footer-info">
                     <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
                     <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
-                    <p><strong>Versão:</strong> 4.44 - {% if load_time %}Carregado em {{ load_time }}{% else %}Site em desenvolvimento{% endif %}</p>
-                    <p><strong>Próxima Versão:</strong> 5.0 - Em breve (Adição de novas funcionalidades)</p>
-                    <p><strong>Tecnologias:</strong> Python, Folium, Django, SQL, Git, GitHub, Ubuntu CLI, Claude Code AI.</p>
+                    <p><strong>Versão:</strong> 5.0 - Blog de Estudos Eleitorais</p>
                 </div>
                 <div class="footer-meta">
-                    <div style="font-size: 24px; margin-bottom: 15px;">
-                        <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Twitter">
+                    <div class="social-links">
+                        <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" title="Twitter">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="Instagram">
+                        <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i> 
+                        <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" style="color: #333; margin: 0 10px; text-decoration: none;" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://www.doesanguedoevida.com.br/banco-de-sangue-serum" target="_blank" rel="noopener" style="color: #f10606; margin: 0 10px; text-decoration: none;" title="Banco de Sangue">
+                        <a href="https://www.doesanguedoevida.com.br/banco-de-sangue-serum" target="_blank" rel="noopener" title="Banco de Sangue" style="color: #f10606;">
                             <i class="fas fa-heart"></i>
                         </a>
                     </div>
-                    <br><strong>contato@mapaeleitoral.com.br</strong>
-                    <br>
-                    <br>Última atualização: <strong>Julho/2025</strong>
+                    <p><strong>contato@mapaeleitoral.com.br</strong></p>
+                    <p>Última atualização: <strong>Julho/2025</strong></p>
                 </div>
             </div>
         </div>

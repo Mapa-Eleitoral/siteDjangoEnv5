@@ -119,26 +119,27 @@
         /* Navigation */
         .nav {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         .nav-link {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             text-decoration: none;
-            font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: var(--radius);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .nav-link:hover {
-            color: var(--primary);
-            background: rgba(18, 63, 50, 0.1);
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
 
-        .nav-link.active {
-            color: var(--primary);
-            background: rgba(18, 63, 50, 0.1);
+        .nav-link[style*="background"] {
+            background: var(--primary) !important;
+            color: white !important;
         }
 
         /* Main Content */
@@ -378,31 +379,27 @@
 
         /* Footer */
         .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
+            background: var(--primary);
+            color: white;
             padding: 2rem 0;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
             align-items: center;
         }
 
-        .footer-info {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .footer-info strong {
-            color: var(--text-primary);
+        .footer-info p {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+            font-size: 0.9rem;
         }
 
         .footer-info a {
-            color: var(--primary);
+            color: white;
             text-decoration: none;
         }
 
@@ -410,19 +407,26 @@
             text-decoration: underline;
         }
 
-        .footer-social {
+        .footer-meta {
+            text-align: right;
+        }
+
+        .social-links {
             display: flex;
             gap: 1rem;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
         }
 
-        .social-link {
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            transition: color 0.2s ease;
+        .social-links a {
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
         }
 
-        .social-link:hover {
-            color: var(--primary);
+        .social-links a:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
         }
 
         /* Visual enhancements */
@@ -524,9 +528,9 @@
                 </div>
                 <nav class="nav">
                     <a href="/" class="nav-link">Home</a>
-                    <a href="/projeto" class="nav-link active">Projeto</a>
+                    <a href="/projeto/" class="nav-link" style="background: var(--primary); color: white;">Projeto</a>
                     <a href="/blog/" class="nav-link">Blog</a>
-                    <a href="/apoio" class="nav-link">Apoio</a>
+                    <a href="/apoio/" class="nav-link">Apoio</a>
                 </nav>
             </div>
         </div>
@@ -805,27 +809,27 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-info">
-                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
                     <p><strong>Fontes:</strong> Tribunal Superior Eleitoral e DATA.RIO</p>
-                    <p><strong>Licença:</strong> Projeto de código aberto para fins educacionais</p>
-                    <p><strong>Contato:</strong> contato@mapaeleitoral.com.br</p>
+                    <p><strong>Desenvolvido por:</strong> <a href="https://github.com/diasfilipe" target="_blank" rel="noopener">Filipe Dias</a></p>
+                    <p><strong>Versão:</strong> 5.0 - Blog de Estudos Eleitorais</p>
                 </div>
-                <div class="footer-social">
-                    <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" class="social-link" title="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" class="social-link" title="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" class="social-link" title="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://github.com/diasfilipe" target="_blank" rel="noopener" class="social-link" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://www.doesanguedoevida.com.br/banco-de-sangue-serum" target="_blank" rel="noopener" class="social-link" style="color: #f10606; margin: 0 10px; text-decoration: none" title="Banco de Sangue">
-                        <i class="fas fa-heart"></i>
-                    </a>
+                <div class="footer-meta">
+                    <div class="social-links">
+                        <a href="https://twitter.com/eleitoralmapa" target="_blank" rel="noopener" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/mapaeleitoral.com.br" target="_blank" rel="noopener" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/diasfilipe/" target="_blank" rel="noopener" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://www.doesanguedoevida.com.br/banco-de-sangue-serum" target="_blank" rel="noopener" title="Banco de Sangue" style="color: #f10606;">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                    </div>
+                    <p><strong>contato@mapaeleitoral.com.br</strong></p>
+                    <p>Última atualização: <strong>Julho/2025</strong></p>
                 </div>
             </div>
         </div>
