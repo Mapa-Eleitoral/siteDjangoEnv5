@@ -7,8 +7,8 @@ date: "2024-07-20"
 canonical: "https://mapaeleitoral.com.br/blog/o_que_significa_coeficiente_eleitoral/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1750776418412-1548a2b3f4b9?q=80&w=725&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Dia de Eleição") 
-<small style="color: #999; font-size: 0.8em;">Foto por [ahmad saad](https://unsplash.com/pt-br/@sada30) no [Unsplash](https://unsplash.com)</small>
+![Thumbnail](https://images.unsplash.com/photo-1750776418412-1548a2b3f4b9?q=80&w=725&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Coeficiente Eleitoral") 
+<small style="color: #999; font-size: 0.8em;">Foto por [Ahmad Saad](https://unsplash.com/pt-br/@sada30) no [Unsplash](https://unsplash.com)</small>
 
 # O que Significa Coeficiente Eleitoral: Entendendo o Cálculo das Eleições Proporcionais
 
