@@ -53,7 +53,9 @@
       "Bash(apt:*)",
       "Bash(/mnt/c/Windows/System32/mysql --version)",
       "Bash(chmod:*)",
-      "Bash(./execute_mysql.sh)"
+      "Bash(./execute_mysql.sh)",
+      "WebFetch(domain:127.0.0.1)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
