@@ -810,10 +810,13 @@ def blog_view(request):
     
     # Possíveis localizações dos artigos
     possible_paths = [
+        # Caminho absoluto direto
+        '/mnt/c/users/filip/onedrive/mapaeleitoral/sitedjangoenvv5/siteDjangoProject/blog_posts',
+        # Caminho correto atual
+        os.path.join(project_dir, 'blog_posts'),
         # Estrutura local de desenvolvimento
         os.path.join(os.path.dirname(os.path.dirname(project_dir)), 'produtos', 'blog', 'post'),
         # Dentro do projeto Django
-        os.path.join(project_dir, 'blog_posts'),
         os.path.join(current_dir, 'blog_posts'),
         # Na raiz do projeto
         os.path.join(project_dir, 'produtos', 'blog', 'post'),
@@ -1022,7 +1025,7 @@ def blog_post_view(request, slug):
     import markdown
     from datetime import datetime
     from django.http import Http404
-    from .models import get_or_create_blog_article
+    from .models import BlogArticle, get_or_create_blog_article
     
     # Caminho para os artigos do blog - múltiplas tentativas
     current_dir = os.path.dirname(__file__)  # mapa_eleitoral
@@ -1030,10 +1033,13 @@ def blog_post_view(request, slug):
     
     # Possíveis localizações dos artigos
     possible_paths = [
+        # Caminho absoluto direto
+        '/mnt/c/users/filip/onedrive/mapaeleitoral/sitedjangoenvv5/siteDjangoProject/blog_posts',
+        # Caminho correto atual
+        os.path.join(project_dir, 'blog_posts'),
         # Estrutura local de desenvolvimento
         os.path.join(os.path.dirname(os.path.dirname(project_dir)), 'produtos', 'blog', 'post'),
         # Dentro do projeto Django
-        os.path.join(project_dir, 'blog_posts'),
         os.path.join(current_dir, 'blog_posts'),
         # Na raiz do projeto
         os.path.join(project_dir, 'produtos', 'blog', 'post'),
@@ -1049,6 +1055,16 @@ def blog_post_view(request, slug):
             break
     
     if not filepath or not os.path.exists(filepath):
+        # Debug detalhado
+        print(f"DEBUG: Arquivo não encontrado para slug: {slug}")
+        print(f"DEBUG: project_dir = {project_dir}")
+        print(f"DEBUG: current_dir = {current_dir}")
+        for i, path in enumerate(possible_paths):
+            exists = os.path.exists(path)
+            print(f"DEBUG: Caminho {i+1}: {path} - {'EXISTS' if exists else 'NOT FOUND'}")
+            if exists:
+                files = os.listdir(path)
+                print(f"DEBUG: Arquivos em {path}: {files}")
         raise Http404("Artigo não encontrado")
     
     try:
