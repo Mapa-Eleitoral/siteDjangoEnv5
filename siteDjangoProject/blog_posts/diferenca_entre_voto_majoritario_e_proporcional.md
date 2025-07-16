@@ -7,8 +7,8 @@ date: "2024-08-30"
 canonical: "https://mapaeleitoral.com.br/blog/diferenca_entre_voto_majoritario_e_proporcional/"
 ---
 
-![Fila em dia de eleição](https://images.unsplash.com/photo-1625426078245-6911839409dd?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Brasília, DF, Brasil - 2021") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Hal Gatewood](https://unsplash.com/pt-br/@ramonbucard) no [Unsplash](https://unsplash.com)</small>
+![Thumbnail](https://images.unsplash.com/photo-1625426078245-6911839409dd?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Brasília, DF, Brasil - 2021") 
+<small style="color: #999; font-size: 0.8em;">Foto por [Ramon Buçard](https://unsplash.com/pt-br/@ramonbucard) no [Unsplash](https://unsplash.com)</small>
 
 # Diferença entre Voto Majoritário e Proporcional: Guia dos Sistemas Eleitorais
 
