@@ -4,7 +4,7 @@ description: "Análise completa da abstenção eleitoral no Rio de Janeiro em 20
 keywords: "abstenção eleitoral rio 2016, eleições municipais rj, crivella freixo, participação eleitoral"
 author: "Filipe Dias"
 date: "2016-10-30"
-canonical: "https://mapaeleitoral.com.br/blog/abstencao_rio_2016/"
+canonical: "https://mapaeleitoral.com.br/blog/abstencao_rio2016/"
 ---
 
 # Abstenção Eleitoral Rio de Janeiro 2016: Análise Detalhada
