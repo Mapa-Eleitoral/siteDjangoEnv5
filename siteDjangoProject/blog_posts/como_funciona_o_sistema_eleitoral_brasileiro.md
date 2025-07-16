@@ -6,6 +6,10 @@ author: "Filipe Dias"
 date: "2024-08-20"
 canonical: "https://mapaeleitoral.com.br/blog/como-funciona-o-sistema-eleitoral-brasileiro/"
 ---
+![Fila em dia de eleição][referencia]
+
+[referencia]: https://unsplash.com/pt-br/fotografias/fotografia-aerea-de-pessoas-Nzb4LBsctyQ "Dia de Eleição"
+
 
 # Como Funciona o Sistema Eleitoral Brasileiro: Guia Completo
 
