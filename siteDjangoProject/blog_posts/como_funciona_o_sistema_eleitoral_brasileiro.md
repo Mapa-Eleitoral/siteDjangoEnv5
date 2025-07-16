@@ -7,8 +7,7 @@ date: "2024-08-20"
 canonical: "https://mapaeleitoral.com.br/blog/como-funciona-o-sistema-eleitoral-brasileiro/"
 ---
 
-![Fila em dia de eleição](https://images.unsplash.com/photo-1519248200454-8f2590ed22b7?q=80&w=875&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Dia de Eleição")
-
+![Fila em dia de eleição](https://images.unsplash.com/photo-1519248200454-8f2590ed22b7?q=80&w=875&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Dia de Eleição") 
 <small style="color: #999; font-size: 0.8em;">Foto por [Hal Gatewood](https://unsplash.com/pt-br/@halacious) no [Unsplash](https://unsplash.com)</small>
 
 # Como Funciona o Sistema Eleitoral Brasileiro: Guia Completo
