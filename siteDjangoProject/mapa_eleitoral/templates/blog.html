@@ -747,7 +747,11 @@
         {% if articles %}
         <article class="featured-post">
             <div class="blog-post-image">
-                Análise Destaque
+                {% if articles.0.thumbnail_url %}
+                    <img src="{{ articles.0.thumbnail_url }}" alt="{{ articles.0.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    Análise Destaque
+                {% endif %}
             </div>
             <div class="blog-post-content">
                 <a href="{% url 'mapa_eleitoral:blog_post' articles.0.slug %}" class="blog-post-title">{{ articles.0.title }}</a>
@@ -843,12 +847,16 @@
             {% for article in articles|slice:"1:" %}
             <article class="blog-post">
                 <div class="blog-post-image color-{{ forloop.counter }}">
-                    {% if 'abstencao' in article.slug %}
-                        Abstenção<br>Eleitoral
-                    {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
-                        Partidos<br>Políticos
+                    {% if article.thumbnail_url %}
+                        <img src="{{ article.thumbnail_url }}" alt="{{ article.title }}" style="width: 100%; height: 100%; object-fit: cover;">
                     {% else %}
-                        Análise<br>Eleitoral
+                        {% if 'abstencao' in article.slug %}
+                            Abstenção<br>Eleitoral
+                        {% elif 'evolucao' in article.slug or 'partidari' in article.slug %}
+                            Partidos<br>Políticos
+                        {% else %}
+                            Análise<br>Eleitoral
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="blog-post-content">

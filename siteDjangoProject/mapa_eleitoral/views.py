@@ -865,9 +865,9 @@ def blog_view(request):
                         excerpt = ""
                         
                         # Verificar se há frontmatter YAML
-                        if content.startswith('---\n'):
+                        if content.startswith('---'):
                             try:
-                                # Usar PyYAML diretamente (mais simples e confiável)
+                                # Tentar PyYAML primeiro
                                 import yaml
                                 parts = content.split('---', 2)
                                 if len(parts) >= 3:
@@ -891,9 +891,37 @@ def blog_view(request):
                                                 pass
                                         
                                         excerpt = description
-                                        # GARANTIR que o content seja substituído
                                         content = content_body
                                         
+                            except ImportError:
+                                # Fallback sem PyYAML - parsing manual simples
+                                parts = content.split('---', 2)
+                                if len(parts) >= 3:
+                                    frontmatter_str = parts[1].strip()
+                                    content_body = parts[2].strip()
+                                    
+                                    # Parse manual simples
+                                    for line in frontmatter_str.split('\n'):
+                                        if line.strip().startswith('title:'):
+                                            title = line.split(':', 1)[1].strip().strip('"\'')
+                                        elif line.strip().startswith('description:'):
+                                            description = line.split(':', 1)[1].strip().strip('"\'')
+                                        elif line.strip().startswith('keywords:'):
+                                            keywords = line.split(':', 1)[1].strip().strip('"\'')
+                                        elif line.strip().startswith('author:'):
+                                            author = line.split(':', 1)[1].strip().strip('"\'')
+                                        elif line.strip().startswith('canonical:'):
+                                            canonical = line.split(':', 1)[1].strip().strip('"\'')
+                                        elif line.strip().startswith('date:'):
+                                            try:
+                                                date_str = line.split(':', 1)[1].strip().strip('"\'')
+                                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                                            except:
+                                                pass
+                                    
+                                    excerpt = description
+                                    content = content_body
+                                    
                             except Exception as e:
                                 print(f"Erro ao processar frontmatter em {filename}: {e}")
                         
@@ -926,6 +954,18 @@ def blog_view(request):
                         else:
                             date_modified = date_from_content
                         
+                        # Extrair primeira imagem do conteúdo para thumbnail
+                        thumbnail_url = None
+                        import re
+                        
+                        # Procurar por imagens no markdown ![alt](url)
+                        img_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
+                        img_matches = re.findall(img_pattern, content)
+                        
+                        if img_matches:
+                            # Usar a primeira imagem encontrada
+                            thumbnail_url = img_matches[0][1]  # URL da imagem
+                            
                         # Converter markdown para HTML
                         md = markdown.Markdown(extensions=['meta'])
                         html_content = md.convert(content)
@@ -945,7 +985,8 @@ def blog_view(request):
                             'date': date_modified,
                             'content': html_content,
                             'filename': filename,
-                            'view_count': view_count
+                            'view_count': view_count,
+                            'thumbnail_url': thumbnail_url  # Adicionar thumbnail
                         })
                 except Exception as e:
                     print(f"Erro ao processar {filename}: {e}")
@@ -1064,11 +1105,12 @@ def blog_post_view(request, slug):
         date_from_content = None
         
         # Verificar se há frontmatter YAML
-        if content.startswith('---\n'):
+        if content.startswith('---'):
             try:
-                # Usar PyYAML diretamente (mais simples e confiável)
+                # Tentar PyYAML primeiro
                 import yaml
                 parts = content.split('---', 2)
+                
                 if len(parts) >= 3:
                     frontmatter_str = parts[1].strip()
                     content_body = parts[2].strip()
@@ -1089,7 +1131,36 @@ def blog_post_view(request, slug):
                             except:
                                 pass
                     
-                    # GARANTIR que o content seja substituído
+                    # FORÇAR substituição do conteúdo
+                    content = content_body
+                    
+            except ImportError:
+                # Fallback sem PyYAML - parsing manual simples
+                parts = content.split('---', 2)
+                if len(parts) >= 3:
+                    frontmatter_str = parts[1].strip()
+                    content_body = parts[2].strip()
+                    
+                    # Parse manual simples para extrair título e descrição
+                    for line in frontmatter_str.split('\n'):
+                        if line.strip().startswith('title:'):
+                            title = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.strip().startswith('description:'):
+                            description = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.strip().startswith('keywords:'):
+                            keywords = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.strip().startswith('author:'):
+                            author = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.strip().startswith('canonical:'):
+                            canonical = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.strip().startswith('date:'):
+                            try:
+                                date_str = line.split(':', 1)[1].strip().strip('"\'')
+                                date_from_content = datetime.strptime(date_str, '%Y-%m-%d')
+                            except:
+                                pass
+                    
+                    # FORÇAR substituição do conteúdo
                     content = content_body
                     
             except Exception as e:
