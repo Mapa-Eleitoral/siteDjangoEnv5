@@ -972,8 +972,8 @@ def blog_view(request):
                         
                         # Obter ou criar registro no banco para tracking
                         slug = filename.replace('.md', '')
-                        # blog_article = get_or_create_blog_article(slug, title) # DESABILITADO
-                        view_count = 0  # Sem tracking automático
+                        blog_article = get_or_create_blog_article(slug, title)
+                        view_count = blog_article.get_views_count()
                         
                         articles.append({
                             'title': title,
@@ -1196,13 +1196,7 @@ def blog_post_view(request, slug):
         
         # ===== TRACKING DE VISUALIZAÇÕES =====
         # Obter ou criar registro do artigo no banco
-        # blog_article = get_or_create_blog_article(slug, title) # DESABILITADO
-        
-        # Tentar obter artigo existente sem criar
-        try:
-            blog_article = BlogArticle.objects.using('blog').get(slug=slug)
-        except BlogArticle.DoesNotExist:
-            blog_article = None
+        blog_article = get_or_create_blog_article(slug, title)
         
         # Registrar visualização (com proteção anti-spam)
         def get_client_ip(request):
@@ -1213,15 +1207,11 @@ def blog_post_view(request, slug):
                 ip = request.META.get('REMOTE_ADDR')
             return ip
         
-        # Incrementar contador de visualizações (apenas se artigo existe)
-        view_counted = False
-        view_count = 0
-        
-        if blog_article:
-            ip_address = get_client_ip(request)
-            user_agent = request.META.get('HTTP_USER_AGENT', '')
-            view_counted = blog_article.increment_views(ip_address, user_agent)
-            view_count = blog_article.get_views_count()
+        # Incrementar contador de visualizações
+        ip_address = get_client_ip(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        view_counted = blog_article.increment_views(ip_address, user_agent)
+        view_count = blog_article.get_views_count()
         
         article = {
             'title': title,
