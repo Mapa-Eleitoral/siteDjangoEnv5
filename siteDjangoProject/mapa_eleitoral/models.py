@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.cache import cache
+from django.core.validators import RegexValidator
 
 class DadoEleitoral(models.Model):
     """
@@ -10,15 +11,35 @@ class DadoEleitoral(models.Model):
     # Campo ID adicionado (corresponde à coluna id criada no MySQL)
     id = models.AutoField(primary_key=True)
     
-    # Mapeando exatamente os campos da sua tabela MySQL
-    ano_eleicao = models.CharField(max_length=4, db_column='ANO_ELEICAO', verbose_name="Ano da Eleição")
-    sg_uf = models.CharField(max_length=2, db_column='SG_UF', verbose_name="Código UF")
+    # Mapeando exatamente os campos da sua tabela MySQL com validações
+    ano_eleicao = models.CharField(
+        max_length=4, 
+        db_column='ANO_ELEICAO', 
+        verbose_name="Ano da Eleição",
+        validators=[RegexValidator(r'^\d{4}$', 'Ano deve ter 4 dígitos')]
+    )
+    sg_uf = models.CharField(
+        max_length=2, 
+        db_column='SG_UF', 
+        verbose_name="Código UF",
+        validators=[RegexValidator(r'^[A-Z]{2}$', 'UF deve ter 2 letras maiúsculas')]
+    )
     nm_ue = models.CharField(max_length=64, db_column='NM_UE', verbose_name="Nome da Unidade Eleitoral")
     ds_cargo = models.CharField(max_length=50, db_column='DS_CARGO', verbose_name="Descrição do Cargo")
-    nr_candidato = models.CharField(max_length=8, db_column='NR_CANDIDATO', verbose_name="Número do Candidato")
+    nr_candidato = models.CharField(
+        max_length=8, 
+        db_column='NR_CANDIDATO', 
+        verbose_name="Número do Candidato",
+        validators=[RegexValidator(r'^\d+$', 'Número do candidato deve conter apenas dígitos')]
+    )
     nm_candidato = models.CharField(max_length=64, db_column='NM_CANDIDATO', verbose_name="Nome do Candidato")
     nm_urna_candidato = models.CharField(max_length=64, db_column='NM_URNA_CANDIDATO', verbose_name="Nome na Urna")
-    nr_cpf_candidato = models.CharField(max_length=11, db_column='NR_CPF_CANDIDATO', verbose_name="CPF do Candidato")
+    nr_cpf_candidato = models.CharField(
+        max_length=11, 
+        db_column='NR_CPF_CANDIDATO', 
+        verbose_name="CPF do Candidato",
+        validators=[RegexValidator(r'^\d{11}$', 'CPF deve ter 11 dígitos')]
+    )
     nr_partido = models.CharField(max_length=100, db_column='NR_PARTIDO', verbose_name="Número do Partido")
     sg_partido = models.CharField(max_length=10, db_column='SG_PARTIDO', verbose_name="Sigla do Partido")
     nr_turno = models.IntegerField(db_column='NR_TURNO', verbose_name="Número do Turno")
