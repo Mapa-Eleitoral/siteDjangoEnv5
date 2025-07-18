@@ -55,7 +55,8 @@
       "Bash(chmod:*)",
       "Bash(./execute_mysql.sh)",
       "WebFetch(domain:127.0.0.1)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(Scripts/python.exe siteDjangoProject/manage.py check)"
     ],
     "deny": []
   }
