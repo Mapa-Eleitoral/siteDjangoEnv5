@@ -39,12 +39,15 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.gzip.GZipMiddleware',  # Compressão GZIP
+    'django.middleware.cache.UpdateCacheMiddleware',  # Cache de página completa
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Cache de página completa
+    'mapa_eleitoral.middleware.OptimizedPerformanceMiddleware',  # Middleware customizado
 ]
 
 ROOT_URLCONF = 'siteDjango.urls'
@@ -147,13 +150,53 @@ else:
 # === DATABASE ROUTER ===
 DATABASE_ROUTERS = ['siteDjango.db_router.DatabaseRouter']
 
-# === CONFIGURAÇÕES DE CACHE SIMPLIFICADAS ===
-# Usar cache em memória por padrão para evitar problemas
+# === CONFIGURAÇÕES DE CACHE SUPER OTIMIZADAS ===
+# Cache com múltiplas camadas para performance máxima
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-cache',
+        'LOCATION': 'mapa-eleitoral-main',
+        'TIMEOUT': 7200 if not DEBUG else 300,  # 2h em prod, 5min em dev
+        'OPTIONS': {
+            'MAX_ENTRIES': 5000,  # Aumentado para mais dados
+            'CULL_FREQUENCY': 2,  # Limpeza mais agressiva
+        }
+    },
+    # Cache específico para dados eleitorais (longa duração)
+    'electoral_data': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-electoral',
+        'TIMEOUT': 86400 if not DEBUG else 600,  # 24h em prod, 10min em dev
+        'OPTIONS': {
+            'MAX_ENTRIES': 10000,  # Dados eleitorais são muitos
+            'CULL_FREQUENCY': 2,
+        }
+    },
+    # Cache para mapas gerados (duração média)
+    'maps': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-maps',
+        'TIMEOUT': 43200 if not DEBUG else 900,  # 12h em prod, 15min em dev
+        'OPTIONS': {
+            'MAX_ENTRIES': 2000,  # Mapas são grandes
+            'CULL_FREQUENCY': 2,
+        }
+    },
+    # Cache para APIs (duração curta)
+    'api': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-api',
         'TIMEOUT': 3600 if not DEBUG else 300,  # 1h em prod, 5min em dev
+        'OPTIONS': {
+            'MAX_ENTRIES': 3000,
+            'CULL_FREQUENCY': 2,
+        }
+    },
+    # Cache para blog (duração longa)
+    'blog': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-blog',
+        'TIMEOUT': 86400 if not DEBUG else 1800,  # 24h em prod, 30min em dev
         'OPTIONS': {
             'MAX_ENTRIES': 1000,
             'CULL_FREQUENCY': 3,
@@ -289,19 +332,46 @@ LOGGING = {
 
 # === CONFIGURAÇÕES ESPECÍFICAS PARA MAPA ELEITORAL ===
 CACHE_TIMES = {
-    'geojson_data': 86400,      # 24h
-    'map_html': 43200,          # 12h
-    'candidato_info': 21600,    # 6h
-    'anos_eleicao': 86400,      # 24h
-    'partidos': 21600,          # 6h
-    'candidatos': 10800,        # 3h
-    'votos_bairro': 7200,       # 2h
-    'complete_data': 7200,      # 2h
+    # Dados que raramente mudam - cache longo
+    'geojson_data': 604800,     # 7 dias - arquivos geográficos
+    'anos_eleicao': 604800,     # 7 dias - lista de anos
+    'template_cache': 86400,    # 24h - templates renderizados
+    
+    # Dados que mudam ocasionalmente - cache médio
+    'map_html': 86400,          # 24h - mapas gerados
+    'candidato_info': 43200,    # 12h - info básica
+    'partidos': 43200,          # 12h - partidos por ano
+    'blog_articles': 43200,     # 12h - artigos do blog
+    
+    # Dados que mudam regularmente - cache curto
+    'candidatos': 21600,        # 6h - candidatos por partido
+    'votos_bairro': 14400,      # 4h - dados de votação
+    'complete_data': 14400,     # 4h - dados completos
+    'api_responses': 7200,      # 2h - respostas de API
+    
+    # Dados dinâmicos - cache muito curto
+    'search_results': 3600,     # 1h - resultados de busca
+    'analytics': 1800,          # 30min - dados analíticos
+    'user_sessions': 900,       # 15min - sessões de usuário
 }
 
 # Reduzir tempos em desenvolvimento
 if DEBUG:
     CACHE_TIMES = {k: min(v, 300) for k, v in CACHE_TIMES.items()}
+
+# === CONFIGURAÇÕES DE CACHE DE PÁGINA COMPLETA ===
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 1800 if not DEBUG else 60  # 30min prod, 1min dev
+CACHE_MIDDLEWARE_KEY_PREFIX = 'mapaeleitoral_page'
+
+# === CONFIGURAÇÕES DE CACHE POR VIEW ===
+CACHE_VIEWS = {
+    'home': 600,        # 10 minutos
+    'blog': 3600,       # 1 hora
+    'blog_post': 7200,  # 2 horas
+    'projeto': 86400,   # 24 horas
+    'apoio': 86400,     # 24 horas
+}
 
 # Configurações de performance para mapas
 MAP_SETTINGS = {

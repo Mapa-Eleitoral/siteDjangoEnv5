@@ -26,6 +26,7 @@ CACHE_TIMES = {
     'candidatos': 10800,        # 3h - candidatos por partido/ano
     'votos_bairro': 7200,       # 2h - dados de votação
     'complete_data': 7200,      # 2h - dados completos agregados
+    'api_responses': 3600,      # 1h - respostas de API
 }
 
 # Reduzir tempos em desenvolvimento
@@ -85,26 +86,40 @@ def load_geojson_optimized():
 # === GETTERS SUPER OTIMIZADOS ===
 
 def get_cached_anos():
-    """Busca anos disponíveis com cache"""
-    return cached_query(
-        lambda: DadoEleitoral.objects.values_list('ano_eleicao', flat=True).distinct().order_by('-ano_eleicao'),
-        'anos_eleicao_v2',
-        CACHE_TIMES['anos_eleicao']
-    )
+    """Busca anos disponíveis com cache otimizado"""
+    from django.core.cache import caches
+    electoral_cache = caches['electoral_data']
+    
+    cache_key = 'anos_eleicao_v3'
+    anos = electoral_cache.get(cache_key)
+    
+    if anos is None:
+        anos = list(DadoEleitoral.objects.values_list('ano_eleicao', flat=True).distinct().order_by('-ano_eleicao'))
+        electoral_cache.set(cache_key, anos, CACHE_TIMES['anos_eleicao'])
+        logging.info(f"Anos carregados do banco: {len(anos)} anos")
+    
+    return anos
 
 def get_cached_partidos(ano):
     """Busca partidos por ano com cache otimizado"""
     if not ano:
         return []
     
-    return cached_query(
-        lambda: DadoEleitoral.objects.filter(ano_eleicao=ano)
-                                   .values_list('sg_partido', flat=True)
-                                   .distinct()
-                                   .order_by('sg_partido'),
-        safe_key('partidos_v2', ano),
-        CACHE_TIMES['partidos']
-    )
+    from django.core.cache import caches
+    electoral_cache = caches['electoral_data']
+    
+    cache_key = safe_key('partidos_v3', ano)
+    partidos = electoral_cache.get(cache_key)
+    
+    if partidos is None:
+        partidos = list(DadoEleitoral.objects.filter(ano_eleicao=ano)
+                                           .values_list('sg_partido', flat=True)
+                                           .distinct()
+                                           .order_by('sg_partido'))
+        electoral_cache.set(cache_key, partidos, CACHE_TIMES['partidos'])
+        logging.info(f"Partidos carregados para {ano}: {len(partidos)} partidos")
+    
+    return partidos
 
 def get_cached_candidatos(partido, ano):
     """Busca candidatos com cache otimizado"""
@@ -432,6 +447,7 @@ def create_fallback_map_html(candidato_info):
 
 # === VIEW PRINCIPAL OTIMIZADA ===
 
+@cache_page(settings.CACHE_VIEWS['home'], cache='default')
 @vary_on_headers('Accept-Language')
 def home_view(request):
     """View principal com máxima otimização para Core Web Vitals"""
@@ -495,7 +511,7 @@ def home_view(request):
 
 # === APIs AJAX OTIMIZADAS ===
 
-@cache_page(CACHE_TIMES['anos_eleicao'])
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
 @vary_on_headers('Accept-Language')
 def get_anos_ajax(request):
     """API otimizada para buscar anos"""
@@ -504,7 +520,7 @@ def get_anos_ajax(request):
         'status': 'success'
     })
 
-@cache_page(CACHE_TIMES['partidos'])
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
 def get_partidos_ajax(request):
     """API otimizada para buscar partidos com fallback"""
     ano = request.GET.get('ano')
@@ -532,7 +548,7 @@ def get_partidos_ajax(request):
             'status': 'error'
         }, status=500)
 
-@cache_page(CACHE_TIMES['candidatos'])
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
 def get_candidatos_ajax(request):
     """API otimizada para buscar candidatos"""
     partido = request.GET.get('partido')
@@ -789,14 +805,17 @@ def debug_candidato_view(request):
     
     return JsonResponse(debug_info, json_dumps_params={'ensure_ascii': False})
 
+@cache_page(settings.CACHE_VIEWS['projeto'], cache='default')
 def projeto_view(request):
     """View para página do projeto"""
     return render(request, 'projeto.html')
 
+@cache_page(settings.CACHE_VIEWS['apoio'], cache='default')
 def apoio_view(request):
     """View para página de apoio"""
     return render(request, 'apoio.html')
 
+@cache_page(settings.CACHE_VIEWS['blog'], cache='blog')
 def blog_view(request):
     """View para página de blog com estudos eleitorais"""
     import os
@@ -1030,6 +1049,7 @@ def blog_view(request):
     
     return render(request, 'blog.html', context)
 
+@cache_page(settings.CACHE_VIEWS['blog_post'], cache='blog')
 def blog_post_view(request, slug):
     """View para exibir um post individual do blog"""
     import os
