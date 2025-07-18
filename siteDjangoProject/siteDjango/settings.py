@@ -38,7 +38,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mapa_eleitoral.middleware.OptimizedPerformanceMiddleware',  # Middleware customizado
 ]
 
 ROOT_URLCONF = 'siteDjango.urls'
@@ -141,16 +140,16 @@ else:
 # === DATABASE ROUTER ===
 DATABASE_ROUTERS = ['siteDjango.db_router.DatabaseRouter']
 
-# === CONFIGURAÇÕES DE CACHE OTIMIZADAS ===
-# Cache otimizado para performance máxima
+# === CONFIGURAÇÕES DE CACHE SIMPLIFICADAS ===
+# Usar cache em memória por padrão para evitar problemas
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'mapa-eleitoral-cache',
-        'TIMEOUT': 86400 if not DEBUG else 3600,  # 24h em prod, 1h em dev
+        'TIMEOUT': 3600 if not DEBUG else 300,  # 1h em prod, 5min em dev
         'OPTIONS': {
-            'MAX_ENTRIES': 10000,  # Aumentado para mais dados
-            'CULL_FREQUENCY': 2,   # Limpeza mais agressiva
+            'MAX_ENTRIES': 1000,
+            'CULL_FREQUENCY': 3,
         }
     }
 }
@@ -283,15 +282,14 @@ LOGGING = {
 
 # === CONFIGURAÇÕES ESPECÍFICAS PARA MAPA ELEITORAL ===
 CACHE_TIMES = {
-    'geojson_data': 604800,     # 7 dias - dados geográficos não mudam
-    'map_html': 86400,          # 24h - mapas podem durar mais
-    'candidato_info': 86400,    # 24h - info básica estável
-    'anos_eleicao': 604800,     # 7 dias - lista de anos raramente muda
-    'partidos': 86400,          # 24h - partidos por ano estáveis
-    'candidatos': 43200,        # 12h - candidatos por partido
-    'votos_bairro': 21600,      # 6h - dados de votação
-    'complete_data': 21600,     # 6h - dados completos agregados
-    'db_queries': 3600,         # 1h - queries de banco
+    'geojson_data': 86400,      # 24h
+    'map_html': 43200,          # 12h
+    'candidato_info': 21600,    # 6h
+    'anos_eleicao': 86400,      # 24h
+    'partidos': 21600,          # 6h
+    'candidatos': 10800,        # 3h
+    'votos_bairro': 7200,       # 2h
+    'complete_data': 7200,      # 2h
 }
 
 # Reduzir tempos em desenvolvimento

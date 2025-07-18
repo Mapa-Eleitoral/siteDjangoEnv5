@@ -85,10 +85,10 @@ def load_geojson_optimized():
 # === GETTERS SUPER OTIMIZADOS ===
 
 def get_cached_anos():
-    """Busca anos disponíveis com cache otimizado"""
+    """Busca anos disponíveis com cache"""
     return cached_query(
-        lambda: DadoEleitoral.objects.using('default').values_list('ano_eleicao', flat=True).distinct().order_by('-ano_eleicao'),
-        'anos_eleicao_v3',
+        lambda: DadoEleitoral.objects.values_list('ano_eleicao', flat=True).distinct().order_by('-ano_eleicao'),
+        'anos_eleicao_v2',
         CACHE_TIMES['anos_eleicao']
     )
 
@@ -98,11 +98,11 @@ def get_cached_partidos(ano):
         return []
     
     return cached_query(
-        lambda: DadoEleitoral.objects.using('default').filter(ano_eleicao=ano)
+        lambda: DadoEleitoral.objects.filter(ano_eleicao=ano)
                                    .values_list('sg_partido', flat=True)
                                    .distinct()
                                    .order_by('sg_partido'),
-        safe_key('partidos_v3', ano),
+        safe_key('partidos_v2', ano),
         CACHE_TIMES['partidos']
     )
 
@@ -112,7 +112,7 @@ def get_cached_candidatos(partido, ano):
         return []
     
     def query_candidatos():
-        candidatos = (DadoEleitoral.objects.using('default')
+        candidatos = (DadoEleitoral.objects
                      .filter(ano_eleicao=ano, sg_partido=partido)
                      .values_list('nm_urna_candidato', flat=True)
                      .distinct()
@@ -121,15 +121,17 @@ def get_cached_candidatos(partido, ano):
         # Garantir que candidatos existem antes de retornar
         candidatos_list = list(candidatos)
         
-        # Log para debug somente se necessário
+        # Log para debug
         if not candidatos_list:
             logging.warning(f"Nenhum candidato encontrado para {partido} em {ano}")
+        else:
+            logging.info(f"Encontrados {len(candidatos_list)} candidatos para {partido} em {ano}")
         
         return candidatos_list
     
     return cached_query(
         query_candidatos,
-        safe_key('candidatos_v3', partido, ano),
+        safe_key('candidatos_v2', partido, ano),
         CACHE_TIMES['candidatos']
     )
 
@@ -172,7 +174,7 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
     q_variants |= Q(nm_urna_candidato__iexact=candidato_decoded)
     
     # Single optimized query with all variants
-    votos_agregados = (DadoEleitoral.objects.using('default')
+    votos_agregados = (DadoEleitoral.objects
                       .filter(ano_eleicao=ano, sg_partido=partido)
                       .filter(q_variants)
                       .values('nm_bairro', 'nm_urna_candidato')
