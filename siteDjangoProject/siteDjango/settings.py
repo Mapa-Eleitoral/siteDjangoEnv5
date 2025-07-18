@@ -6,7 +6,7 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-fallback-key-only-for-emergency')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
@@ -92,7 +92,7 @@ if config('DATABASE_URL', default=None):
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'blog',
             'USER': config('DB_USER', default='root'),
-            'PASSWORD': config('DB_PASSWORD'),
+            'PASSWORD': config('DB_PASSWORD', default='MHOyVWaRdBsIxajzheoDtesardXtYhmP'),
             'HOST': config('DB_HOST', default='gondola.proxy.rlwy.net'),
             'PORT': config('DB_PORT', default=29860, cast=int),
             'OPTIONS': {
@@ -132,7 +132,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'blog',
             'USER': config('DB_USER', default='root'),
-            'PASSWORD': config('DB_PASSWORD'),
+            'PASSWORD': config('DB_PASSWORD', default='MHOyVWaRdBsIxajzheoDtesardXtYhmP'),
             'HOST': config('DB_HOST', default='gondola.proxy.rlwy.net'),
             'PORT': config('DB_PORT', default=29860, cast=int),
             'OPTIONS': {

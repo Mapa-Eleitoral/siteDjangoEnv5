@@ -58,7 +58,11 @@
       "Bash(rm:*)",
       "Bash(Scripts/python.exe siteDjangoProject/manage.py check)",
       "Bash(Scripts/python.exe manage.py runserver 0.0.0.0:8000)",
-      "Bash(Scripts/python.exe siteDjangoProject/manage.py runserver:*)"
+      "Bash(Scripts/python.exe siteDjangoProject/manage.py runserver:*)",
+      "Bash(Scripts/python.exe siteDjangoProject/manage.py check --deploy)",
+      "Bash(Scripts/python.exe -c \"from decouple import config; print(''SECRET_KEY loaded:'', bool(config(''SECRET_KEY'', default=None)))\")",
+      "Bash(Scripts/python.exe siteDjangoProject/manage.py dbshell --database=default)",
+      "Bash(Scripts/python.exe:*)"
     ],
     "deny": []
   }
