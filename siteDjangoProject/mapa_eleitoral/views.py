@@ -27,6 +27,8 @@ CACHE_TIMES = {
     'votos_bairro': 7200,       # 2h - dados de votação
     'complete_data': 7200,      # 2h - dados completos agregados
     'api_responses': 3600,      # 1h - respostas de API
+    'zonas_secoes': 21600,      # 6h - lista de zonas-seções
+    'votos_zona_secao': 7200,   # 2h - votos por zona-seção específica
 }
 
 # Reduzir tempos em desenvolvimento
@@ -46,6 +48,118 @@ def cached_query(query_func, cache_key, ttl, *args, **kwargs):
         result = list(query_func(*args, **kwargs))
         cache.set(cache_key, result, ttl)
     return result
+
+# === CACHE PARA ZONA-SEÇÃO ===
+def get_cached_zonas_secoes(ano):
+    """Busca zonas-seções disponíveis com cache otimizado"""
+    if not ano:
+        return {}
+    
+    from django.core.cache import caches
+    electoral_cache = caches['electoral_data']
+    
+    cache_key = safe_key('zonas_secoes_v2', ano)
+    zonas_organizadas = electoral_cache.get(cache_key)
+    
+    if zonas_organizadas is None:
+        # OTIMIZAÇÃO: Query com apenas campos necessários e using index
+        zonas_secoes = (DadoEleitoral.objects
+                       .filter(ano_eleicao=ano, zona_secao__isnull=False)
+                       .only('zona_secao')
+                       .values_list('zona_secao', flat=True)
+                       .distinct()
+                       .order_by('zona_secao'))
+        
+        zonas_secoes_list = list(zonas_secoes)
+        
+        # Organizar por zona e seção no cache
+        zonas_organizadas = {}
+        for zona_secao in zonas_secoes_list:
+            if '-' in zona_secao:
+                try:
+                    zona, secao = zona_secao.split('-', 1)  # Usar split limitado
+                    zona = zona.strip()
+                    secao = secao.strip()
+                    
+                    if zona not in zonas_organizadas:
+                        zonas_organizadas[zona] = []
+                    
+                    zonas_organizadas[zona].append({
+                        'secao': secao,
+                        'zona_secao': zona_secao
+                    })
+                except ValueError:
+                    continue
+        
+        # Ordenar seções dentro de cada zona
+        for zona in zonas_organizadas:
+            zonas_organizadas[zona].sort(key=lambda x: int(x['secao']) if x['secao'].isdigit() else x['secao'])
+        
+        electoral_cache.set(cache_key, zonas_organizadas, CACHE_TIMES['zonas_secoes'])  # 6h cache
+        logging.info(f"Zonas-seções carregadas otimizado para {ano}: {len(zonas_organizadas)} zonas")
+    
+    return zonas_organizadas
+
+def get_cached_votos_zona_secao(ano, zona_secao):
+    """Busca votos por zona-seção com cache otimizado"""
+    if not all([ano, zona_secao]):
+        return None
+    
+    from django.core.cache import caches
+    electoral_cache = caches['electoral_data']
+    
+    cache_key = safe_key('votos_zona_secao_v2', ano, zona_secao)
+    resultado = electoral_cache.get(cache_key)
+    
+    if resultado is None:
+        # OTIMIZAÇÃO: Query agregada usando index zona_secao
+        votos_por_candidato = (DadoEleitoral.objects
+                              .filter(ano_eleicao=ano, zona_secao=zona_secao)
+                              .only('nm_urna_candidato', 'sg_partido', 'qt_votos')
+                              .values('nm_urna_candidato', 'sg_partido')
+                              .annotate(total_votos=models.Sum('qt_votos'))
+                              .order_by('-total_votos'))
+        
+        if not votos_por_candidato.exists():
+            electoral_cache.set(cache_key, None, CACHE_TIMES['votos_zona_secao'])  # 2h cache
+            return None
+        
+        votos_list = list(votos_por_candidato)
+        total_votos_zona_secao = sum(item['total_votos'] or 0 for item in votos_list)
+        
+        candidatos_data = []
+        for item in votos_list:
+            votos = int(item['total_votos'] or 0)
+            candidatos_data.append({
+                'candidato': item['nm_urna_candidato'],
+                'partido': item['sg_partido'],
+                'votos': votos,
+                'percentual': round((votos / total_votos_zona_secao) * 100, 1) if total_votos_zona_secao > 0 else 0
+            })
+        
+        # Separar zona e seção para display
+        zona = ""
+        secao = ""
+        if '-' in zona_secao:
+            try:
+                zona, secao = zona_secao.split('-', 1)
+                zona = zona.strip()
+                secao = secao.strip()
+            except ValueError:
+                pass
+        
+        resultado = {
+            'data': candidatos_data,
+            'total_votos': total_votos_zona_secao,
+            'zona_secao': zona_secao,
+            'zona': zona,
+            'secao': secao
+        }
+        
+        electoral_cache.set(cache_key, resultado, CACHE_TIMES['votos_zona_secao'])  # 2h cache
+        logging.info(f"Votos zona-seção carregados otimizado: {zona_secao} - {total_votos_zona_secao} votos")
+    
+    return resultado
 
 def load_geojson_optimized():
     """Carrega GeoJSON com cache otimizado"""
@@ -610,7 +724,7 @@ def clear_cache_view(request):
         
         # Usar pattern matching se disponível
         if hasattr(cache, 'delete_pattern'):
-            patterns = ['anos_*', 'partidos_*', 'candidatos_*', 'complete_data_*', 'geojson_*']
+            patterns = ['anos_*', 'partidos_*', 'candidatos_*', 'complete_data_*', 'geojson_*', 'zonas_secoes_*', 'votos_zona_secao_*']
             for pattern in patterns:
                 keys_cleared += cache.delete_pattern(pattern) or 0
         else:
@@ -1383,8 +1497,9 @@ def generate_map_view(request):
             'error': 'Erro interno do servidor'
         }, status=500)
 
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
 def get_zonas_secoes_ajax(request):
-    """API para buscar zonas-seções disponíveis"""
+    """API otimizada para buscar zonas-seções disponíveis"""
     ano = request.GET.get('ano')
     
     if not ano:
@@ -1393,42 +1508,26 @@ def get_zonas_secoes_ajax(request):
         }, status=400)
     
     try:
-        # Buscar zonas-seções distintas para o ano
-        zonas_secoes = (DadoEleitoral.objects
-                       .filter(ano_eleicao=ano, zona_secao__isnull=False)
-                       .values_list('zona_secao', flat=True)
-                       .distinct()
-                       .order_by('zona_secao'))
+        start_time = time.time()
         
-        zonas_secoes_list = list(zonas_secoes)
+        # Usar cache otimizado
+        zonas_organizadas = get_cached_zonas_secoes(ano)
         
-        # Separar e organizar por zona e seção
-        zonas_organizadas = {}
-        for zona_secao in zonas_secoes_list:
-            if '-' in zona_secao:
-                try:
-                    zona, secao = zona_secao.split('-')
-                    zona = zona.strip()
-                    secao = secao.strip()
-                    
-                    if zona not in zonas_organizadas:
-                        zonas_organizadas[zona] = []
-                    
-                    zonas_organizadas[zona].append({
-                        'secao': secao,
-                        'zona_secao': zona_secao
-                    })
-                except ValueError:
-                    continue
+        # Gerar lista plana para compatibilidade
+        zonas_secoes_list = []
+        for zona, secoes in zonas_organizadas.items():
+            for secao_data in secoes:
+                zonas_secoes_list.append(secao_data['zona_secao'])
         
-        # Ordenar seções dentro de cada zona
-        for zona in zonas_organizadas:
-            zonas_organizadas[zona].sort(key=lambda x: int(x['secao']) if x['secao'].isdigit() else x['secao'])
+        duration = time.time() - start_time
         
         return JsonResponse({
             'success': True,
             'zonas_secoes': zonas_secoes_list,
-            'zonas_organizadas': zonas_organizadas
+            'zonas_organizadas': zonas_organizadas,
+            'total_zonas': len(zonas_organizadas),
+            'total_secoes': len(zonas_secoes_list),
+            'load_time': f"{duration:.3f}s"
         })
         
     except Exception as e:
@@ -1437,8 +1536,9 @@ def get_zonas_secoes_ajax(request):
             'error': 'Erro interno do servidor'
         }, status=500)
 
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
 def get_votos_zona_secao_ajax(request):
-    """API para buscar votos por zona-seção específica"""
+    """API otimizada para buscar votos por zona-seção específica"""
     ano = request.GET.get('ano')
     zona_secao = request.GET.get('zona_secao')
     
@@ -1448,57 +1548,92 @@ def get_votos_zona_secao_ajax(request):
         }, status=400)
     
     try:
-        # Buscar votos por candidato na zona-seção
-        votos_por_candidato = (DadoEleitoral.objects
-                              .filter(ano_eleicao=ano, zona_secao=zona_secao)
-                              .values('nm_urna_candidato', 'sg_partido')
-                              .annotate(total_votos=models.Sum('qt_votos'))
-                              .order_by('-total_votos'))
+        start_time = time.time()
         
-        if not votos_por_candidato:
+        # Usar cache otimizado
+        resultado = get_cached_votos_zona_secao(ano, zona_secao)
+        
+        if not resultado:
             return JsonResponse({
                 'success': True,
                 'data': [],
                 'total_votos': 0,
                 'zona_secao': zona_secao,
+                'zona': zona_secao.split('-')[0].strip() if '-' in zona_secao else '',
+                'secao': zona_secao.split('-')[1].strip() if '-' in zona_secao else '',
                 'message': 'Nenhum candidato encontrado para esta zona-seção'
             })
         
-        votos_list = list(votos_por_candidato)
-        total_votos_zona_secao = sum(item['total_votos'] or 0 for item in votos_list)
+        duration = time.time() - start_time
         
-        resultado = []
-        for item in votos_list:
-            votos = item['total_votos'] or 0
-            resultado.append({
-                'candidato': item['nm_urna_candidato'],
-                'partido': item['sg_partido'],
-                'votos': int(votos),
-                'percentual': round((votos / total_votos_zona_secao) * 100, 1) if total_votos_zona_secao > 0 else 0
-            })
-        
-        # Separar zona e seção para display
-        zona = ""
-        secao = ""
-        if '-' in zona_secao:
-            try:
-                zona, secao = zona_secao.split('-')
-                zona = zona.strip()
-                secao = secao.strip()
-            except ValueError:
-                pass
-        
-        return JsonResponse({
+        # Adicionar métricas de performance
+        response_data = resultado.copy()
+        response_data.update({
             'success': True,
-            'data': resultado,
-            'total_votos': total_votos_zona_secao,
-            'zona_secao': zona_secao,
-            'zona': zona,
-            'secao': secao
+            'load_time': f"{duration:.3f}s",
+            'total_candidatos': len(resultado['data'])
         })
+        
+        return JsonResponse(response_data)
         
     except Exception as e:
         logging.error(f"Erro ao buscar votos por zona-seção: {e}")
+        return JsonResponse({
+            'error': 'Erro interno do servidor'
+        }, status=500)
+
+@cache_page(CACHE_TIMES['api_responses'], cache='api')
+def get_estatisticas_zona_secao_ajax(request):
+    """API otimizada para estatísticas gerais de zona-seção"""
+    ano = request.GET.get('ano')
+    
+    if not ano:
+        return JsonResponse({
+            'error': 'Parâmetro ano é obrigatório'
+        }, status=400)
+    
+    try:
+        start_time = time.time()
+        
+        # Usar cache otimizado para obter zonas-seções
+        zonas_organizadas = get_cached_zonas_secoes(ano)
+        
+        # Calcular estatísticas
+        total_zonas = len(zonas_organizadas)
+        total_secoes = sum(len(secoes) for secoes in zonas_organizadas.values())
+        
+        # Top 5 zonas com mais seções
+        top_zonas = sorted(
+            [(zona, len(secoes)) for zona, secoes in zonas_organizadas.items()],
+            key=lambda x: x[1],
+            reverse=True
+        )[:5]
+        
+        # Distribuição de seções por zona
+        distribuicao = {}
+        for zona, secoes in zonas_organizadas.items():
+            count = len(secoes)
+            if count not in distribuicao:
+                distribuicao[count] = 0
+            distribuicao[count] += 1
+        
+        duration = time.time() - start_time
+        
+        return JsonResponse({
+            'success': True,
+            'ano': ano,
+            'total_zonas': total_zonas,
+            'total_secoes': total_secoes,
+            'media_secoes_por_zona': round(total_secoes / total_zonas, 1) if total_zonas > 0 else 0,
+            'top_zonas_mais_secoes': [
+                {'zona': zona, 'secoes': count} for zona, count in top_zonas
+            ],
+            'distribuicao_secoes': distribuicao,
+            'load_time': f"{duration:.3f}s"
+        })
+        
+    except Exception as e:
+        logging.error(f"Erro ao buscar estatísticas zona-seção: {e}")
         return JsonResponse({
             'error': 'Erro interno do servidor'
         }, status=500)
