@@ -150,57 +150,46 @@ else:
 # === DATABASE ROUTER ===
 DATABASE_ROUTERS = ['siteDjango.db_router.DatabaseRouter']
 
-# === CONFIGURAÇÕES DE CACHE SUPER OTIMIZADAS ===
-# Cache com múltiplas camadas para performance máxima
+# === CONFIGURAÇÕES DE CACHE SIMPLIFICADAS E OTIMIZADAS ===
+# Sistema de cache unificado para melhor performance
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-main',
-        'TIMEOUT': 7200 if not DEBUG else 300,  # 2h em prod, 5min em dev
-        'OPTIONS': {
-            'MAX_ENTRIES': 5000,  # Aumentado para mais dados
-            'CULL_FREQUENCY': 2,  # Limpeza mais agressiva
-        }
-    },
-    # Cache específico para dados eleitorais (longa duração)
-    'electoral_data': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-electoral',
-        'TIMEOUT': 86400 if not DEBUG else 600,  # 24h em prod, 10min em dev
-        'OPTIONS': {
-            'MAX_ENTRIES': 10000,  # Dados eleitorais são muitos
-            'CULL_FREQUENCY': 2,
-        }
-    },
-    # Cache para mapas gerados (duração média)
-    'maps': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-maps',
-        'TIMEOUT': 43200 if not DEBUG else 900,  # 12h em prod, 15min em dev
-        'OPTIONS': {
-            'MAX_ENTRIES': 2000,  # Mapas são grandes
-            'CULL_FREQUENCY': 2,
-        }
-    },
-    # Cache para APIs (duração curta)
-    'api': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-api',
+        'LOCATION': 'mapa-eleitoral-unified',
         'TIMEOUT': 3600 if not DEBUG else 300,  # 1h em prod, 5min em dev
         'OPTIONS': {
-            'MAX_ENTRIES': 3000,
-            'CULL_FREQUENCY': 2,
+            'MAX_ENTRIES': 10000,  # Unificado para melhor gestão
+            'CULL_FREQUENCY': 3,  # Menos agressivo para melhor performance
         }
     },
-    # Cache para blog (duração longa)
+    # Cache secundário apenas para dados críticos de longa duração
+    'electoral_data': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-critical',
+        'TIMEOUT': 86400 if not DEBUG else 600,  # 24h em prod, 10min em dev
+        'OPTIONS': {
+            'MAX_ENTRIES': 5000,  # Reduzido para menos overhead
+            'CULL_FREQUENCY': 4,  # Menos frequente para dados críticos
+        }
+    },
+    # Cache aliases para compatibilidade com código existente
+    'maps': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'mapa-eleitoral-unified',
+        'TIMEOUT': 3600 if not DEBUG else 300,
+        'OPTIONS': {'MAX_ENTRIES': 10000, 'CULL_FREQUENCY': 3}
+    },
+    'api': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 
+        'LOCATION': 'mapa-eleitoral-unified',
+        'TIMEOUT': 3600 if not DEBUG else 300,
+        'OPTIONS': {'MAX_ENTRIES': 10000, 'CULL_FREQUENCY': 3}
+    },
     'blog': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'mapa-eleitoral-blog',
-        'TIMEOUT': 86400 if not DEBUG else 1800,  # 24h em prod, 30min em dev
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000,
-            'CULL_FREQUENCY': 3,
-        }
+        'LOCATION': 'mapa-eleitoral-unified',
+        'TIMEOUT': 3600 if not DEBUG else 300,
+        'OPTIONS': {'MAX_ENTRIES': 10000, 'CULL_FREQUENCY': 3}
     }
 }
 

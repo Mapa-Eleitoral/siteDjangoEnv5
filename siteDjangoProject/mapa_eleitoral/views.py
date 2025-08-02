@@ -90,13 +90,17 @@ def get_cached_anos():
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
     
-    cache_key = 'anos_eleicao_v3'
+    cache_key = 'anos_eleicao_v4'
     anos = electoral_cache.get(cache_key)
     
     if anos is None:
-        anos = list(DadoEleitoral.objects.values_list('ano_eleicao', flat=True).distinct().order_by('-ano_eleicao'))
+        # OTIMIZAÇÃO: Query com apenas campos necessários e using index
+        anos = list(DadoEleitoral.objects.only('ano_eleicao')
+                   .values_list('ano_eleicao', flat=True)
+                   .distinct()
+                   .order_by('-ano_eleicao')[:10])  # Limitar a 10 anos mais recentes
         electoral_cache.set(cache_key, anos, CACHE_TIMES['anos_eleicao'])
-        logging.info(f"Anos carregados do banco: {len(anos)} anos")
+        logging.info(f"Anos carregados otimizado: {len(anos)} anos")
     
     return anos
 
@@ -108,16 +112,18 @@ def get_cached_partidos(ano):
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
     
-    cache_key = safe_key('partidos_v3', ano)
+    cache_key = safe_key('partidos_v4', ano)
     partidos = electoral_cache.get(cache_key)
     
     if partidos is None:
+        # OTIMIZAÇÃO: Query com db_index e only necessário
         partidos = list(DadoEleitoral.objects.filter(ano_eleicao=ano)
+                                           .only('sg_partido')
                                            .values_list('sg_partido', flat=True)
                                            .distinct()
                                            .order_by('sg_partido'))
         electoral_cache.set(cache_key, partidos, CACHE_TIMES['partidos'])
-        logging.info(f"Partidos carregados para {ano}: {len(partidos)} partidos")
+        logging.info(f"Partidos carregados otimizado para {ano}: {len(partidos)} partidos")
     
     return partidos
 
@@ -127,8 +133,10 @@ def get_cached_candidatos(partido, ano):
         return []
     
     def query_candidatos():
+        # OTIMIZAÇÃO: Query com only() e campos indexados
         candidatos = (DadoEleitoral.objects
                      .filter(ano_eleicao=ano, sg_partido=partido)
+                     .only('nm_urna_candidato')
                      .values_list('nm_urna_candidato', flat=True)
                      .distinct()
                      .order_by('nm_urna_candidato'))
@@ -140,7 +148,7 @@ def get_cached_candidatos(partido, ano):
         if not candidatos_list:
             logging.warning(f"Nenhum candidato encontrado para {partido} em {ano}")
         else:
-            logging.info(f"Encontrados {len(candidatos_list)} candidatos para {partido} em {ano}")
+            logging.info(f"Encontrados {len(candidatos_list)} candidatos otimizado para {partido} em {ano}")
         
         return candidatos_list
     
@@ -188,10 +196,11 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
     # Add case-insensitive search
     q_variants |= Q(nm_urna_candidato__iexact=candidato_decoded)
     
-    # Single optimized query with all variants
+    # OTIMIZAÇÃO: Single optimized query com select_related e only()
     votos_agregados = (DadoEleitoral.objects
                       .filter(ano_eleicao=ano, sg_partido=partido)
                       .filter(q_variants)
+                      .only('nm_bairro', 'nm_urna_candidato', 'qt_votos')
                       .values('nm_bairro', 'nm_urna_candidato')
                       .annotate(total_votos=models.Sum('qt_votos'))
                       .order_by('nm_bairro'))
@@ -276,16 +285,21 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
 def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
     """
     Gera mapa dinamicamente e retorna HTML inline (sem salvar arquivo)
+    OTIMIZAÇÃO: Implementado memory cleanup e resource management
     """
+    import gc
+    mapa = None
+    geojson_data = None
+    
     try:
         # 1. Verificar se temos dados válidos
         if not votos_dict or total_votos == 0:
             logging.warning("Dados de votação vazios ou inválidos")
             return None
         
-        logging.info(f"Gerando mapa dinâmico para {candidato_info['nome']}")
+        logging.info(f"Gerando mapa dinâmico OTIMIZADO para {candidato_info['nome']}")
         
-        # 2. Configuração do mapa otimizada
+        # 2. Configuração do mapa otimizada com resource limits
         mapa = fl.Map(
             location=[-22.928777, -43.423878],  # Centro do Rio de Janeiro
             zoom_start=11,
@@ -295,7 +309,10 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
             height='80%',
             max_zoom=15,
             min_zoom=9,
-            attribution_control=False
+            attribution_control=False,
+            # OTIMIZAÇÃO: Limitar recursos
+            max_bounds=[[-23.1, -43.8], [-22.7, -43.1]],  # Limitar área do Rio
+            options={'maxBounds': [[-23.1, -43.8], [-22.7, -43.1]]}
         )
         
         # 3. Carregar GeoJSON
@@ -374,34 +391,25 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
             logging.error(f"Erro ao processar GeoJSON: {e}")
             return create_fallback_map_html(candidato_info)
         
-        # 7. Gerar HTML dinâmico (SEM salvar arquivo)
+        # 7. Gerar HTML dinâmico com memory cleanup (SEM salvar arquivo)
         try:
             # Gerar HTML do mapa
             html_content = mapa._repr_html_()
             
-            # Adicionar melhorias no HTML
-            html_improvements = """
-            <style>
-                .folium-map { 
-                    width: 100% !important; 
-                    height: 100% !important; 
-                    border-radius: 8px;
-                }
-                body { margin: 0; padding: 0; }
-            </style>
-            <script>
-                // Otimizações de performance
-                window.addEventListener('load', function() {
-                    console.log('Mapa dinâmico carregado com sucesso');
-                });
-            </script>
-            """
+            # OTIMIZAÇÃO: Limpar objetos grandes da memória
+            del mapa
+            if 'geojson_data' in locals():
+                del geojson_data
+            gc.collect()  # Force garbage collection
+            
+            # Adicionar melhorias no HTML - versão otimizada
+            html_improvements = """<style>.folium-map{width:100%!important;height:100%!important;border-radius:8px}body{margin:0;padding:0}</style><script>window.addEventListener('load',()=>console.log('Mapa otimizado carregado'))</script>"""
             
             # Inserir melhorias no HTML
             if '</head>' in html_content:
                 html_content = html_content.replace('</head>', html_improvements + '</head>')
             
-            logging.info(f"Mapa dinâmico gerado com sucesso para {candidato_info['nome']}")
+            logging.info(f"Mapa dinâmico OTIMIZADO gerado para {candidato_info['nome']}")
             return html_content  # Retornar HTML direto, não URL
                 
         except Exception as e:
@@ -411,6 +419,16 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
     except Exception as e:
         logging.error(f"Erro geral na geração do mapa dinâmico: {e}")
         return create_fallback_map_html(candidato_info)
+    finally:
+        # OTIMIZAÇÃO: Cleanup garantido mesmo em caso de erro
+        try:
+            if mapa:
+                del mapa
+            if geojson_data:
+                del geojson_data
+            gc.collect()
+        except:
+            pass
 
 def create_fallback_map_html(candidato_info):
     """

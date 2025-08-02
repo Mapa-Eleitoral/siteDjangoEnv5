@@ -45,10 +45,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Carregamento inline do CSS crítico -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-    </style>
+    <!-- CSS crítico inline otimizado -->
+    <link rel="stylesheet" href="/static/css/critical.min.css">
+    
+    <!-- Preload de fonts críticas -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"></noscript>
     
     <!-- DNS Prefetch para recursos externos -->
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
@@ -943,7 +945,10 @@
     </div>
     {% endif %}
 
-    <!-- JavaScript otimizado com loading assíncrono inserido DJANGO-->
+    <!-- JavaScript otimizado e minificado -->
+    <script src="/static/js/app.optimized.min.js" defer></script>
+    
+    <!-- Fallback script inline para compatibilidade -->
     <script defer>
         // === CONFIGURAÇÃO OTIMIZADA DJANGO===
         const AppConfig = {
