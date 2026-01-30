@@ -26,3 +26,4 @@ markdown>=3.4.0
 # YAML processing para frontmatter dos artigos
 PyYAML>=6.0.0
 python-frontmatter>=1.0.0
+cryptography>=41.0.0
