@@ -1,2 +1,5 @@
 [phases.setup]
 nixPkgs = ["python3", "gcc", "pkg-config", "mariadb-connector-c"]
+
+[variables]
+PKG_CONFIG_PATH = "/root/.nix-profile/lib/pkgconfig:/root/.nix-profile/share/pkgconfig"
