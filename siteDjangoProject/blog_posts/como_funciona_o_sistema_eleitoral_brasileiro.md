@@ -20,17 +20,17 @@ O sistema eleitoral brasileiro é um dos mais complexos e abrangentes do mundo, 
 
 ### Base Legal
 O sistema eleitoral brasileiro está fundamentado em:
-- **Constituição Federal de 1988**: Estabelece os princípios gerais
-- **Código Eleitoral (Lei 4.737/65)**: Regula os procedimentos eleitorais
-- **Lei das Eleições (Lei 9.504/97)**: Define regras específicas para campanhas
-- **Lei dos Partidos Políticos (Lei 9.096/95)**: Regula a organização partidária
+- **Constituição Federal de 1988**: Estabelece os princípios gerais.
+- **Código Eleitoral (Lei 4.737/65)**: Regula os procedimentos eleitorais.
+- **Lei das Eleições (Lei 9.504/97)**: Define regras específicas para campanhas.
+- **Lei dos Partidos Políticos (Lei 9.096/95)**: Regula a organização partidária.
 
 ### Princípios Fundamentais
-- **Sufrágio universal**: Direito de voto para todos os cidadãos qualificados
-- **Voto direto**: Escolha direta dos representantes pelos eleitores
-- **Voto secreto**: Garantia de privacidade na escolha
-- **Periodicidade**: Eleições regulares a cada período determinado
-- **Igualdade de oportunidades**: Condições equitativas para todos os candidatos
+  **Sufrágio universal**: Direito de voto para todos os cidadãos qualificados.
+- **Voto direto**: Escolha direta dos representantes pelos eleitores.
+- **Voto secreto**: Garantia de privacidade na escolha.
+- **Periodicidade**: Eleições regulares a cada período determinado.
+- **Igualdade de oportunidades**: Condições equitativas para todos os candidatos.
 
 ## Estrutura do Sistema Eleitoral
 

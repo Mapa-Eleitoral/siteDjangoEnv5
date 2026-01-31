@@ -1637,4 +1637,50 @@ def get_estatisticas_zona_secao_ajax(request):
         return JsonResponse({
             'error': 'Erro interno do servidor'
         }, status=500)
-            
+
+
+# === VIEW PARA SERVIR GEOJSON OTIMIZADO ===
+@cache_page(CACHE_TIMES['geojson_data'])
+def serve_geojson(request, filename='Limite_Bairro.geojson'):
+    """
+    Serve arquivos GeoJSON com cache de longa duração e compressão
+    O middleware GZIP irá comprimir automaticamente
+    """
+    try:
+        # Validar nome do arquivo para segurança
+        allowed_files = [
+            'Limite_Bairro.geojson',
+            'limiteBairroBeloHorizonte.geojson',
+            'limiteBairroCuritiba.geojson',
+            'limiteBairroFortaleza.geojson',
+            'limiteBairroSalvador.geojson'
+        ]
+
+        if filename not in allowed_files:
+            return JsonResponse({'error': 'Arquivo não permitido'}, status=403)
+
+        # Tentar usar arquivo simplificado se existir
+        simplified_filename = filename.replace('.geojson', '_simplified.geojson')
+        geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', simplified_filename)
+
+        if not os.path.exists(geojson_path):
+            # Fallback para arquivo original
+            geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', filename)
+
+        if not os.path.exists(geojson_path):
+            return JsonResponse({'error': 'Arquivo não encontrado'}, status=404)
+
+        # Carregar e retornar GeoJSON
+        with open(geojson_path, 'r', encoding='utf-8') as f:
+            geojson_data = json.load(f)
+
+        response = JsonResponse(geojson_data, safe=False)
+        # Headers para cache no navegador (1 semana)
+        response['Cache-Control'] = 'public, max-age=604800, immutable'
+        response['Vary'] = 'Accept-Encoding'
+
+        return response
+
+    except Exception as e:
+        logging.error(f"Erro ao servir GeoJSON {filename}: {e}")
+        return JsonResponse({'error': 'Erro ao carregar dados geográficos'}, status=500)

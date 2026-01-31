@@ -36,10 +36,37 @@
     <meta property="article:author" content="Filipe Dias">
     <meta property="article:section" content="Política">
     <meta property="article:tag" content="eleições,rio de janeiro,dados eleitorais,mapa,votação">
-    
+
     <!-- Meta tags para Facebook -->
     <meta property="fb:app_id" content="mapa-eleitoral-app">
     <meta property="article:published_time" content="2025-07-03T22:51:25Z">
+
+    <!-- Structured Data - JSON-LD para SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Mapa Eleitoral",
+        "description": "Plataforma de visualização de dados eleitorais do Rio de Janeiro",
+        "url": "https://mapaeleitoral.com.br",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Mapa Eleitoral",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://mapaeleitoral.com.br/static/EduardoPaesViz.png"
+            }
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://mapaeleitoral.com.br/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "sameAs": [
+            "https://github.com/diasfilipe/mapa-eleitoral"
+        ]
+    }
+    </script>
 
     <!-- Otimização crítica de fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -726,6 +753,150 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* Popup de doação */
+        .donation-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+        }
+
+        .donation-overlay.is-visible {
+            display: flex;
+        }
+
+        .donation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            max-width: 520px;
+            width: 100%;
+            padding: 1.5rem;
+            position: relative;
+            animation: donation-fade 0.2s ease-out;
+        }
+
+        @keyframes donation-fade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .donation-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .donation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.75rem;
+            background: rgba(18, 63, 50, 0.1);
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .donation-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0 0 0.25rem 0;
+        }
+
+        .donation-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .donation-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .donation-pix {
+            margin-top: 1rem;
+            padding: 0.9rem;
+            border-radius: 0.75rem;
+            border: 1px dashed var(--border);
+            background: #f1f5f9;
+        }
+
+        .donation-pix-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--secondary);
+            margin-bottom: 0.35rem;
+        }
+
+        .donation-pix-key {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .donation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.1rem;
+        }
+
+        .donation-btn {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 0.6rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .donation-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .donation-copy-status {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 640px) {
+            .donation-card {
+                padding: 1.25rem;
+            }
+            .donation-actions {
+                flex-direction: column;
+            }
+            .donation-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -906,6 +1077,35 @@
         </div>
         
     </main>
+
+    <!-- Popup de doação -->
+    <div class="donation-overlay" id="donationOverlay" role="dialog" aria-modal="true" aria-labelledby="donationTitle" aria-describedby="donationDesc">
+        <div class="donation-card" role="document">
+            <button class="donation-close" type="button" aria-label="Fechar aviso de doação">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="donation-header">
+                <span class="donation-icon" aria-hidden="true">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </span>
+                <div>
+                    <h2 class="donation-title" id="donationTitle">Apoie o Mapa Eleitoral</h2>
+                    <p class="donation-text" id="donationDesc">
+                        Sua ajuda é essencial para o projeto não acabar e ainda ser ampliado a outros municípios.
+                    </p>
+                </div>
+            </div>
+            <div class="donation-pix">
+                <div class="donation-pix-label">Chave Pix</div>
+                <div class="donation-pix-key" id="donationPixKey">pix@mapaeleitoral.com.br</div>
+            </div>
+            <div class="donation-actions">
+                <button type="button" class="donation-btn primary" id="donationCopyBtn">Copiar chave Pix</button>
+                <button type="button" class="donation-btn" id="donationCloseBtn">Agora não</button>
+            </div>
+            <span class="donation-copy-status" id="donationCopyStatus" aria-live="polite"></span>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1723,6 +1923,98 @@
                     });
             });
         }
+    </script>
+
+    <script>
+        (function() {
+            const overlay = document.getElementById('donationOverlay');
+            if (!overlay) return;
+
+            const storageKey = 'mapaeleitoral_donation_popup_dismissed';
+            const showAfterMs = 2500;
+
+            const openPopup = () => overlay.classList.add('is-visible');
+            const closePopup = () => {
+                overlay.classList.remove('is-visible');
+                try {
+                    const today = new Date().toISOString().slice(0, 10);
+                    localStorage.setItem(storageKey, today);
+                } catch (error) {
+                    // Sem persistência se storage não estiver disponível
+                }
+            };
+
+            const dismissedToday = () => {
+                try {
+                    const value = localStorage.getItem(storageKey);
+                    const today = new Date().toISOString().slice(0, 10);
+                    return value === today;
+                } catch (error) {
+                    return false;
+                }
+            };
+
+            if (!dismissedToday()) {
+                window.setTimeout(openPopup, showAfterMs);
+            }
+
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    closePopup();
+                }
+            });
+
+            const closeBtn = document.getElementById('donationCloseBtn');
+            const iconCloseBtn = overlay.querySelector('.donation-close');
+            closeBtn && closeBtn.addEventListener('click', closePopup);
+            iconCloseBtn && iconCloseBtn.addEventListener('click', closePopup);
+
+            const copyBtn = document.getElementById('donationCopyBtn');
+            const copyStatus = document.getElementById('donationCopyStatus');
+            const pixKey = (document.getElementById('donationPixKey')?.textContent || '').trim();
+
+            const updateStatus = (message) => {
+                if (copyStatus) {
+                    copyStatus.textContent = message;
+                }
+            };
+
+            const copyFallback = () => {
+                const temp = document.createElement('textarea');
+                temp.value = pixKey;
+                temp.setAttribute('readonly', '');
+                temp.style.position = 'absolute';
+                temp.style.left = '-9999px';
+                document.body.appendChild(temp);
+                temp.select();
+                const ok = document.execCommand('copy');
+                document.body.removeChild(temp);
+                return ok;
+            };
+
+            copyBtn && copyBtn.addEventListener('click', async () => {
+                if (!pixKey) return;
+                let copied = false;
+
+                try {
+                    await navigator.clipboard.writeText(pixKey);
+                    copied = true;
+                } catch (error) {
+                    copied = copyFallback();
+                }
+
+                if (copied) {
+                    copyBtn.textContent = 'Chave copiada';
+                    updateStatus('Chave Pix copiada.');
+                    window.setTimeout(() => {
+                        copyBtn.textContent = 'Copiar chave Pix';
+                        updateStatus('');
+                    }, 2000);
+                } else {
+                    updateStatus('Não foi possível copiar. Use o texto acima.');
+                }
+            });
+        })();
     </script>
 
     <!-- Schema.org para SEO -->

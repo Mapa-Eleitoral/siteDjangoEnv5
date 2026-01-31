@@ -62,7 +62,9 @@
       "Bash(Scripts/python.exe siteDjangoProject/manage.py check --deploy)",
       "Bash(Scripts/python.exe -c \"from decouple import config; print(''SECRET_KEY loaded:'', bool(config(''SECRET_KEY'', default=None)))\")",
       "Bash(Scripts/python.exe siteDjangoProject/manage.py dbshell --database=default)",
-      "Bash(Scripts/python.exe:*)"
+      "Bash(Scripts/python.exe:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(./Scripts/python.exe:*)"
     ],
     "deny": []
   }

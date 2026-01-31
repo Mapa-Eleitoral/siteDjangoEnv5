@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # Para sitemap.xml
     'mapa_eleitoral',
 ]
 
@@ -39,16 +40,23 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.gzip.GZipMiddleware',  # Compressão GZIP
-    'django.middleware.cache.UpdateCacheMiddleware',  # Cache de página completa
+]
+
+# Cache de página completa apenas em produção
+if not DEBUG:
+    MIDDLEWARE.insert(3, 'django.middleware.cache.UpdateCacheMiddleware')
+    MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
+
+# Middleware padrão
+MIDDLEWARE.extend([
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Cache de página completa
     'mapa_eleitoral.middleware.OptimizedPerformanceMiddleware',  # Middleware customizado
-]
+])
 
 ROOT_URLCONF = 'siteDjango.urls'
 
@@ -330,7 +338,7 @@ CACHE_TIMES = {
     'map_html': 86400,          # 24h - mapas gerados
     'candidato_info': 43200,    # 12h - info básica
     'partidos': 43200,          # 12h - partidos por ano
-    'blog_articles': 43200,     # 12h - artigos do blog
+    'blog_articles': 5,         # 5 segundos - artigos do blog (desenvolvimento)
     
     # Dados que mudam regularmente - cache curto
     'candidatos': 21600,        # 6h - candidatos por partido
@@ -350,13 +358,13 @@ if DEBUG:
 
 # === CONFIGURAÇÕES DE CACHE DE PÁGINA COMPLETA ===
 CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 1800 if not DEBUG else 60  # 30min prod, 1min dev
+CACHE_MIDDLEWARE_SECONDS = 1800 if not DEBUG else 5   # 30min prod, 5 seg dev
 CACHE_MIDDLEWARE_KEY_PREFIX = 'mapaeleitoral_page'
 
 # === CONFIGURAÇÕES DE CACHE POR VIEW ===
 CACHE_VIEWS = {
     'home': 600,        # 10 minutos
-    'blog': 3600,       # 1 hora
+    'blog': 5,          # 5 segundos (ambiente de desenvolvimento em 5 segundos. Produção 1 hora)
     'blog_post': 7200,  # 2 horas
     'projeto': 86400,   # 24 horas
     'apoio': 86400,     # 24 horas

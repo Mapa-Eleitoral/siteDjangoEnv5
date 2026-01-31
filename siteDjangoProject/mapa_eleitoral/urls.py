@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .feeds import LatestBlogPostsFeed
 
 app_name = 'mapa_eleitoral'
 
@@ -10,6 +11,7 @@ urlpatterns = [
     path('blog/<slug:slug>/', views.blog_post_view, name='blog_post'),
     path('blog-analytics/', views.blog_analytics_view, name='blog_analytics'),
     path('apoio/', views.apoio_view, name='apoio'),
+    path('rss.xml', LatestBlogPostsFeed(), name='rss_feed'),
     path('get_candidatos_ajax/', views.get_candidatos_ajax, name='get_candidatos_ajax'),
     path('get_partidos_ajax/', views.get_partidos_ajax, name='get_partidos_ajax'),
     path('get_anos_ajax/', views.get_anos_ajax, name='get_anos_ajax'),
@@ -21,5 +23,6 @@ urlpatterns = [
     path('generate-map/', views.generate_map_view, name='generate_map'),
     path('get_zonas_secoes_ajax/', views.get_zonas_secoes_ajax, name='get_zonas_secoes_ajax'),
     path('get_votos_zona_secao_ajax/', views.get_votos_zona_secao_ajax, name='get_votos_zona_secao_ajax'),
+    path('geojson/<str:filename>', views.serve_geojson, name='serve_geojson'),
 ]
 
