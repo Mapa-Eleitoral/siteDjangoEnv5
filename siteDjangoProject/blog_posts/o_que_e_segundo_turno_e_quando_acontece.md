@@ -7,14 +7,21 @@ date: "2024-09-25"
 canonical: "https://mapaeleitoral.com.br/blog/o_que_e_segundo_turno_e_quando_acontece/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1640655367482-fa9797fe1258?q=80&w=1552&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Segundo Turno") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Anita Monteiro](https://unsplash.com/pt-br/@anitamonteiro) no [Unsplash](https://unsplash.com)</small>
-
-# O que é Segundo Turno e Quando Acontece: Guia Completo do Sistema Eleitoral
+<figure>
+  <img src="https://images.unsplash.com/photo-1640655367482-fa9797fe1258?q=80&w=1552&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Urna eletrônica e voto no segundo turno">
+  <figcaption>Foto por [Anita Monteiro](https://unsplash.com/pt-br/@anitamonteiro) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 O segundo turno é uma das características mais importantes do sistema eleitoral brasileiro, garantindo que os ocupantes dos principais cargos executivos sejam eleitos com **legitimidade democrática ampla**.
 
 Este mecanismo assegura que vencem apenas candidatos que obtenham apoio da **maioria absoluta** dos eleitores, fortalecendo a representatividade e a governabilidade.
+
+## Resumo em 5 pontos
+- O segundo turno ocorre quando ninguém supera 50% dos votos válidos no primeiro turno.
+- Disputam apenas os dois candidatos mais votados na primeira etapa.
+- Aplica-se a presidente, governador e prefeito em cidades com mais de 200 mil eleitores.
+- Acontece no último domingo de outubro, três semanas após o primeiro turno.
+- O objetivo é garantir legitimidade com maioria absoluta.
 
 ## O que é Segundo Turno
 
@@ -228,6 +235,17 @@ A compreensão de quando e como funciona o segundo turno é essencial para:
 - **Cidadãos**: Acompanhar a dinâmica eleitoral
 
 O sistema tem se mostrado **estável e eficaz** ao longo de mais de três décadas, contribuindo para a consolidação da democracia brasileira.
+
+## Perguntas frequentes
+
+### Quando acontece o segundo turno?
+O segundo turno ocorre no último domingo de outubro, três semanas após o primeiro turno em anos eleitorais.
+
+### Quais cargos têm segundo turno?
+Presidente da República, governadores e prefeitos de municípios com mais de 200 mil eleitores.
+
+### Como se calcula a maioria absoluta?
+É mais de 50% dos votos válidos: (total de votos válidos ÷ 2) + 1.
 
 ## Artigos Relacionados
 - [Diferença entre Voto Majoritário e Proporcional](/blog/diferenca_entre_voto_majoritario_e_proporcional/)

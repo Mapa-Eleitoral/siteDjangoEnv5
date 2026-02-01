@@ -7,14 +7,21 @@ date: "2024-07-25"
 canonical: "https://mapaeleitoral.com.br/blog/o-que-e-coligacao-partidaria/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1581592717535-7f3e001bfa7f?q=80&w=704&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Coligação Partidária") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Europeana](https://unsplash.com/pt-br/@europeana) no [Unsplash](https://unsplash.com)</small>
-
-# O que é Coligação Partidária: Entendendo as Alianças Eleitorais no Brasil
+<figure>
+  <img src="https://images.unsplash.com/photo-1581592717535-7f3e001bfa7f?q=80&w=704&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Bandeiras e símbolos políticos em contexto eleitoral">
+  <figcaption>Foto por [Europeana](https://unsplash.com/pt-br/@europeana) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 ## Introdução
 
 As **coligações partidárias** são uma das características mais marcantes do sistema eleitoral brasileiro, permitindo que partidos políticos se unam temporariamente para disputar eleições com maior força e representatividade. Compreender como funcionam essas alianças é fundamental para entender a dinâmica política nacional e como se formam os governos no Brasil.
+
+## Resumo em 5 pontos
+- Coligação partidária é uma aliança temporária entre partidos para uma eleição específica.
+- A união busca somar forças eleitorais, tempo de mídia e recursos de campanha.
+- Pode ocorrer em diferentes níveis (nacional, estadual e municipal).
+- Exige convenções partidárias e registro na Justiça Eleitoral.
+- Mudanças recentes reduziram coligações proporcionais e estimularam federações.
 
 ## Definição e Conceito
 
@@ -306,7 +313,7 @@ Nas eleições proporcionais, a coligação:
 ### Lições Comparadas
 - **Sistemas eleitorais**: Influência no formato das alianças
 - **Cultura política**: Impacto na estabilidade
-- **Regras institucionais**: Incentivos para cooperao
+- **Regras institucionais**: Incentivos para cooperação
 - **Governabilidade**: Relação com efetividade governamental
 
 ## Conclusão
@@ -316,6 +323,17 @@ As coligações partidárias representam um elemento central do sistema polític
 A evolução das coligações para as federações partidárias marca uma tentativa de equilibrar a necessidade de alianças eleitorais com a busca por maior estabilidade e coerência política. Esse processo de mudança reflete o amadurecimento do sistema democrático brasileiro e a busca por soluções que combinem representatividade, governabilidade e clareza para os eleitores.
 
 O futuro das alianças partidárias no Brasil dependerá da capacidade dos atores políticos de construir projetos consistentes e duradouros, que vão além dos interesses eleitorais imediatos e contribuam para o fortalecimento da democracia e da representação política no país.
+
+## Perguntas frequentes
+
+### Coligação é a mesma coisa que federação partidária?
+Não. Coligação é uma aliança temporária para uma eleição. Federação é uma união permanente de partidos com atuação conjunta por pelo menos quatro anos.
+
+### As coligações ainda existem nas eleições proporcionais?
+Não. As coligações proporcionais foram proibidas, permanecendo apenas nas eleições majoritárias.
+
+### O que é necessário para formar uma coligação?
+Os partidos precisam aprovar a aliança em convenção e registrar a coligação na Justiça Eleitoral dentro do prazo legal.
 
 ## Artigos Relacionados
 - [Diferença entre Voto Majoritário e Proporcional](/blog/diferenca_entre_voto_majoritario_e_proporcional/)

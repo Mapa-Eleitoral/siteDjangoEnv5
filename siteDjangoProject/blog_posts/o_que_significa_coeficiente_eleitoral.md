@@ -7,14 +7,21 @@ date: "2024-07-20"
 canonical: "https://mapaeleitoral.com.br/blog/o_que_significa_coeficiente_eleitoral/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1750776418412-1548a2b3f4b9?q=80&w=725&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Coeficiente Eleitoral") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Ahmad Saad](https://unsplash.com/pt-br/@sada30) no [Unsplash](https://unsplash.com)</small>
-
-# O que Significa Coeficiente Eleitoral: Entendendo o Cálculo das Eleições Proporcionais
+<figure>
+  <img src="https://images.unsplash.com/photo-1750776418412-1548a2b3f4b9?q=80&w=725&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Cálculo de votos e cadeiras em eleições proporcionais">
+  <figcaption>Foto por [Ahmad Saad](https://unsplash.com/pt-br/@sada30) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 O coeficiente eleitoral é um conceito fundamental para compreender como funcionam as **eleições proporcionais** no Brasil. É através deste cálculo que se determina quantos votos são necessários para que um partido ou federação partidária conquiste uma cadeira na Câmara dos Deputados, Assembleias Legislativas ou Câmaras Municipais.
 
 Embora seja um conceito técnico, sua compreensão é essencial para entender como cada voto contribui para a **representação política** no país.
+
+## Resumo em 5 pontos
+- O coeficiente eleitoral é o total de votos válidos dividido pelo número de vagas.
+- Aplica-se às eleições proporcionais para deputados e vereadores.
+- Define a quantidade inicial de cadeiras por partido ou federação.
+- As sobras são distribuídas pelo método da maior média.
+- O valor varia conforme participação eleitoral e tamanho da circunscrição.
 
 ## Definição e Conceito
 
@@ -272,6 +279,17 @@ O coeficiente eleitoral é um elemento central do sistema proporcional brasileir
 Compreender o coeficiente eleitoral é fundamental para entender como funciona a **representação proporcional** no Brasil e como cada voto contribui para a composição dos órgãos legislativos do país.
 
 O sistema, embora complexo, busca equilibrar a **representatividade democrática** com a **governabilidade**, permitindo que diferentes correntes políticas tenham espaço no Legislativo proporcionalmente à sua força eleitoral.
+
+## Perguntas frequentes
+
+### Em quais eleições o coeficiente eleitoral se aplica?
+Ele se aplica às eleições proporcionais, como deputados federais, estaduais, distritais e vereadores.
+
+### Como o coeficiente eleitoral é calculado?
+É o total de votos válidos dividido pelo número de vagas em disputa na circunscrição.
+
+### O que acontece com as sobras de vagas?
+As cadeiras restantes são distribuídas pelo método da maior média entre os partidos.
 
 ## Artigos Relacionados
 - [Como São Calculadas as Cadeiras na Câmara dos Deputados](/blog/como_sao_calculadas_as_cadeiras_na_camara_dos_deputados/)

@@ -7,14 +7,21 @@ date: "2024-08-30"
 canonical: "https://mapaeleitoral.com.br/blog/diferenca_entre_voto_majoritario_e_proporcional/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1625426078245-6911839409dd?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Brasília, DF, Brasil - 2021") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Ramon Buçard](https://unsplash.com/pt-br/@ramonbucard) no [Unsplash](https://unsplash.com)</small>
-
-# Diferença entre Voto Majoritário e Proporcional: Guia dos Sistemas Eleitorais
+<figure>
+  <img src="https://images.unsplash.com/photo-1625426078245-6911839409dd?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Congresso Nacional em Brasília, sede do Legislativo">
+  <figcaption>Foto por [Ramon Buçard](https://unsplash.com/pt-br/@ramonbucard) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 O Brasil adota **dois sistemas eleitorais distintos** para a escolha de seus representantes: o sistema majoritário e o sistema proporcional.
 
 Compreender as diferenças entre esses sistemas é fundamental para entender como funcionam as eleições brasileiras e como cada voto influencia o resultado final. Cada sistema tem características próprias que afetam diretamente a **representatividade política** e a **governabilidade** do país.
+
+## Resumo em 5 pontos
+- O Brasil utiliza sistemas majoritário e proporcional em eleições diferentes.
+- O majoritário elege um único vencedor, com maioria simples ou absoluta.
+- O proporcional distribui vagas conforme votos de partidos e candidatos.
+- O quociente eleitoral define a quantidade inicial de cadeiras por partido.
+- Há impactos distintos em governabilidade, representação e pluralidade.
 
 ## Sistema Majoritário
 
@@ -243,6 +250,17 @@ Compreender essas diferenças é essencial para:
 - **Cidadãos**: Participar do debate democrático
 
 O sistema eleitoral brasileiro, com suas particularidades, reflete a busca por um equilíbrio entre **representatividade** e **governabilidade** em uma democracia complexa e diversa.
+
+## Perguntas frequentes
+
+### Quais cargos usam o sistema majoritário?
+Presidente, governador, senador e prefeito usam o sistema majoritário, com maioria simples ou absoluta conforme o cargo e o tamanho do município.
+
+### Quais cargos usam o sistema proporcional?
+Deputados federais, estaduais, distritais e vereadores são eleitos pelo sistema proporcional.
+
+### Como se calcula o quociente eleitoral?
+O quociente eleitoral é calculado dividindo os votos válidos pelo número de vagas em disputa na circunscrição.
 
 ## Artigos Relacionados
 - [O que é Segundo Turno e Quando Acontece](/blog/o_que_e_segundo_turno_e_quando_acontece/)

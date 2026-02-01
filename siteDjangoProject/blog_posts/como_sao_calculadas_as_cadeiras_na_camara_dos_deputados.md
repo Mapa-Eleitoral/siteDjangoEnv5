@@ -7,14 +7,21 @@ date: "2024-05-15"
 canonical: "https://mapaeleitoral.com.br/blog/como_sao_calculadas_as_cadeiras_na_camara_dos_deputados/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1720650154209-2e8647d5a56f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Brasília, DF, Brasil - 2021") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Gabriel Tiveron](https://unsplash.com/pt-br/@gabrieltiveron) no [Unsplash](https://unsplash.com)</small>
-
-# Como São Calculadas as Cadeiras na Câmara dos Deputados: Guia Completo
+<figure>
+  <img src="https://images.unsplash.com/photo-1720650154209-2e8647d5a56f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Congresso Nacional em Brasília, Câmara dos Deputados">
+  <figcaption>Foto por [Gabriel Tiveron](https://unsplash.com/pt-br/@gabrieltiveron) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 O cálculo das cadeiras na Câmara dos Deputados é um dos aspectos mais complexos do sistema eleitoral brasileiro. Diferentemente das eleições majoritárias, onde vence simplesmente quem tem mais votos, a distribuição das **513 cadeiras** da Câmara segue um sistema proporcional que considera tanto a população de cada estado quanto os votos recebidos por partidos e candidatos.
 
 Compreender esse processo é fundamental para entender como funciona a **representação política** no Brasil.
+
+## Resumo em 5 pontos
+- A Câmara tem 513 cadeiras distribuídas entre os estados.
+- Cada estado possui entre 8 e 70 deputados federais.
+- A distribuição considera a população apurada no último censo.
+- Dentro do estado, as vagas seguem o sistema proporcional e o quociente eleitoral.
+- As sobras são distribuídas pelo método da maior média.
 
 ## Fundamentos Constitucionais
 
@@ -285,6 +292,17 @@ O cálculo das cadeiras na Câmara dos Deputados é um **processo complexo** que
 - **Modernização**: Adaptar às mudanças sociais
 
 O sistema brasileiro busca equilibrar **representatividade**, **proporcionalidade** e **governabilidade**, sendo resultado de compromissos políticos e constitucionais. Sua compreensão é fundamental para o exercício consciente da cidadania e para o debate sobre possíveis reformas políticas.
+
+## Perguntas frequentes
+
+### Quantos deputados federais existem?
+A Câmara dos Deputados é composta por 513 cadeiras no total.
+
+### Qual o mínimo e o máximo de deputados por estado?
+Cada estado tem no mínimo 8 e no máximo 70 deputados federais, conforme a Constituição.
+
+### O que é quociente eleitoral?
+É o total de votos válidos dividido pelo número de cadeiras do estado, base para a distribuição proporcional.
 
 ## Artigos Relacionados
 - [O que Significa Coeficiente Eleitoral](/blog/o_que_significa_coeficiente_eleitoral/)

@@ -7,14 +7,21 @@ date: "2024-08-20"
 canonical: "https://mapaeleitoral.com.br/blog/como-funciona-o-sistema-eleitoral-brasileiro/"
 ---
 
-![Thumbnail](https://images.unsplash.com/photo-1519248200454-8f2590ed22b7?q=80&w=875&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "Dia de Eleição") 
-<small style="color: #999; font-size: 0.8em;">Foto por [Hal Gatewood](https://unsplash.com/pt-br/@halacious) no [Unsplash](https://unsplash.com)</small>
-
-# Como Funciona o Sistema Eleitoral Brasileiro: Guia Completo
+<figure>
+  <img src="https://images.unsplash.com/photo-1519248200454-8f2590ed22b7?q=80&w=875&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Eleitores em dia de eleição no Brasil">
+  <figcaption>Foto por [Hal Gatewood](https://unsplash.com/pt-br/@halacious) no [Unsplash](https://unsplash.com)</figcaption>
+</figure>
 
 ## Introdução
 
 O sistema eleitoral brasileiro é um dos mais complexos e abrangentes do mundo, combinando diferentes métodos de votação e representação para atender às especificidades de um país continental com mais de 156 milhões de eleitores. Compreender seu funcionamento é fundamental para o exercício consciente da cidadania e para a participação efetiva no processo democrático nacional.
+
+## Resumo em 5 pontos
+- O Brasil combina sistema majoritário para cargos executivos e Senado e sistema proporcional para o Legislativo.
+- A Justiça Eleitoral (TSE, TREs e zonas eleitorais) organiza e supervisiona todo o processo.
+- Eleições gerais e municipais ocorrem a cada 4 anos, em anos alternados.
+- O voto é direto, secreto, periódico e baseado no sufrágio universal.
+- O processo eleitoral envolve pré-candidatura, campanha, votação e apuração.
 
 ## Fundamentos Constitucionais
 
@@ -26,7 +33,7 @@ O sistema eleitoral brasileiro está fundamentado em:
 - **Lei dos Partidos Políticos (Lei 9.096/95)**: Regula a organização partidária.
 
 ### Princípios Fundamentais
-  **Sufrágio universal**: Direito de voto para todos os cidadãos qualificados.
+- **Sufrágio universal**: Direito de voto para todos os cidadãos qualificados.
 - **Voto direto**: Escolha direta dos representantes pelos eleitores.
 - **Voto secreto**: Garantia de privacidade na escolha.
 - **Periodicidade**: Eleições regulares a cada período determinado.
@@ -324,6 +331,17 @@ A compreensão adequada deste sistema é fundamental para o fortalecimento da de
 Os desafios contemporâneos, como o combate à desinformação e a busca por maior representatividade, exigem adaptação constante do sistema. No entanto, as bases sólidas construídas ao longo dos anos garantem que o Brasil continue sendo uma referência em organização eleitoral, combinando segurança, transparência e eficiência em um processo que envolve mais de 150 milhões de eleitores.
 
 O futuro do sistema eleitoral brasileiro depende da participação ativa de todos os cidadãos, seja como eleitores conscientes, candidatos comprometidos ou agentes de fiscalização. Somente através do engajamento coletivo será possível manter e aprimorar uma das maiores conquistas da sociedade brasileira: um sistema eleitoral democrático, transparente e confiável.
+
+## Perguntas frequentes
+
+### Qual a diferença entre voto majoritário e proporcional?
+No sistema majoritário vence o candidato mais votado (executivo e Senado). No proporcional, as vagas são distribuídas conforme a força eleitoral dos partidos para cargos legislativos.
+
+### Quem organiza as eleições no Brasil?
+A Justiça Eleitoral organiza e supervisiona o processo por meio do TSE, dos TREs e das zonas eleitorais.
+
+### Quais eleições acontecem a cada 4 anos?
+As eleições gerais e municipais ocorrem a cada quatro anos, em anos pares alternados.
 
 ## Artigos Relacionados
 - [Diferença entre Voto Majoritário e Proporcional](/blog/diferenca_entre_voto_majoritario_e_proporcional/)
