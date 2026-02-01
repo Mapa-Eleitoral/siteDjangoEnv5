@@ -144,6 +144,15 @@
             color: white !important;
         }
 
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(18, 63, 50, 0.15);
+        }
+
         /* Main Content */
         .main-content {
             padding: 3rem 0;

@@ -57,7 +57,7 @@
             background-color: var(--background);
             color: var(--text-primary);
             line-height: 1.6;
-            font-size: 14px;
+            font-size: 16px;
             font-display: swap;
             contain: layout style paint;
         }
@@ -105,6 +105,11 @@
             margin: 0;
             letter-spacing: -0.5px;
             line-height: 1;
+        }
+
+        .main-title-link {
+            color: inherit;
+            text-decoration: none;
         }
 
         .subtitle {
@@ -550,6 +555,27 @@
             background: var(--primary-dark);
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(18, 63, 50, 0.15);
+        }
+
         /* Footer */
         .footer {
             background: var(--primary);
@@ -726,7 +752,9 @@
             <div class="header-content">
                 <div class="logo-section">
                     <div class="logo-text">
-                        <h1 class="main-title">mapæleitoral</h1>
+                        <h1 class="main-title">
+                            <a href="/" class="main-title-link" aria-label="Mapa Eleitoral - Pagina inicial">mapæleitoral</a>
+                        </h1>
                         <p class="subtitle">Democracia em Dados</p>
                     </div>
                 </div>
@@ -917,7 +945,8 @@
             Cadastre-se para receber notificações quando os artigos forem publicados!</p>
             
             <form class="newsletter">
-                <input type="email" placeholder="Seu e-mail" required>
+                <label class="sr-only" for="newsletterEmail">Seu email</label>
+                <input id="newsletterEmail" name="email" type="email" placeholder="Seu e-mail" required>
                 <button type="submit">Notificar</button>
             </form>
         </section>
