@@ -15,6 +15,17 @@ cd siteDjangoProject
 
 ---
 
+## ✍️ **Criar Novo Post (Template SEO)**
+
+```bash
+# Gerar post a partir do template SEO (use o slug do arquivo)
+../Scripts/python.exe ../tools/new_blog_post.py "slug_do_post" --title "Titulo do Post"
+```
+
+**Template:** `docs/BLOG_POST_TEMPLATE_SEO.md`
+
+---
+
 ## 📊 **Verificar Estatísticas**
 
 ```bash

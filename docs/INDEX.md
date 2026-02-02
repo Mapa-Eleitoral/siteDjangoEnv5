@@ -16,6 +16,7 @@ Esta pasta contém toda a documentação do projeto Mapa Eleitoral, organizada p
 ### 📊 **Blog e Tracking**
 - **[BLOG_TRACKING_GUIDE.md](./BLOG_TRACKING_GUIDE.md)** - 📖 **Guia completo do sistema de tracking**
 - **[QUICK_COMMANDS.md](./QUICK_COMMANDS.md)** - ⚡ **Comandos rápidos para administração**
+- **[BLOG_POST_TEMPLATE_SEO.md](./BLOG_POST_TEMPLATE_SEO.md)** - Template com checklist SEO para novos posts
 
 ### 📋 **Geral**
 - **[README.md](./README.md)** - Documentação geral do projeto
