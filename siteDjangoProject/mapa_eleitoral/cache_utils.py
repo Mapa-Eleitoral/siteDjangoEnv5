@@ -97,25 +97,7 @@ class CacheManager:
                     self.electoral_cache.set(cache_key, candidatos, 
                                            settings.CACHE_TIMES['candidatos'])
             
-            # NOVO: Pré-carregar zonas-seções para o ano
-            logger.info(f"Carregando zonas-seções para {ano}...")
-            from .views import get_cached_zonas_secoes
-            zonas_organizadas = get_cached_zonas_secoes(ano)
-            logger.info(f"Carregadas {len(zonas_organizadas)} zonas para {ano}")
-            
-            # NOVO: Pré-carregar apenas algumas seções críticas (mais eficiente)
-            if zonas_organizadas and ano == '2024':  # Apenas para o ano mais recente
-                # Carregar apenas as primeiras 3 seções para não sobrecarregar
-                secoes_carregadas = 0
-                primeira_zona = list(zonas_organizadas.keys())[0]
-                for secao_info in zonas_organizadas[primeira_zona][:3]:
-                    zona_secao = secao_info['zona_secao']
-                    from .views import get_cached_votos_zona_secao
-                    resultado = get_cached_votos_zona_secao(ano, zona_secao)
-                    if resultado:
-                        secoes_carregadas += 1
-                
-                logger.info(f"Carregados dados de {secoes_carregadas} seções críticas para {ano}")
+            # Zonas-seções são pré-carregadas pelo warmup_cache command
         
         logger.info("Aquecimento do cache concluído")
     

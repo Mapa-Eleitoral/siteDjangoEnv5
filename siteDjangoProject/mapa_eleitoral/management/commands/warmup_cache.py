@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
     help = 'Aquece o cache com dados frequentemente acessados'
 
@@ -18,7 +19,7 @@ class Command(BaseCommand):
             default='all',
             help='Tipo de cache para aquecer'
         )
-        
+
         parser.add_argument(
             '--clear',
             action='store_true',
@@ -27,7 +28,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Iniciando aquecimento do cache...'))
-        
+
         # Limpar cache se solicitado
         if options['clear']:
             self.stdout.write('Limpando cache existente...')
@@ -35,31 +36,55 @@ class Command(BaseCommand):
             cache_manager.invalidate_pattern('*', 'blog')
             cache_manager.invalidate_pattern('*', 'maps')
             cache_manager.invalidate_pattern('*', 'api')
-            
+
         cache_type = options['type']
-        
+
         try:
             if cache_type in ['all', 'electoral']:
                 self.stdout.write('Aquecendo cache de dados eleitorais...')
                 cache_manager.warm_up_cache()
-            
+                self._warmup_zonas_all_years()
+
             if cache_type in ['all', 'blog']:
                 self.stdout.write('Aquecendo cache do blog...')
                 preload_critical_data()
-            
+
             # Mostrar estatísticas do cache
             stats = cache_manager.get_cache_stats()
             self.stdout.write(self.style.SUCCESS('Estatísticas do cache:'))
             for cache_name, cache_stats in stats.items():
                 self.stdout.write(f"  {cache_name}: {cache_stats['backend']}")
-            
+
             self.stdout.write(
                 self.style.SUCCESS('Aquecimento do cache concluído com sucesso!')
             )
-            
+
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(f'Erro durante aquecimento: {str(e)}')
             )
             logger.error(f'Erro no aquecimento do cache: {e}', exc_info=True)
             raise
+
+    def _warmup_zonas_all_years(self):
+        """Pré-carrega zonas-seções para todos os anos disponíveis"""
+        from mapa_eleitoral.models import DadoEleitoral
+        from mapa_eleitoral.views import get_cached_zonas_secoes
+
+        try:
+            anos = list(
+                DadoEleitoral.objects
+                .values_list('ano_eleicao', flat=True)
+                .distinct()
+                .order_by('-ano_eleicao')
+            )
+
+            for ano in anos:
+                self.stdout.write(f'  Carregando zonas-seções para {ano}...')
+                zonas = get_cached_zonas_secoes(ano)
+                self.stdout.write(f'    -> {len(zonas)} zonas carregadas')
+
+        except Exception as e:
+            self.stdout.write(
+                self.style.WARNING(f'Aviso ao carregar zonas: {str(e)}')
+            )

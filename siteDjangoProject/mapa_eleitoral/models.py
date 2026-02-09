@@ -61,6 +61,7 @@ class DadoEleitoral(models.Model):
             models.Index(fields=['nm_urna_candidato'], name='idx_candidato'),
             models.Index(fields=['ano_eleicao', 'sg_partido', 'nm_urna_candidato'], name='idx_completo'),
             models.Index(fields=['zona_secao'], name='idx_zona_secao'),
+            models.Index(fields=['ano_eleicao', 'zona_secao'], name='idx_ano_zona_secao'),
         ]
     
     def __str__(self):
