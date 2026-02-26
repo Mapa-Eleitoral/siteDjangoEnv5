@@ -4,39 +4,37 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.core.validators import RegexValidator
 
-class DadoEleitoral(models.Model):
+class DadoEleitoralBase(models.Model):
     """
-    Model que mapeia para a tabela eleicoes_rio existente no MySQL
+    Classe base abstrata com campos comuns a todas as cidades
     """
-    # Campo ID adicionado (corresponde à coluna id criada no MySQL)
     id = models.AutoField(primary_key=True)
-    
-    # Mapeando exatamente os campos da sua tabela MySQL com validações
+
     ano_eleicao = models.CharField(
-        max_length=4, 
-        db_column='ANO_ELEICAO', 
+        max_length=4,
+        db_column='ANO_ELEICAO',
         verbose_name="Ano da Eleição",
         validators=[RegexValidator(r'^\d{4}$', 'Ano deve ter 4 dígitos')]
     )
     sg_uf = models.CharField(
-        max_length=2, 
-        db_column='SG_UF', 
+        max_length=2,
+        db_column='SG_UF',
         verbose_name="Código UF",
         validators=[RegexValidator(r'^[A-Z]{2}$', 'UF deve ter 2 letras maiúsculas')]
     )
     nm_ue = models.CharField(max_length=64, db_column='NM_UE', verbose_name="Nome da Unidade Eleitoral")
     ds_cargo = models.CharField(max_length=50, db_column='DS_CARGO', verbose_name="Descrição do Cargo")
     nr_candidato = models.CharField(
-        max_length=8, 
-        db_column='NR_CANDIDATO', 
+        max_length=8,
+        db_column='NR_CANDIDATO',
         verbose_name="Número do Candidato",
         validators=[RegexValidator(r'^\d+$', 'Número do candidato deve conter apenas dígitos')]
     )
     nm_candidato = models.CharField(max_length=64, db_column='NM_CANDIDATO', verbose_name="Nome do Candidato")
     nm_urna_candidato = models.CharField(max_length=64, db_column='NM_URNA_CANDIDATO', verbose_name="Nome na Urna")
     nr_cpf_candidato = models.CharField(
-        max_length=11, 
-        db_column='NR_CPF_CANDIDATO', 
+        max_length=11,
+        db_column='NR_CPF_CANDIDATO',
         verbose_name="CPF do Candidato",
         validators=[RegexValidator(r'^\d{11}$', 'CPF deve ter 11 dígitos')]
     )
@@ -48,13 +46,23 @@ class DadoEleitoral(models.Model):
     zona_secao = models.CharField(max_length=20, db_column='ZONA_SECAO', verbose_name="Zona-Seção", null=True, blank=True)
     nr_latitude = models.CharField(max_length=100, db_column='NR_LATITUDE', verbose_name="Latitude")
     nr_longitude = models.CharField(max_length=100, db_column='NR_LONGITUDE', verbose_name="Longitude")
-    
+
     class Meta:
-        db_table = 'eleicoes_rio'  
-        managed = False  
-        verbose_name = "Dado Eleitoral"
-        verbose_name_plural = "Dados Eleitorais"
-        # Indexes for performance optimization
+        abstract = True
+
+    def __str__(self):
+        return f"{self.nm_urna_candidato} ({self.sg_partido}) - {self.nm_bairro}: {self.qt_votos} votos"
+
+
+class DadoEleitoralRio(DadoEleitoralBase):
+    """
+    Model que mapeia para a tabela eleicoes_rio existente no MySQL
+    """
+    class Meta:
+        db_table = 'eleicoes_rio'
+        managed = False
+        verbose_name = "Dado Eleitoral Rio"
+        verbose_name_plural = "Dados Eleitorais Rio"
         indexes = [
             models.Index(fields=['ano_eleicao', 'sg_partido'], name='idx_ano_partido'),
             models.Index(fields=['ano_eleicao', 'nm_bairro'], name='idx_ano_bairro'),
@@ -63,9 +71,26 @@ class DadoEleitoral(models.Model):
             models.Index(fields=['zona_secao'], name='idx_zona_secao'),
             models.Index(fields=['ano_eleicao', 'zona_secao'], name='idx_ano_zona_secao'),
         ]
-    
-    def __str__(self):
-        return f"{self.nm_urna_candidato} ({self.sg_partido}) - {self.nm_bairro}: {self.qt_votos} votos"
+
+
+class DadoEleitoralBH(DadoEleitoralBase):
+    """
+    Model que mapeia para a tabela eleicoes_bh existente no MySQL
+    """
+    class Meta:
+        db_table = 'eleicoes_bh'
+        managed = False
+        verbose_name = "Dado Eleitoral BH"
+        verbose_name_plural = "Dados Eleitorais BH"
+        indexes = [
+            models.Index(fields=['ano_eleicao', 'sg_partido'], name='idx_bh_ano_partido'),
+            models.Index(fields=['ano_eleicao', 'nm_bairro'], name='idx_bh_ano_bairro'),
+            models.Index(fields=['nm_urna_candidato'], name='idx_bh_candidato'),
+        ]
+
+
+# Alias para retrocompatibilidade
+DadoEleitoral = DadoEleitoralRio
 
 
 # ===== MODELOS PARA TRACKING DE BLOG =====

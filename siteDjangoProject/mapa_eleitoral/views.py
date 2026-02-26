@@ -9,7 +9,7 @@ from django.conf import settings
 from django.db import models
 import os, json, time, hashlib, logging
 from decimal import Decimal
-from .models import DadoEleitoral
+from .models import DadoEleitoral, DadoEleitoralRio, DadoEleitoralBH
 
 # Imports para geração de mapas
 import folium as fl
@@ -35,6 +35,37 @@ CACHE_TIMES = {
 if settings.DEBUG:
     CACHE_TIMES = {k: min(v, 300) for k, v in CACHE_TIMES.items()}
 
+# === CONFIGURAÇÃO DE CIDADES ===
+CIDADE_CONFIG = {
+    'Rio de Janeiro': {
+        'geojson': 'Limite_Bairro.geojson',
+        'geojson_encoding': 'utf-8',
+        'center': [-22.928777, -43.423878],
+        'bounds': [[-23.1, -43.8], [-22.7, -43.1]],
+        'label': 'Rio de Janeiro',
+        'default_partido': 'PSD',
+        'default_candidato': 'EDUARDO PAES',
+    },
+    'Belo Horizonte': {
+        'geojson': 'limiteBairroBeloHorizonte.geojson',
+        'geojson_encoding': 'latin-1',
+        'center': [-19.9225, -43.9352],
+        'bounds': [[-20.05, -44.1], [-19.79, -43.77]],
+        'label': 'Belo Horizonte',
+        'default_partido': '',
+        'default_candidato': '',
+    },
+}
+
+CIDADES_DISPONIVEIS = list(CIDADE_CONFIG.keys())
+
+
+def get_model_for_cidade(cidade):
+    if cidade == 'Belo Horizonte':
+        return DadoEleitoralBH
+    return DadoEleitoralRio
+
+
 # === UTILITÁRIOS DE CACHE OTIMIZADOS ===
 def safe_key(prefix, *args):
     """Gera chave de cache segura e única"""
@@ -50,20 +81,21 @@ def cached_query(query_func, cache_key, ttl, *args, **kwargs):
     return result
 
 # === CACHE PARA ZONA-SEÇÃO ===
-def get_cached_zonas_secoes(ano):
+def get_cached_zonas_secoes(ano, cidade='Rio de Janeiro'):
     """Busca zonas-seções disponíveis com cache otimizado"""
     if not ano:
         return {}
-    
+
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
-    
-    cache_key = safe_key('zonas_secoes_v2', ano)
+
+    cache_key = safe_key('zonas_secoes_v2', cidade, ano)
     zonas_organizadas = electoral_cache.get(cache_key)
-    
+
     if zonas_organizadas is None:
+        model = get_model_for_cidade(cidade)
         # OTIMIZAÇÃO: Query com apenas campos necessários e using index
-        zonas_secoes = (DadoEleitoral.objects
+        zonas_secoes = (model.objects
                        .filter(ano_eleicao=ano, zona_secao__isnull=False)
                        .only('zona_secao')
                        .values_list('zona_secao', flat=True)
@@ -96,24 +128,25 @@ def get_cached_zonas_secoes(ano):
             zonas_organizadas[zona].sort(key=lambda x: int(x['secao']) if x['secao'].isdigit() else x['secao'])
         
         electoral_cache.set(cache_key, zonas_organizadas, CACHE_TIMES['zonas_secoes'])  # 6h cache
-        logging.info(f"Zonas-seções carregadas otimizado para {ano}: {len(zonas_organizadas)} zonas")
+        logging.info(f"Zonas-seções carregadas otimizado para {cidade}/{ano}: {len(zonas_organizadas)} zonas")
     
     return zonas_organizadas
 
-def get_cached_votos_zona_secao(ano, zona_secao):
+def get_cached_votos_zona_secao(ano, zona_secao, cidade='Rio de Janeiro'):
     """Busca votos por zona-seção com cache otimizado"""
     if not all([ano, zona_secao]):
         return None
-    
+
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
-    
-    cache_key = safe_key('votos_zona_secao_v2', ano, zona_secao)
+
+    cache_key = safe_key('votos_zona_secao_v2', cidade, ano, zona_secao)
     resultado = electoral_cache.get(cache_key)
-    
+
     if resultado is None:
+        model = get_model_for_cidade(cidade)
         # OTIMIZAÇÃO: Query agregada usando index zona_secao
-        votos_por_candidato = (DadoEleitoral.objects
+        votos_por_candidato = (model.objects
                               .filter(ano_eleicao=ano, zona_secao=zona_secao)
                               .only('nm_urna_candidato', 'sg_partido', 'qt_votos')
                               .values('nm_urna_candidato', 'sg_partido')
@@ -161,15 +194,17 @@ def get_cached_votos_zona_secao(ano, zona_secao):
     
     return resultado
 
-def load_geojson_optimized():
+def load_geojson_optimized(cidade='Rio de Janeiro'):
     """Carrega GeoJSON com cache otimizado"""
-    key = 'geojson_optimized_v2'
+    key = safe_key('geojson_optimized_v2', cidade)
     geojson = cache.get(key)
-    
+
     if geojson is None:
-        geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', 'Limite_Bairro.geojson')
-        
-        with open(geojson_path, 'r', encoding='utf-8') as f:
+        config = CIDADE_CONFIG[cidade]
+        geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', config['geojson'])
+        encoding = config.get('geojson_encoding', 'utf-8')
+
+        with open(geojson_path, 'r', encoding=encoding) as f:
             geojson = json.load(f)
         
         # Otimizar geometrias para performance
@@ -199,94 +234,99 @@ def load_geojson_optimized():
 
 # === GETTERS SUPER OTIMIZADOS ===
 
-def get_cached_anos():
+def get_cached_anos(cidade='Rio de Janeiro'):
     """Busca anos disponíveis com cache otimizado"""
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
-    
-    cache_key = 'anos_eleicao_v4'
+
+    cache_key = safe_key('anos_eleicao_v4', cidade)
     anos = electoral_cache.get(cache_key)
-    
+
     if anos is None:
+        model = get_model_for_cidade(cidade)
         # OTIMIZAÇÃO: Query com apenas campos necessários e using index
-        anos = list(DadoEleitoral.objects.only('ano_eleicao')
+        anos = list(model.objects.only('ano_eleicao')
                    .values_list('ano_eleicao', flat=True)
                    .distinct()
                    .order_by('-ano_eleicao')[:10])  # Limitar a 10 anos mais recentes
         electoral_cache.set(cache_key, anos, CACHE_TIMES['anos_eleicao'])
-        logging.info(f"Anos carregados otimizado: {len(anos)} anos")
-    
+        logging.info(f"Anos carregados otimizado para {cidade}: {len(anos)} anos")
+
     return anos
 
-def get_cached_partidos(ano):
+def get_cached_partidos(ano, cidade='Rio de Janeiro'):
     """Busca partidos por ano com cache otimizado"""
     if not ano:
         return []
-    
+
     from django.core.cache import caches
     electoral_cache = caches['electoral_data']
-    
-    cache_key = safe_key('partidos_v4', ano)
+
+    cache_key = safe_key('partidos_v4', cidade, ano)
     partidos = electoral_cache.get(cache_key)
-    
+
     if partidos is None:
+        model = get_model_for_cidade(cidade)
         # OTIMIZAÇÃO: Query com db_index e only necessário
-        partidos = list(DadoEleitoral.objects.filter(ano_eleicao=ano)
+        partidos = list(model.objects.filter(ano_eleicao=ano)
                                            .only('sg_partido')
                                            .values_list('sg_partido', flat=True)
                                            .distinct()
                                            .order_by('sg_partido'))
         electoral_cache.set(cache_key, partidos, CACHE_TIMES['partidos'])
-        logging.info(f"Partidos carregados otimizado para {ano}: {len(partidos)} partidos")
-    
+        logging.info(f"Partidos carregados otimizado para {cidade}/{ano}: {len(partidos)} partidos")
+
     return partidos
 
-def get_cached_candidatos(partido, ano):
+def get_cached_candidatos(partido, ano, cidade='Rio de Janeiro'):
     """Busca candidatos com cache otimizado"""
     if not (partido and ano):
         return []
-    
+
     def query_candidatos():
+        model = get_model_for_cidade(cidade)
         # OTIMIZAÇÃO: Query com only() e campos indexados
-        candidatos = (DadoEleitoral.objects
+        candidatos = (model.objects
                      .filter(ano_eleicao=ano, sg_partido=partido)
                      .only('nm_urna_candidato')
                      .values_list('nm_urna_candidato', flat=True)
                      .distinct()
                      .order_by('nm_urna_candidato'))
-        
+
         # Garantir que candidatos existem antes de retornar
         candidatos_list = list(candidatos)
-        
+
         # Log para debug
         if not candidatos_list:
-            logging.warning(f"Nenhum candidato encontrado para {partido} em {ano}")
+            logging.warning(f"Nenhum candidato encontrado para {partido} em {cidade}/{ano}")
         else:
-            logging.info(f"Encontrados {len(candidatos_list)} candidatos otimizado para {partido} em {ano}")
-        
+            logging.info(f"Encontrados {len(candidatos_list)} candidatos otimizado para {partido} em {cidade}/{ano}")
+
         return candidatos_list
-    
+
     return cached_query(
         query_candidatos,
-        safe_key('candidatos_v2', partido, ano),
+        safe_key('candidatos_v2', cidade, partido, ano),
         CACHE_TIMES['candidatos']
     )
 
-def get_complete_candidate_data_optimized(candidato, partido, ano):
+def get_complete_candidate_data_optimized(candidato, partido, ano, cidade='Rio de Janeiro'):
     """Busca dados completos do candidato com cache em camadas"""
     if not all([candidato, partido, ano]):
         return None
-    
-    cache_key = safe_key('complete_data_v3', candidato, partido, ano)
+
+    cache_key = safe_key('complete_data_v3', cidade, candidato, partido, ano)
     data = cache.get(cache_key)
-    
+
     if data is not None:
         return data
-    
+
+    model = get_model_for_cidade(cidade)
+
     # Decodificar URL encoding se necessário
     import urllib.parse
     candidato_decoded = urllib.parse.unquote(candidato)
-    
+
     # Tentar diferentes variações do nome para máxima compatibilidade
     candidato_variants = [
         candidato,
@@ -296,77 +336,77 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
         candidato.strip(),
         candidato_decoded.strip()
     ]
-    
+
     # Optimized query with single database hit
     votos_agregados = None
     candidato_encontrado = None
-    
+
     # Build Q object for multiple variants in single query
     from django.db.models import Q
     q_variants = Q()
     for variant in candidato_variants:
         q_variants |= Q(nm_urna_candidato=variant)
-    
+
     # Add case-insensitive search
     q_variants |= Q(nm_urna_candidato__iexact=candidato_decoded)
-    
+
     # OTIMIZAÇÃO: Single optimized query com select_related e only()
-    votos_agregados = (DadoEleitoral.objects
+    votos_agregados = (model.objects
                       .filter(ano_eleicao=ano, sg_partido=partido)
                       .filter(q_variants)
                       .only('nm_bairro', 'nm_urna_candidato', 'qt_votos')
                       .values('nm_bairro', 'nm_urna_candidato')
                       .annotate(total_votos=models.Sum('qt_votos'))
                       .order_by('nm_bairro'))
-    
+
     if votos_agregados.exists():
         # Get the actual candidate name found
         candidato_encontrado = votos_agregados.first()['nm_urna_candidato']
         logging.info(f"Candidato encontrado: '{candidato_encontrado}' (original: '{candidato}')")
-        
+
         # Convert to simple format for compatibility
         votos_agregados = votos_agregados.values_list('nm_bairro', 'total_votos')
-    
+
     # Log para debug
     if not votos_agregados or not votos_agregados.exists():
-        logging.warning(f"Candidato não encontrado: '{candidato}' / '{candidato_decoded}' - Ano: {ano} - Partido: {partido}")
-        
+        logging.warning(f"Candidato não encontrado: '{candidato}' / '{candidato_decoded}' - Cidade: {cidade} - Ano: {ano} - Partido: {partido}")
+
         # Buscar candidatos similares para debug
-        candidatos_similares = (DadoEleitoral.objects
+        candidatos_similares = (model.objects
                                .filter(ano_eleicao=ano, sg_partido=partido)
                                .filter(nm_urna_candidato__icontains=candidato_decoded.split()[0] if candidato_decoded else candidato.split()[0])
                                .values_list('nm_urna_candidato', flat=True)
                                .distinct()[:5])
-        
+
         if candidatos_similares:
             logging.info(f"Candidatos similares encontrados: {list(candidatos_similares)}")
-        
+
         cache.set(cache_key, None, CACHE_TIMES['complete_data'])
         return None
-    
+
     if not votos_agregados:
         cache.set(cache_key, None, CACHE_TIMES['complete_data'])
         return None
-    
+
     # Converter para dicionário e calcular total
     votos_dict = {}
     total_votos = 0
-    
+
     for bairro, votos in votos_agregados:
         votos_int = int(votos) if votos else 0
         votos_dict[bairro] = votos_int
         total_votos += votos_int
-    
+
     # Cache separado para info do candidato (reutilizável)
-    info_key = safe_key('candidato_info_v2', candidato, partido, ano)
+    info_key = safe_key('candidato_info_v2', cidade, candidato, partido, ano)
     candidato_info = cache.get(info_key)
-    
+
     if candidato_info is None:
-        primeiro_registro = (DadoEleitoral.objects
+        primeiro_registro = (model.objects
                            .filter(ano_eleicao=ano, sg_partido=partido, nm_urna_candidato=candidato)
                            .values('nm_urna_candidato', 'ds_cargo')
                            .first())
-        
+
         if primeiro_registro:
             candidato_info = {
                 'nome': primeiro_registro['nm_urna_candidato'],
@@ -375,28 +415,28 @@ def get_complete_candidate_data_optimized(candidato, partido, ano):
                 'votos_total': total_votos
             }
             cache.set(info_key, candidato_info, CACHE_TIMES['candidato_info'])
-    
+
     # Atualizar total de votos na info (pode ter mudado)
     if candidato_info:
         candidato_info['votos_total'] = total_votos
-    
+
     data = {
         'votos_dict': votos_dict,
         'total_votos': total_votos,
         'candidato_info': candidato_info
     }
-    
+
     # Cache com TTL otimizado
     cache.set(cache_key, data, CACHE_TIMES['complete_data'])
-    
-    logging.info(f"Dados carregados: {candidato} - {total_votos} votos em {len(votos_dict)} bairros")
+
+    logging.info(f"Dados carregados: {candidato} ({cidade}) - {total_votos} votos em {len(votos_dict)} bairros")
     return data
 
 # === GERAÇÃO DE MAPA SUPER OTIMIZADA ===
 
 # CORREÇÃO PARA SISTEMA DE GERAÇÃO DE MAPAS
 
-def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
+def generate_dynamic_map_html(votos_dict, total_votos, candidato_info, cidade='Rio de Janeiro'):
     """
     Gera mapa dinamicamente e retorna HTML inline (sem salvar arquivo)
     OTIMIZAÇÃO: Implementado memory cleanup e resource management
@@ -404,18 +444,19 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
     import gc
     mapa = None
     geojson_data = None
-    
+
     try:
         # 1. Verificar se temos dados válidos
         if not votos_dict or total_votos == 0:
             logging.warning("Dados de votação vazios ou inválidos")
             return None
-        
-        logging.info(f"Gerando mapa dinâmico OTIMIZADO para {candidato_info['nome']}")
-        
+
+        config = CIDADE_CONFIG[cidade]
+        logging.info(f"Gerando mapa dinâmico OTIMIZADO para {candidato_info['nome']} ({cidade})")
+
         # 2. Configuração do mapa otimizada com resource limits
         mapa = fl.Map(
-            location=[-22.928777, -43.423878],  # Centro do Rio de Janeiro
+            location=config['center'],
             zoom_start=11,
             tiles='CartoDB positron',
             prefer_canvas=True,
@@ -425,21 +466,22 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
             min_zoom=9,
             attribution_control=False,
             # OTIMIZAÇÃO: Limitar recursos
-            max_bounds=[[-23.1, -43.8], [-22.7, -43.1]],  # Limitar área do Rio
-            options={'maxBounds': [[-23.1, -43.8], [-22.7, -43.1]]}
+            max_bounds=config['bounds'],
+            options={'maxBounds': config['bounds']}
         )
-        
+
         # 3. Carregar GeoJSON
-        geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', 'Limite_Bairro.geojson')
-        
+        geojson_path = os.path.join(settings.BASE_DIR, 'mapa_eleitoral', 'data', config['geojson'])
+        geojson_encoding = config.get('geojson_encoding', 'utf-8')
+
         if not os.path.exists(geojson_path):
             logging.error(f"Arquivo GeoJSON não encontrado: {geojson_path}")
-            return create_fallback_map_html(candidato_info)
-        
+            return create_fallback_map_html(candidato_info, cidade)
+
         try:
             # 4. Adicionar Choropleth
             choropleth_data = [[bairro, votos] for bairro, votos in votos_dict.items() if votos > 0]
-            
+
             choropleth = fl.Choropleth(
                 geo_data=geojson_path,
                 name='Distribuição de Votos',
@@ -456,12 +498,11 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
                 legend_name=f'Votos - {candidato_info["nome"]}',
                 smooth_factor=1.0,
                 highlight=True,
-                
             )
             choropleth.add_to(mapa)
-            
+
             # 5. Adicionar tooltips
-            with open(geojson_path, 'r', encoding='utf-8') as f:
+            with open(geojson_path, 'r', encoding=geojson_encoding) as f:
                 import json
                 geojson_data = json.load(f)
             
@@ -503,36 +544,36 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
             
         except Exception as e:
             logging.error(f"Erro ao processar GeoJSON: {e}")
-            return create_fallback_map_html(candidato_info)
-        
+            return create_fallback_map_html(candidato_info, cidade)
+
         # 7. Gerar HTML dinâmico com memory cleanup (SEM salvar arquivo)
         try:
             # Gerar HTML do mapa
             html_content = mapa._repr_html_()
-            
+
             # OTIMIZAÇÃO: Limpar objetos grandes da memória
             del mapa
             if 'geojson_data' in locals():
                 del geojson_data
             gc.collect()  # Force garbage collection
-            
+
             # Adicionar melhorias no HTML - versão otimizada
             html_improvements = """<style>.folium-map{width:100%!important;height:100%!important;border-radius:8px}body{margin:0;padding:0}</style><script>window.addEventListener('load',()=>console.log('Mapa otimizado carregado'))</script>"""
-            
+
             # Inserir melhorias no HTML
             if '</head>' in html_content:
                 html_content = html_content.replace('</head>', html_improvements + '</head>')
-            
-            logging.info(f"Mapa dinâmico OTIMIZADO gerado para {candidato_info['nome']}")
+
+            logging.info(f"Mapa dinâmico OTIMIZADO gerado para {candidato_info['nome']} ({cidade})")
             return html_content  # Retornar HTML direto, não URL
-                
+
         except Exception as e:
             logging.error(f"Erro ao gerar HTML do mapa: {e}")
-            return create_fallback_map_html(candidato_info)
-    
+            return create_fallback_map_html(candidato_info, cidade)
+
     except Exception as e:
         logging.error(f"Erro geral na geração do mapa dinâmico: {e}")
-        return create_fallback_map_html(candidato_info)
+        return create_fallback_map_html(candidato_info, cidade)
     finally:
         # OTIMIZAÇÃO: Cleanup garantido mesmo em caso de erro
         try:
@@ -544,25 +585,26 @@ def generate_dynamic_map_html(votos_dict, total_votos, candidato_info):
         except:
             pass
 
-def create_fallback_map_html(candidato_info):
+def create_fallback_map_html(candidato_info, cidade='Rio de Janeiro'):
     """
     Cria um mapa simples de fallback em caso de erro (HTML dinâmico)
     """
     try:
+        config = CIDADE_CONFIG[cidade]
         # Mapa básico sem GeoJSON
         fallback_map = fl.Map(
-            location=[-22.928777, -43.423878],
+            location=config['center'],
             zoom_start=10,
             tiles='OpenStreetMap',
             width='100%',
             height='100%'
         )
-        
+
         # Adicionar marcador central
         fl.Marker(
-            [-22.928777, -43.423878],
+            config['center'],
             popup=f"Dados de {candidato_info['nome']}<br>Total: {candidato_info.get('votos_total', 0):,} votos",
-            tooltip="Rio de Janeiro"
+            tooltip=config['label']
         ).add_to(fallback_map)
         
         # Retornar HTML direto
@@ -579,54 +621,66 @@ def create_fallback_map_html(candidato_info):
 
 # === VIEW PRINCIPAL OTIMIZADA ===
 
-@cache_page(settings.CACHE_VIEWS['home'], cache='default')
 @vary_on_headers('Accept-Language')
 def home_view(request):
     """View principal com máxima otimização para Core Web Vitals"""
-    
+
     start_time = time.time()
-    
+
+    # Cidade selecionada
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+    config = CIDADE_CONFIG[cidade]
+
     # Buscar parâmetros
-    anos = get_cached_anos()
+    anos = get_cached_anos(cidade)
     ano_selecionado = request.GET.get('ano') or (anos[0] if anos else '2024')
-    
+
     # Buscar partidos do ano selecionado
-    partidos = get_cached_partidos(ano_selecionado)
-    partido_selecionado = request.GET.get('partido') or ('PSD' if 'PSD' in partidos else (partidos[0] if partidos else ''))
-    
+    partidos = get_cached_partidos(ano_selecionado, cidade)
+    partido_selecionado = request.GET.get('partido') or (
+        config['default_partido'] if config['default_partido'] in partidos
+        else (partidos[0] if partidos else '')
+    )
+
     # Buscar candidatos do partido/ano
-    candidatos = get_cached_candidatos(partido_selecionado, ano_selecionado)
-    candidato_selecionado = request.GET.get('candidato') or ('EDUARDO PAES' if 'EDUARDO PAES' in candidatos else (candidatos[0] if candidatos else ''))
-    
+    candidatos = get_cached_candidatos(partido_selecionado, ano_selecionado, cidade)
+    candidato_selecionado = request.GET.get('candidato') or (
+        config['default_candidato'] if config['default_candidato'] in candidatos
+        else (candidatos[0] if candidatos else '')
+    )
+
     # Inicializar variáveis do mapa
-    mapa_url = None
     candidato_info = None
-    
+
     # Verificar se deve gerar mapa
     show_map = all([candidato_selecionado, partido_selecionado, ano_selecionado])
     map_data = None
-    
+
     if show_map:
         dados_completos = get_complete_candidate_data_optimized(
-            candidato_selecionado, 
-            partido_selecionado, 
-            ano_selecionado
+            candidato_selecionado,
+            partido_selecionado,
+            ano_selecionado,
+            cidade
         )
-        
+
         if dados_completos and dados_completos['total_votos'] > 0:
             candidato_info = dados_completos['candidato_info']
             # Preparar dados para o mapa dinâmico
             map_data = {
                 'candidato': candidato_selecionado,
                 'partido': partido_selecionado,
-                'ano': ano_selecionado
+                'ano': ano_selecionado,
+                'cidade': cidade,
             }
-    
+
     # Log de performance
     duration = time.time() - start_time
     if duration > 1.0:
         logging.warning(f"View lenta: home_view - {duration:.2f}s")
-    
+
     context = {
         'anos': anos,
         'partidos': partidos,
@@ -636,9 +690,11 @@ def home_view(request):
         'selected_candidato': candidato_selecionado,
         'candidato_info': candidato_info,
         'map_data': map_data,  # Dados para gerar mapa dinamicamente
-        'load_time': f"{duration:.2f}s"  # Para debug
+        'load_time': f"{duration:.2f}s",  # Para debug
+        'cidades': CIDADES_DISPONIVEIS,
+        'cidade_selecionada': cidade,
     }
-    
+
     return render(request, 'home.html', context)
 
 # === APIs AJAX OTIMIZADAS ===
@@ -647,8 +703,11 @@ def home_view(request):
 @vary_on_headers('Accept-Language')
 def get_anos_ajax(request):
     """API otimizada para buscar anos"""
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
     return JsonResponse({
-        'anos': get_cached_anos(),
+        'anos': get_cached_anos(cidade),
         'status': 'success'
     })
 
@@ -656,15 +715,18 @@ def get_anos_ajax(request):
 def get_partidos_ajax(request):
     """API otimizada para buscar partidos com fallback"""
     ano = request.GET.get('ano')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     # Fallback: usar ano mais recente se não especificado
     if not ano:
-        anos_disponiveis = get_cached_anos()
+        anos_disponiveis = get_cached_anos(cidade)
         ano = anos_disponiveis[0] if anos_disponiveis else '2024'
         logging.warning(f"Ano não especificado em get_partidos_ajax, usando fallback: {ano}")
-    
+
     try:
-        partidos = get_cached_partidos(ano)
+        partidos = get_cached_partidos(ano, cidade)
         return JsonResponse({
             'partidos': partidos,
             'count': len(partidos),
@@ -685,11 +747,14 @@ def get_candidatos_ajax(request):
     """API otimizada para buscar candidatos"""
     partido = request.GET.get('partido')
     ano = request.GET.get('ano')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     if not (partido and ano):
         return JsonResponse({'error': 'Partido e ano são obrigatórios'}, status=400)
-    
-    candidatos = get_cached_candidatos(partido, ano)
+
+    candidatos = get_cached_candidatos(partido, ano, cidade)
     return JsonResponse({
         'candidatos': candidatos,
         'count': len(candidatos),
@@ -701,14 +766,17 @@ def get_filter_data_ajax(request):
     """API unificada para buscar todos os dados de filtro"""
     ano = request.GET.get('ano')
     partido = request.GET.get('partido')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     response_data = {
-        'anos': get_cached_anos(),
-        'partidos': get_cached_partidos(ano) if ano else [],
-        'candidatos': get_cached_candidatos(partido, ano) if (ano and partido) else [],
+        'anos': get_cached_anos(cidade),
+        'partidos': get_cached_partidos(ano, cidade) if ano else [],
+        'candidatos': get_cached_candidatos(partido, ano, cidade) if (ano and partido) else [],
         'status': 'success'
     }
-    
+
     return JsonResponse(response_data)
 
 # === VIEWS DE MANUTENÇÃO ===
@@ -1454,17 +1522,19 @@ def generate_map_view(request):
     candidato = request.GET.get('candidato')
     partido = request.GET.get('partido')
     ano = request.GET.get('ano')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     if not all([candidato, partido, ano]):
         return JsonResponse({
             'error': 'Parâmetros obrigatórios: candidato, partido, ano'
         }, status=400)
-    
+
     try:
-        
         # Buscar dados do candidato
-        dados_completos = get_complete_candidate_data_optimized(candidato, partido, ano)
-        
+        dados_completos = get_complete_candidate_data_optimized(candidato, partido, ano, cidade)
+
         if not dados_completos or dados_completos['total_votos'] == 0:
             return JsonResponse({
                 'error': 'Candidato não encontrado ou sem dados de votação',
@@ -1472,25 +1542,26 @@ def generate_map_view(request):
                 'partido': partido,
                 'ano': ano
             }, status=404)
-        
+
         # Gerar mapa dinâmico
         html_content = generate_dynamic_map_html(
             dados_completos['votos_dict'],
             dados_completos['total_votos'],
-            dados_completos['candidato_info']
+            dados_completos['candidato_info'],
+            cidade
         )
-        
+
         if not html_content:
             return JsonResponse({
                 'error': 'Erro ao gerar mapa'
             }, status=500)
-        
+
         return JsonResponse({
             'success': True,
             'html': html_content,
             'candidato_info': dados_completos['candidato_info']
         })
-        
+
     except Exception as e:
         logging.error(f"Erro ao gerar mapa: {e}")
         return JsonResponse({
@@ -1501,26 +1572,29 @@ def generate_map_view(request):
 def get_zonas_secoes_ajax(request):
     """API otimizada para buscar zonas-seções disponíveis"""
     ano = request.GET.get('ano')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     if not ano:
         return JsonResponse({
             'error': 'Parâmetro ano é obrigatório'
         }, status=400)
-    
+
     try:
         start_time = time.time()
-        
+
         # Usar cache otimizado
-        zonas_organizadas = get_cached_zonas_secoes(ano)
-        
+        zonas_organizadas = get_cached_zonas_secoes(ano, cidade)
+
         # Gerar lista plana para compatibilidade
         zonas_secoes_list = []
         for zona, secoes in zonas_organizadas.items():
             for secao_data in secoes:
                 zonas_secoes_list.append(secao_data['zona_secao'])
-        
+
         duration = time.time() - start_time
-        
+
         return JsonResponse({
             'success': True,
             'zonas_secoes': zonas_secoes_list,
@@ -1529,7 +1603,7 @@ def get_zonas_secoes_ajax(request):
             'total_secoes': len(zonas_secoes_list),
             'load_time': f"{duration:.3f}s"
         })
-        
+
     except Exception as e:
         logging.error(f"Erro ao buscar zonas-seções: {e}")
         return JsonResponse({
@@ -1541,17 +1615,20 @@ def get_votos_zona_secao_ajax(request):
     """API otimizada para buscar votos por zona-seção específica"""
     ano = request.GET.get('ano')
     zona_secao = request.GET.get('zona_secao')
-    
+    cidade = request.GET.get('cidade', 'Rio de Janeiro')
+    if cidade not in CIDADES_DISPONIVEIS:
+        cidade = 'Rio de Janeiro'
+
     if not all([ano, zona_secao]):
         return JsonResponse({
             'error': 'Parâmetros obrigatórios: ano, zona_secao'
         }, status=400)
-    
+
     try:
         start_time = time.time()
-        
+
         # Usar cache otimizado
-        resultado = get_cached_votos_zona_secao(ano, zona_secao)
+        resultado = get_cached_votos_zona_secao(ano, zona_secao, cidade)
         
         if not resultado:
             return JsonResponse({
@@ -1595,9 +1672,12 @@ def get_estatisticas_zona_secao_ajax(request):
     try:
         start_time = time.time()
         
+        cidade = request.GET.get('cidade', 'Rio de Janeiro')
+        if cidade not in CIDADES_DISPONIVEIS:
+            cidade = 'Rio de Janeiro'
         # Usar cache otimizado para obter zonas-seções
-        zonas_organizadas = get_cached_zonas_secoes(ano)
-        
+        zonas_organizadas = get_cached_zonas_secoes(ano, cidade)
+
         # Calcular estatísticas
         total_zonas = len(zonas_organizadas)
         total_secoes = sum(len(secoes) for secoes in zonas_organizadas.values())

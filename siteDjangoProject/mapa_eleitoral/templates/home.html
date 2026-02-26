@@ -943,6 +943,16 @@
             <form method="GET" id="filterForm" novalidate>
                 <div class="controls-grid">
                     <div class="form-group">
+                        <label for="cidade" class="form-label">Cidade</label>
+                        <select class="form-select" id="cidade" name="cidade" aria-label="Selecione a cidade">
+                            {% for cidade in cidades %}
+                            <option value="{{ cidade }}" {% if cidade == cidade_selecionada %}selected{% endif %}>
+                                {{ cidade }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="ano" class="form-label">Ano da Eleição</label>
                         <select class="form-select" id="ano" name="ano" required aria-label="Selecione o ano da eleição">
                             {% for ano in anos %}
@@ -1016,15 +1026,17 @@
                         loadDynamicMap({
                             candidato: '{{ map_data.candidato }}',
                             partido: '{{ map_data.partido }}',
-                            ano: '{{ map_data.ano }}'
+                            ano: '{{ map_data.ano }}',
+                            cidade: '{{ map_data.cidade }}'
                         });
-                        
+
                     } else {
                         document.addEventListener('DOMContentLoaded', () => {
                             loadDynamicMap({
                                 candidato: '{{ map_data.candidato }}',
                                 partido: '{{ map_data.partido }}',
-                                ano: '{{ map_data.ano }}'
+                                ano: '{{ map_data.ano }}',
+                                cidade: '{{ map_data.cidade }}'
                             });
                         });
                     }
@@ -1377,6 +1389,7 @@
 
             initializeElements() {
                 this.elements = {
+                    cidade: document.getElementById('cidade'),
                     ano: document.getElementById('ano'),
                     partido: document.getElementById('partido'),
                     candidato: document.getElementById('candidato'),
@@ -1386,12 +1399,17 @@
             }
 
             setupEventListeners() {
+                // Quando cidade muda, resetar filtros e recarregar anos
+                this.elements.cidade.addEventListener('change',
+                    Utils.debounce(() => this.updateAnos(), AppConfig.DEBOUNCE_DELAY)
+                );
+
                 // Eventos com debounce
-                this.elements.ano.addEventListener('change', 
+                this.elements.ano.addEventListener('change',
                     Utils.debounce(() => this.updatePartidos(), AppConfig.DEBOUNCE_DELAY)
                 );
 
-                this.elements.partido.addEventListener('change', 
+                this.elements.partido.addEventListener('change',
                     Utils.debounce(() => this.updateCandidatos(), AppConfig.DEBOUNCE_DELAY)
                 );
 
@@ -1404,7 +1422,7 @@
                 });
 
                 // Eventos de teclado para acessibilidade
-                [this.elements.ano, this.elements.partido, this.elements.candidato].forEach(element => {
+                [this.elements.cidade, this.elements.ano, this.elements.partido, this.elements.candidato].forEach(element => {
                     element.addEventListener('keydown', (e) => {
                         if (e.key === 'Enter') {
                             e.preventDefault();
@@ -1423,10 +1441,11 @@
                 try {
                     // Preload dados mais utilizados apenas se ano válido
                     const anoAtual = this.elements.ano.value;
+                    const cidadeAtual = this.elements.cidade.value;
                     if (anoAtual && anoAtual !== '' && !isNaN(anoAtual)) {
                         await this.stateManager.getData(
-                            `/get_partidos_ajax/?ano=${encodeURIComponent(anoAtual)}`,
-                            `partidos_${anoAtual}`
+                            `/get_partidos_ajax/?ano=${encodeURIComponent(anoAtual)}&cidade=${encodeURIComponent(cidadeAtual)}`,
+                            `partidos_${cidadeAtual}_${anoAtual}`
                         );
                     }
                 } catch (error) {
@@ -1434,9 +1453,37 @@
                 }
             }
 
+            async updateAnos() {
+                const startTime = performance.now();
+                const cidade = this.elements.cidade.value;
+
+                try {
+                    this.setSelectLoading(this.elements.ano, true);
+                    this.setSelectLoading(this.elements.partido, true);
+                    this.setSelectLoading(this.elements.candidato, true);
+
+                    const data = await this.stateManager.getData(
+                        `/get_anos_ajax/?cidade=${encodeURIComponent(cidade)}`,
+                        `anos_${cidade}`
+                    );
+
+                    this.populateSelect(this.elements.ano, data.anos);
+                    await this.updatePartidos();
+
+                    Utils.logPerformance('Update Anos', startTime);
+
+                } catch (error) {
+                    console.error('Erro ao atualizar anos:', error);
+                    this.showError(this.elements.ano, 'Erro ao carregar anos');
+                } finally {
+                    this.setSelectLoading(this.elements.ano, false);
+                }
+            }
+
             async updatePartidos() {
                 const startTime = performance.now();
                 const ano = this.elements.ano.value;
+                const cidade = this.elements.cidade.value;
 
                 // Validação rigorosa
                 if (!ano || ano === '' || isNaN(ano) || ano.length !== 4) {
@@ -1449,8 +1496,8 @@
                     this.setSelectLoading(this.elements.candidato, true);
 
                     const data = await this.stateManager.getData(
-                        `/get_partidos_ajax/?ano=${encodeURIComponent(ano)}`,
-                        `partidos_${ano}`
+                        `/get_partidos_ajax/?ano=${encodeURIComponent(ano)}&cidade=${encodeURIComponent(cidade)}`,
+                        `partidos_${cidade}_${ano}`
                     );
 
                     this.populateSelect(this.elements.partido, data.partidos);
@@ -1470,6 +1517,7 @@
                 const startTime = performance.now();
                 const partido = this.elements.partido.value;
                 const ano = this.elements.ano.value;
+                const cidade = this.elements.cidade.value;
 
                 if (!partido || !ano) return;
 
@@ -1477,8 +1525,8 @@
                     this.setSelectLoading(this.elements.candidato, true);
 
                     const data = await this.stateManager.getData(
-                        `/get_candidatos_ajax/?partido=${encodeURIComponent(partido)}&ano=${encodeURIComponent(ano)}`,
-                        `candidatos_${partido}_${ano}`
+                        `/get_candidatos_ajax/?partido=${encodeURIComponent(partido)}&ano=${encodeURIComponent(ano)}&cidade=${encodeURIComponent(cidade)}`,
+                        `candidatos_${cidade}_${partido}_${ano}`
                     );
 
                     this.populateSelect(this.elements.candidato, data.candidatos);
@@ -1645,15 +1693,16 @@
         window.loadDynamicMap = async function(mapData) {
             const mapWrapper = document.getElementById('mapWrapper');
             if (!mapWrapper || !mapData) return;
-            
+
             try {
                 Utils.setLoading(true);
                 mapWrapper.innerHTML = '<div style="text-align: center; padding: 2rem;">Gerando mapa...</div>';
-                
+
                 const params = new URLSearchParams({
                     candidato: mapData.candidato,
                     partido: mapData.partido,
-                    ano: mapData.ano
+                    ano: mapData.ano,
+                    cidade: mapData.cidade || 'Rio de Janeiro'
                 });
                 
                 const response = await fetch(`/generate-map/?${params}`);
@@ -1732,6 +1781,12 @@
             }
             
             setupEventListeners() {
+                // Recarregar zonas quando a cidade ou o ano mudar
+                document.getElementById('cidade').addEventListener('change', () => {
+                    this.clearSelects();
+                    this.loadZonas();
+                });
+
                 // Carregar zonas quando o ano mudar
                 document.getElementById('ano').addEventListener('change', () => {
                     this.loadZonas();
@@ -1750,17 +1805,18 @@
             
             async loadZonas() {
                 const ano = document.getElementById('ano').value;
+                const cidade = document.getElementById('cidade').value;
                 if (!ano) {
                     this.clearSelects();
                     return;
                 }
-                
+
                 try {
-                    const cacheKey = `zonas_${ano}`;
+                    const cacheKey = `zonas_${cidade}_${ano}`;
                     let zonas = this.cache.get(cacheKey);
-                    
+
                     if (!zonas) {
-                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}`);
+                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}&cidade=${encodeURIComponent(cidade)}`);
                         zonas = response.zonas_secoes || [];
                         this.cache.set(cacheKey, zonas);
                     }
@@ -1794,20 +1850,21 @@
             
             async loadSecoes() {
                 const ano = document.getElementById('ano').value;
+                const cidade = document.getElementById('cidade').value;
                 const zona = this.zonaSelect.value;
-                
+
                 if (!ano || !zona) {
                     this.secaoSelect.innerHTML = '<option value="">Selecione uma seção</option>';
                     this.hideResult();
                     return;
                 }
-                
+
                 try {
-                    const cacheKey = `zonas_${ano}`;
+                    const cacheKey = `zonas_${cidade}_${ano}`;
                     let zonasSecoes = this.cache.get(cacheKey);
-                    
+
                     if (!zonasSecoes) {
-                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}`);
+                        const response = await Utils.fetchWithRetry(`/get_zonas_secoes_ajax/?ano=${ano}&cidade=${encodeURIComponent(cidade)}`);
                         zonasSecoes = response.zonas_secoes || [];
                         this.cache.set(cacheKey, zonasSecoes);
                     }
@@ -1842,20 +1899,21 @@
             
             async consultarZonaSecao() {
                 const ano = document.getElementById('ano').value;
+                const cidade = document.getElementById('cidade').value;
                 const zona = this.zonaSelect.value;
                 const secao = this.secaoSelect.value;
-                
+
                 if (!ano || !zona || !secao) {
                     this.showError('Por favor, selecione o ano, zona e seção');
                     return;
                 }
-                
+
                 try {
                     this.consultarBtn.disabled = true;
                     this.consultarBtn.textContent = 'Consultando...';
-                    
+
                     const zonaSecao = `${zona}-${secao}`;
-                    const response = await Utils.fetchWithRetry(`/get_votos_zona_secao_ajax/?ano=${ano}&zona_secao=${zonaSecao}`);
+                    const response = await Utils.fetchWithRetry(`/get_votos_zona_secao_ajax/?ano=${ano}&zona_secao=${zonaSecao}&cidade=${encodeURIComponent(cidade)}`);
                     
                     this.showResult(response, zona, secao);
                 } catch (error) {
